@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="180813_0742_change_wxp_data_user_add_column" author="cinling">
+        <addColumn tableName="wxp_data_user">
+            <column name="auth_code" type="char(32)" defaultValue="" remarks="登录授权码" afterColumn="wechat_user_id">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="wxp_data_user">
+            <column name="auth_code_dead_time" type="int unsigned" defaultValue="0" remarks="登录授权码到期时间" afterColumn="auth_code">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+
+        <createIndex tableName="wxp_data_user" indexName="auth_code" unique="true">
+            <column name="auth_code" />
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

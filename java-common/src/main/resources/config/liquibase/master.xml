@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include file="classpath:config/liquibase/changelog/180505_1858_create_table_system_monitor.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180505_1858_create_table_user.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180630_0000_rename_system_monitor.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180710_0732_create_table_admin_log.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180806_2354_create_table_wxp_data_map.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180808_2336_create_table_wechat_user.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180810_2248_add_wechat_user_openid_index.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180812_1549_change_wechat_user_add_column.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180812_1708_create_wxp_data_user.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/180813_0742_change_wxp_data_user_add_column.xml" relativeToChangelogFile="false"/>
+
+</databaseChangeLog>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.cinling.javacommon.database.mapper.WXPDataUserMapper" >
+
+    <!--<select id="SelectAll" resultType="cn.cinling.javacommon.database.entity.WXPDataUserEntity">-->
+        <!--SELECT * FROM `wxp_data_user`-->
+    <!--</select>-->
+
+    <select id="SelectById" resultType="cn.cinling.javacommon.database.entity.WXPDataUserEntity">
+        SELECT * FROM `wxp_data_user` WHERE `id` = #{id}  LIMIT 0, 1
+    </select>
+
+    <select id="SelectByWechatUserId" resultType="cn.cinling.javacommon.database.entity.WXPDataUserEntity">
+        SELECT * FROM `wxp_data_user` WHERE `wechat_user_id` = #{wechatUserId}  LIMIT 0, 1
+    </select>
+
+    <insert id="InsertOne" parameterType="cn.cinling.javacommon.database.entity.WXPDataUserEntity">
+        INSERT INTO `wxp_data_user`
+                (`wechat_user_id`, `auth_code`, `auth_code_dead_time`, `update_time`, `create_time`)
+        VALUES (#{wechatUserId}
+          , <if test="authCode != null">#{authCode}</if><if test="authCode == null">''</if>
+          , <if test="authCodeDeadTime != null">#{authCodeDeadTime}</if><if test="authCodeDeadTime == null">0</if>
+          , #{updateTime}
+          , #{createTime})
+    </insert>
+
+    <select id="GetLastId" resultType="Integer">
+        SELECT last_insert_id()
+    </select>
+
+    <select id="SelectByAuthCode" resultType="cn.cinling.javacommon.database.entity.WXPDataUserEntity">
+        SELECT * FROM `wxp_data_user` WHERE `auth_code` = #{authCode}  LIMIT 0, 1
+    </select>
+
+    <update id="UpdateOne" parameterType="cn.cinling.javacommon.database.entity.WXPDataUserEntity">
+        UPDATE `wxp_data_user`
+            <trim prefix="SET" prefixOverrides=",">
+                <if test="wechatUserId != null">`wechat_user_id` = #{wechatUserId}</if>
+                <if test="authCode != null">,`auth_code` = #{authCode}</if>
+                <if test="authCodeDeadTime != null">,`auth_code_dead_time` = #{authCodeDeadTime}</if>
+                <if test="authCodeDeadTime != null">,`update_time` = #{updateTime}</if>
+                <if test="authCodeDeadTime != null">,`create_time` = #{createTime}</if>
+            </trim>
+        WHERE `id` = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    
+    <changeSet id="180806_2354_create_table_wxp_data_map" author="cinling">
+        <createTable tableName="wxp_data_map">
+            <column name="id" type="int unsigned" autoIncrement="true" remarks="">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="type" type="tinyint" remarks="地图类型。1：home，2：公共">
+                <constraints nullable="false" />
+            </column>
+            <column name="data" type="text" remarks="地图JSON数据">
+                <constraints nullable="false" />
+            </column>
+            <column name="update_time" type="int unsigned" remarks="更新时间">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_time" type="int unsigned" remarks="创建时间">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <modifySql dbms="mysql">
+            <append value="ENGINE=INNODB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci"/>
+        </modifySql>
+    </changeSet>
+    
+</databaseChangeLog>

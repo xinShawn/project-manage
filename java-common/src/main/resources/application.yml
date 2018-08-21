@@ -1,0 +1,18 @@
+
+spring:
+  datasource:
+    name: srv
+    url: jdbc:mysql://127.0.0.1:3306/multiple_webside?useUnicode=true&allowMultiQueries=true&characterEncoding=utf8
+    username: test
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  profiles:
+    include: admin, wxapi
+
+mybatis:
+  mapper-locations: classpath:config/mybatis/mapper/*.xml
+  type-aliases-package: cn.cinling.javacommon.database.entity
+
+
+
+

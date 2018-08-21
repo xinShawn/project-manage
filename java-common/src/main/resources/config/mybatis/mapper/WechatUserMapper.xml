@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.cinling.javacommon.database.mapper.WechatUserMapper">
+
+    <select id="SelectByOpenid" resultType="cn.cinling.javacommon.database.entity.WechatUserEntity">
+        SELECT * FROM `wechat_user` WHERE `openid` = #{openid} LIMIT 0, 1
+    </select>
+
+    <update id="UpdateOne" parameterType="cn.cinling.javacommon.database.entity.WechatUserEntity">
+        UPDATE `wechat_user`
+            <trim prefix="SET" prefixOverrides=",">
+                <if test="openid != null">`openid` = #{openid}</if>
+                <if test="sessionKey != null">,`session_key` = #{sessionKey}</if>
+                <if test="nickName != null">,`nick_name` = #{nickName}</if>
+                <if test="gender != null">,`gender` = #{gender}</if>
+                <if test="language != null">,`language` = #{language}</if>
+                <if test="avatarUrl != null">,`avatar_url` = #{avatarUrl}</if>
+                <if test="country != null">,`country` = #{country}</if>
+                <if test="province != null">,`province` = #{province}</if>
+                <if test="city != null">,`city` = #{city}</if>
+                <if test="updateTime != null">,`update_time` = #{updateTime}</if>
+            </trim>
+        WHERE id = #{id}
+    </update>
+
+    <insert id="InsertOne" parameterType="cn.cinling.javacommon.database.entity.WechatUserEntity">
+        INSERT INTO `wechat_user` (`openid`, `session_key`, `update_time`, `create_time`)
+        VALUES (#{openid}, #{sessionKey}, #{updateTime}, #{createTime})
+    </insert>
+    
+    <select id="SelectById" resultType="cn.cinling.javacommon.database.entity.WechatUserEntity">
+        SELECT * FROM `wechat_user` WHERE `id` = #{id} LIMIT 0, 1
+    </select>
+</mapper>
