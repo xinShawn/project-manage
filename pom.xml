@@ -35,7 +35,7 @@
         <mwa.version>0.0.1</mwa.version>
         <orgJson.version>20180130</orgJson.version>
         <spring.version>5.0.7.RELEASE</spring.version>
-        <springboot.version>2.0.3.RELEASE</springboot.version>
+        <springboot.version>2.0.4.RELEASE</springboot.version>
     </properties>
 
     <modules>
