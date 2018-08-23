@@ -2,7 +2,7 @@
 
 ## 项目所需环境
     nodejs  8.11 或以上
-    php     7.2.7 或以上
+    php     7.2 或以上
     mysql   5.6 或以上
     nginx|apache    (信息服务器)
     composer        (php包管理工具，类似于 nodejs 的 npm)
@@ -43,60 +43,9 @@
     cd ./php-project-manage
     composer install
     
-### 2 数据库配置
-
-    文件路径：`php-project-manage/.env` (如果文件不存在，则复制 .env.example 为 .env)
-    修改如下几项
-    
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=project_manage
-    DB_USERNAME=test
-    DB_PASSWORD=123456
-    
-### 3 升级数据库
-
-    执行命令
-    php artisan migrate
-    
-    
 ## 目录结构
 
 ```
 /                           项目根路径
     nodejs-webpack/         nodejs 控件源码目录
-    php-project-manage/     php项目路径（laravel框架）
-        app/
-        bootstrap/
-        config/
-        database/
-        public/             web开放目录
-        resources/
-        routes/             url路由
-        storage/
-        tests/
-        vendor/             composer包存档目录
 ```
-
-
-#
-#
-
-## laravel 框架相关命令
-
-##### 启动本地服务器（这种执行类似于 nodejs 无需信息服务器，方便调试）
-    php artisan serve
-    
-##### 数据库相关命令
-    创建更新日志
-    php artisan make:migration [文件名] 
-    
-    更新数据库
-    php artisan migrate
-    
-    版本回滚
-    php artisan migrate:rollback
-    
-    创建 IDE-HELPER 文件(NetBeans、PHPStrom 有效)
-    php artisan ide-helper：generate
