@@ -119,7 +119,7 @@
 
     ./yii migrate/down
     
->执行脚本控制器
+###执行脚本控制器
 
     ./yii site/index        #等价于执行方法 /commands/SiteController::actionIndex()
     

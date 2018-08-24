@@ -53,6 +53,7 @@ $config = [
         */
     ],
     'params' => $params,
+    "layout" => "empty"
 ];
 
 if (YII_ENV_DEV) {
