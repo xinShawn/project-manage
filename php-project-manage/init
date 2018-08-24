@@ -1,0 +1,49 @@
+#!/usr/bin/env php
+<?php
+
+$filePath = __DIR__ . "/config/db-local.php";
+
+if (file_exists($filePath)) {
+    echo "[" . $filePath . "] is exists.".PHP_EOL;
+    echo "          ...overwrite? [Yes|No]";
+    $answer = trim(fgets(STDIN));
+
+    if (!strncasecmp($answer, 'y', 1)) {
+        echo "  overwrite " . $filePath;
+    } else {
+        echo PHP_EOL;
+        echo "   init cancelled.";
+        return;
+    }
+}
+
+
+
+$dbLocalFileContent = "
+<?php
+
+return [
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=数据库名字',
+    'username' => '数据库账号',
+    'password' => '数据库密码',
+    'charset' => 'utf8mb4',
+
+    // Schema cache options (for production environment)
+    //'enableSchemaCache' => true,
+    //'schemaCacheDuration' => 60,
+    //'schemaCache' => 'cache',
+];
+
+";
+
+$result = file_put_contents($filePath, $dbLocalFileContent);
+
+echo PHP_EOL;
+echo PHP_EOL;
+if ($result !== false) {
+    echo "  init succeed!";
+} else {
+    echo "ERROR:  init failed!  Cannot create [" . $filePath . "].";
+}
+echo PHP_EOL;
