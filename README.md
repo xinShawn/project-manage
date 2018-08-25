@@ -36,35 +36,13 @@
 
 ## 项目初始化
 
-### 1 初始化 php-project-manage (yii) 项目
+## 一、初始化PHP项目
 
-    #进入项目路径
-    cd ./php-project-manage
-    #安装 yii 的依赖库
-    composer install 或 composer update
+>请查看 php-project-manage/README.md 文件
     
-### 2 初始化环境配置
+## 二、初始化 webpack 项目
 
-    执行命令。这个命令非 yii 自带
-    php init
-    
-### 3 修改数据库配置
-
->文件路径：`php-project-manage/config/db-local.php`
-
->默认：使用mysql本地默认端口（3306）
-
-    'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=数据库名字',
-    'username' => '数据库账号',
-    'password' => '数据库密码',
-    'charset' => 'utf8mb4',
-
-### 4 升级更新数据库
-
-    执行命令
-    yii migrate/up 或 php yii migrate/up
-    
+>请查看 nodejs-webpack/README.md 文件
 
 #
 #    
@@ -73,7 +51,7 @@
 
 ```
 /                           项目根路径
-    /nodejs-webpack         nodejs 控件源码目录
+    /nodejs-webpack         nodejs vue-template 源码目录
     /php-project-manage     php yii 框架跟路径
         /assets             资源路径（这个可能用不到）
         /commands           命令行控制器。可以在命令行调用框架内的方法
@@ -92,40 +70,15 @@
         /web                web 开放目录，一般存放 css、js、图片 等静态资源
         /widgets
 ```
-
-
-#
-#
-
-## yii 框架相关命令
-
-`提示：yii 是一个php脚本，'yii' 命令等价于 'php yii' 命令`
-
-### 启动服务（免信息服务器）
-
-    ./yii serve --port=8888
-    
-### 数据库命令
-
->创建数据库更新文件
-
-    ./yii migrate/create [文件名]
-    
->更新数据库
-
-    ./yii migrate/up
-    
->数据库版本回滚一个版本（前提：最近一次更新的文件支持回滚）
-
-    ./yii migrate/down
-    
-###执行脚本控制器
-
-    ./yii site/index        #等价于执行方法 /commands/SiteController::actionIndex()
-    
 #
 #    
     
 ## 相关文档
 
 >yii 文档： https://www.yiiframework.com/doc/api/2.0
+
+>webpack 文档： https://www.webpackjs.com/concepts/
+
+>vue.js 文档： https://cn.vuejs.org/v2/guide/
+
+>vue单页面模板相关文档：https://github.com/vuejs-templates/webpack
