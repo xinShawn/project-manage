@@ -1,15 +1,12 @@
-# webpack 说明
+#vue-template 单页前端页面
 
 ## 初始化
 
-### 1 安装 npm 依赖库
+    进入到项目路径
+    cd ./nodejs-webpack
+    安装 nodejs 依赖包
+    npm init
 
-    执行命令
-    npm install
-    
-### 2 编译生成所需的文件
+## 更多命令
 
-    执行命令
-    npx webpack
-    
-    
+>可参考 nodejs-webpack/vue-template.md
