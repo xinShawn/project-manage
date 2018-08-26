@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import UrlUtil from './../../utils/UtlUtil'
+
 export default {
   data: function () {
     return {}
@@ -15,7 +17,7 @@ export default {
   methods: {
     testAjax () {
       this.axios({
-        url: '/api/test/test'
+        url: UrlUtil.getBaseUrl() + '/test/test'
       }).then((res) => {
         console.log(res)
       }).catch((error) => {

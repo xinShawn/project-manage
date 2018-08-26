@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
-import main from '../components/main/main'
-import missions from '../components/missions/missions'
-import projects from '../components/projects/projects'
-import backend from '../components/backend/backend'
+import main from '../views/main/main'
+import missions from '../views/missions/missions'
+import projects from '../views/projects/projects'
+import backend from '../views/backend/backend'
 
 Vue.use(Router)
 
