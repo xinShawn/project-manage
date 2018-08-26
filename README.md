@@ -52,7 +52,15 @@
 ```
 /                           项目根路径
     /nodejs-webpack         nodejs vue-template 源码目录
-        /build
+        /build              构建配置
+        /config             配置
+        /src                源代码
+            /assets         静态资源
+            /components     组件
+            /router         路由配置
+            /views          单个页面
+        /static             原静态资源生成后存放的目录（已改到[php-project-manage] web目录下）
+        /test               
     /php-project-manage     php yii 框架跟路径
         /assets             资源路径（这个可能用不到）
         /commands           命令行控制器。可以在命令行调用框架内的方法
