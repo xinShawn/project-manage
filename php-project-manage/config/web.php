@@ -52,7 +52,7 @@ $config = [
     ],
     'params' => $params,
     "layout" => "empty",
-    "defaultRoute" => "base/index"
+    "defaultRoute" => "page/index"
 ];
 
 if (YII_ENV_DEV) {
