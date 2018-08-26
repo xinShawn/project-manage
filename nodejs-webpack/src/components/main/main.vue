@@ -5,7 +5,25 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data: function () {
+    return {}
+  },
+  created: function () {
+    this.testAjax()
+  },
+  methods: {
+    testAjax () {
+      this.axios({
+        url: '/api/test/test'
+      }).then((res) => {
+        console.log(res)
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+  }
+}
 </script>
 
 <style>
