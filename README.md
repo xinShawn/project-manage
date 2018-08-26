@@ -52,6 +52,15 @@
 ```
 /                           项目根路径
     /nodejs-webpack         nodejs vue-template 源码目录
+        /build              构建配置
+        /config             配置
+        /src                源代码
+            /assets         静态资源
+            /components     组件
+            /router         路由配置
+            /views          单个页面
+        /static             原静态资源生成后存放的目录（已改到[php-project-manage] web目录下）
+        /test               
     /php-project-manage     php yii 框架跟路径
         /assets             资源路径（这个可能用不到）
         /commands           命令行控制器。可以在命令行调用框架内的方法
@@ -72,6 +81,74 @@
 ```
 #
 #    
+
+## 更好的开发环境配置： Nginx + Nodejs + php 热更新配置
+
+> 这个方法不能很好地解决，app.js 加载缓慢，且无法实时更新
+
+    修改代码后，可立即呈现在页面中。无需重新 build
+    
+    原理：
+        php原本就支持修改后立即更新。但是 nodejs需要重新编译生成文件，访问首页才会更新。
+        现在，只需要修改nginx文件，使访问非php文件时的请求转发到 nodejs (npm run dev) 服务上即可
+        
+        
+配置文件参考：
+```
+upstream project_manage_server {
+    server localhost:8888;
+    keepalive 64;
+}
+
+server {
+    charset utf-8;
+    client_max_body_size 128M;
+    sendfile off;
+
+    listen 80;
+
+    server_name dev.project-manage.local;
+    root        D:\workspace\project-manage\php-project-manage\web;
+    index       index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;  
+    }
+
+    # 静态资源转发 到 npm run dev 的端口下
+    location ~ \.(html|js|css|jpg|png|json)$ {
+        proxy_pass        http://localhost:8888;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  Host localhost;
+    }
+
+    location ^~ /websocket {
+        proxy_pass http://localhost:8888;
+
+        proxy_redirect   off;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host localhost;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    # 禁止访问以下文件夹 或 后缀名
+    location ~ /\.(ht|svn|git) {
+        deny all;
+    }
+}
+```
     
 ## 相关文档
 

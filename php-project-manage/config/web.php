@@ -43,17 +43,16 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
     ],
     'params' => $params,
-    "layout" => "empty"
+    "layout" => "empty",
+    "defaultRoute" => "page/index"
 ];
 
 if (YII_ENV_DEV) {
