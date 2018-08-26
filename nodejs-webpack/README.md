@@ -6,6 +6,15 @@
     cd ./nodejs-webpack
     安装 nodejs 依赖包
     npm init
+    
+    
+    其他：
+    
+    本地运行服务
+    npm run dev
+    
+    编译生成文件
+    npm run build
 
 ## 更多命令
 

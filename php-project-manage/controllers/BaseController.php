@@ -11,4 +11,11 @@ use yii\web\Controller;
  */
 class BaseController extends Controller {
 
+    /**
+     * 前端单页面应用
+     * @return bool|string
+     */
+    public function actionIndex() {
+        return $this->redirect("@web/index.html");
+    }
 }
