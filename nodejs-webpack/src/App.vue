@@ -1,42 +1,33 @@
 <template>
   <div id="app">
-    <el-container>
-      <!--顶部-->
-      <el-header class="pm-header">
-        <pm-nav></pm-nav>
-      </el-header>
-
-      <!--路由页面-->
-      <el-main class="pm-main">
-        <router-view/>
-      </el-main>
-    </el-container>
+    <!-- <router-view/> -->
+    <v-nav></v-nav>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
-  import PmNav from "./components/pm-nav";
+import nav from './components/nav/nav'
 
-  export default {
-    name: "App",
-    components: {
-      "pm-nav": PmNav
-    }
+export default {
+  name: 'App',
+  components: {
+    'v-nav': nav
   }
+}
 </script>
 
-<style>
-  #app {
-    margin: 0;
-    padding: 0;
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+<style lang="scss">
+body {
+  margin: 0;
+  background-color: #efefef;
+}
+#app {
+  text-align: center;
+  a {
+    text-decoration: none;
   }
-
-  .pm-header {
-    padding: 0;
-  }
+}
 </style>
