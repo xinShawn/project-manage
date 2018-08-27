@@ -23,6 +23,7 @@ export default {
 body {
   margin: 0;
   background-color: #efefef;
+  min-width: 1024px;
 }
 #app {
   text-align: center;
