@@ -1,15 +1,18 @@
 <template>
   <div id="app">
-    <!-- <router-view/> -->
-    <v-nav></v-nav>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <template v-if="true">
+      <v-nav></v-nav>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+      </template>
+    <template v-else>
+    </template>
   </div>
 </template>
 
 <script>
-import nav from './components/nav/nav'
+import nav from './views/nav/nav'
 
 export default {
   name: 'App',
