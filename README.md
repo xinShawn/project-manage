@@ -2,7 +2,7 @@
 
 ## 项目所需环境
     nodejs  8.11 或以上
-    php     7.2 或以上
+    php     5.4 或以上(推荐 使用php7)
     mysql   5.6 或以上
     nginx|apache    (信息服务器)
     composer        (php包管理工具，类似于 nodejs 的 npm)

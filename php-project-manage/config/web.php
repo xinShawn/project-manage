@@ -14,7 +14,10 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'fKKFOTAnks17maYZXs5yIiz83qyeM-cU',
+//            'cookieValidationKey' => 'fKKFOTAnks17maYZXs5yIiz83qyeM-cU',
+            "enableCookieValidation" => false,
+            "enableCsrfCookie" => false,
+            "enableCsrfValidation" => false
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -24,7 +27,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+//            'errorAction' => 'site/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
