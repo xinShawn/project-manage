@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <template v-if="$store.state.isLogin">
+    <template v-if="true">
       <v-nav></v-nav>
       <keep-alive>
         <router-view></router-view>

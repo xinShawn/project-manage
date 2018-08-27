@@ -12,7 +12,7 @@ import Vuex from 'vuex'
  * 组建通信模块
  * @type {Store}
  */
-import store from './managers/StoreManage'
+import store from './store/index'
 
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
@@ -23,7 +23,7 @@ Vue.use(Vuex)
 new Vue({
   el: '#app',
   router,
-  store,
+  store: store,
   components: { App },
   template: '<App/>'
 })
