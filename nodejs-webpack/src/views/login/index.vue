@@ -1,10 +1,10 @@
 <template>
   <main id='loginIndex'>
-    <template v-if="$store.getters.isInit">
+    <template v-if="$store.state.auth.isInit">
       need login
     </template>
     <template v-else>
-      need init
+      <v-init-page></v-init-page>
     </template>
   </main>
 </template>
@@ -12,8 +12,6 @@
 <script>
 import login from './login'
 import init from './init'
-import UrlUtil from './../../utils/UtlUtil'
-import ApiReturnModel from '../../models/ApiReturnModel'
 
 /**
  * 登录的主页
@@ -31,17 +29,23 @@ export default {
   created: function () {
     this.requestIsInitAdmin()
   },
+  mounted: function () {
+  },
   methods: {
     /**
      * 请求查看是否已经初始化了管理员账号
      */
     requestIsInitAdmin () {
-      this.axios.post(UrlUtil.getBaseUrl() + '/user/is-init-admin-user', {}).then((response) => {
-        let ret = new ApiReturnModel(response)
-        console.log(ret.code)
-      }).catch((e) => {
-        console.error(e)
-      })
+      // let thisVue = this
+      // this.axios.post(UrlUtil.getBaseUrl() + '/user/is-init-admin-user', {}).then((response) => {
+      //   let apiReturn = new ApiReturnModel(response)
+      //   let isInit = apiReturn.data.isInitAdmin
+      //   if (!isInit) {
+      //     thisVue.$store.commit('setSysNotInit')
+      //   }
+      // }).catch((e) => {
+      //   console.error(e)
+      // })
     }
   }
 }

@@ -20,7 +20,7 @@ export default {
    * 变量获取的方法
    */
   getters: {
-    isInit: store => {
+    isInitAdminUser: store => {
       return store.auth.isInit
     }
   },
@@ -38,6 +38,7 @@ export default {
      */
     setSysNotInit (state) {
       state.auth.isInit = false
+      console.log('setSysNotInit')
     }
   }
 }

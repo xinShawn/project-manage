@@ -3,6 +3,7 @@ namespace app\managers;
 
 
 use app\models\db\SysUser;
+use yii\db\Exception;
 
 /**
  * Class UserManager 用户 manager
@@ -31,5 +32,26 @@ class UserManager extends BaseManager {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * 添加用户
+     * @param int $groupId
+     * @param string $account
+     * @param string $password
+     * @param string $nickname
+     * @throws \Throwable
+     */
+    public function addUser($groupId, $account, $password, $nickname) {
+        $user = new SysUser();
+        $user->group_id = $groupId;
+        $user->account = $account;
+        $user->password = $password;
+        $user->nickname = $nickname;
+        $user->create_time = time();
+        
+        if ( $user->insert() === false ) {
+            throw new Exception("insert failed!");
+        }
     }
 }

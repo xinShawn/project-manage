@@ -31,7 +31,11 @@ body {
   background-color: #efefef;
   min-width: 1024px;
 }
+html, body, article, main {
+  height: 100%;
+}
 #app {
+  height: 100%;
   text-align: center;
   a {
     text-decoration: none;
