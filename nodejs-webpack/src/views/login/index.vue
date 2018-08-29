@@ -12,6 +12,7 @@
 <script>
 import login from './login'
 import init from './init'
+import ApiReturnModel from '../../models/ApiReturnModel';
 
 /**
  * 登录的主页
@@ -36,16 +37,9 @@ export default {
      * 请求查看是否已经初始化了管理员账号
      */
     requestIsInitAdmin () {
-      // let thisVue = this
-      // this.axios.post(UrlUtil.getBaseUrl() + '/user/is-init-admin-user', {}).then((response) => {
-      //   let apiReturn = new ApiReturnModel(response)
-      //   let isInit = apiReturn.data.isInitAdmin
-      //   if (!isInit) {
-      //     thisVue.$store.commit('setSysNotInit')
-      //   }
-      // }).catch((e) => {
-      //   console.error(e)
-      // })
+      this.$store.dispatch("setIsInitAdmin");
+      
+      console.log(this.$store.state);
     }
   }
 }

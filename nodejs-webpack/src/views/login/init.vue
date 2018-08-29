@@ -51,17 +51,17 @@ export default {
   methods: {
     submitAdmin () {
       if (this.password !== this.passwordCheck) {
-        this.$message.warning('两次输入的密码不同')
-        return
+        this.$message.warning('两次输入的密码不同');
+        return;
       }
       if (this.password.length < 6) {
-        this.$message.warning('密码不能少于6个字符')
-        return
+        this.$message.warning('密码不能少于6个字符');
+        return;
       }
       if (this.account.length < 4) {
-        this.$message.warning('账号不能少于4个字符')
+        this.$message.warning('账号不能少于4个字符');
       }
-      let thisVue = this
+      let thisVue = this;
       
       this.axios.post(HttpUtil.getBaseUrl() + "/user/init-admin-user",
         HttpUtil.objectToPostParams({account: this.account, password: EncryptUtil.md5(this.password)})
@@ -69,6 +69,9 @@ export default {
         let apiReturn = ApiReturnModel.initByResponse(response);
         if (apiReturn.code > 0) {
           this.$message.success(apiReturn.message);
+          setTimeout(() => {
+            this.$store.commit("setSysInit");
+          }, 800);
         } else {
           thisVue.$message.error(apiReturn.message);
         }

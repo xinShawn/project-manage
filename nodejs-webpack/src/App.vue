@@ -1,14 +1,9 @@
 <template>
   <div id="app">
-    <template v-if="$store.state.auth.isLogin">
       <v-nav></v-nav>
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
-      </template>
-    <template v-else>
-      <v-login></v-login>
-    </template>
   </div>
 </template>
 

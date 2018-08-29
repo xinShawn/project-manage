@@ -8,7 +8,7 @@ import backend from '../views/backend/backend'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
@@ -34,5 +34,14 @@ export default new Router({
       name: 'backend',
       component: backend
     }
-  ]
-})
+  ],
+});
+
+/**
+ * 路由判断
+ */
+router.beforeEach((to, from, next) => {
+  console.log(to, from, next);
+});
+
+export default router

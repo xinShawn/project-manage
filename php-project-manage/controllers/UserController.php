@@ -17,7 +17,10 @@ class UserController extends BaseController {
      * 是否已经初始化了管理员账号
      */
     public function actionIsInitAdminUser() {
-        $isInitAdmin = MP::getUserManager()->isInitAdmin();
+        $isInitAdmin = "true";
+        if (!MP::getUserManager()->isInitAdmin()) {
+            $isInitAdmin = "false";
+        }
         
         return ApiReturn::retSucc(["isInitAdmin" => $isInitAdmin]);
     }
