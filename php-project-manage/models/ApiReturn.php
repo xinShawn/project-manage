@@ -25,6 +25,10 @@ class ApiReturn extends BaseModel {
      * 处理结果：失败 非法参数
      */
     const FAIL_ILLEGAL_DATA = -3;
+    /**
+     * 处理结果：失败 已经初始化
+     */
+    const FAIL_ALREADY_INIT = -4;
     
     /**
      * @var int 返回代码
@@ -85,7 +89,9 @@ class ApiReturn extends BaseModel {
             self::SUCC_SUCC => "success",
             
             self::FAIL_FAIL => "failed",
-            self::FAIL_EMPTY_DATA => "empty data"
+            self::FAIL_EMPTY_DATA => "empty data",
+            self::FAIL_ILLEGAL_DATA => "illegal data",
+            self::FAIL_ALREADY_INIT => "already init"
         ];
         
         return isset($messageArray[$code]) ? $messageArray["$code"] : "unknown message";

@@ -37,6 +37,7 @@
 <script>
 import HttpUtil from '../../utils/HttpUtil'
 import EncryptUtil from '../../utils/EncryptUtil'
+import ApiReturnModel from "../../models/ApiReturnModel";
 
 export default {
   name: 'init',
@@ -50,13 +51,31 @@ export default {
   methods: {
     submitAdmin () {
       if (this.password !== this.passwordCheck) {
-        this.$message.error('两次输入的密码不同')
+        this.$message.warning('两次输入的密码不同')
         return
       }
-      HttpUtil.post('/user/init-admin-user', {account: this.account, password: EncryptUtil.md5(this.password)}, (apiReturn) => {
-        console.log(apiReturn)
-      })
-      console.log(this.account, this.password, this.passwordCheck)
+      if (this.password.length < 6) {
+        this.$message.warning('密码不能少于6个字符')
+        return
+      }
+      if (this.account.length < 4) {
+        this.$message.warning('账号不能少于4个字符')
+      }
+      let thisVue = this
+      
+      this.axios.post(HttpUtil.getBaseUrl() + "/user/init-admin-user",
+        HttpUtil.objectToPostParams({account: this.account, password: EncryptUtil.md5(this.password)})
+      ).then((response) => {
+        let apiReturn = ApiReturnModel.initByResponse(response);
+        if (apiReturn.code > 0) {
+          this.$message.success(apiReturn.message);
+        } else {
+          thisVue.$message.error(apiReturn.message);
+        }
+      }).catch((error) => {
+        console.error(error);
+        thisVue.$message.error("请求服务器异常");
+      });
     }
   },
   watch: {

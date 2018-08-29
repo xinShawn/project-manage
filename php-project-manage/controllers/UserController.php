@@ -41,9 +41,11 @@ class UserController extends BaseController {
         $userManager = MP::getUserManager();
         
         if ($userManager->isInitAdmin()) {
-            return ApiReturn::retFail();
+            return ApiReturn::ret(ApiReturn::FAIL_ALREADY_INIT);
         }
     
         $userManager->addUser(0, $account, $password, "系统管理员");
+        
+        return ApiReturn::retSucc();
     }
 }
