@@ -1,8 +1,6 @@
 <template>
   <main id='loginIndex'>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    loginIndex
   </main>
 </template>
 
@@ -15,15 +13,16 @@ export default {
   name: 'index',
   components: {
   },
-  data () {
+  data: () => {
     return {
     }
   },
-  created () {
+  created: function () {
   },
-  mounted () {
+  mounted: function () {
   },
   methods: {
+
   }
 }
 </script>

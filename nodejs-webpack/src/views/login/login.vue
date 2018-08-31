@@ -1,6 +1,6 @@
 <template>
   <main>
-    login page
+    登录页面
   </main>
 </template>
 

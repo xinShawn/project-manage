@@ -9,13 +9,11 @@
 
 <script>
 import nav from './views/nav/nav'
-import login from './views/login/index'
 
 export default {
   name: 'App',
   components: {
     'v-nav': nav,
-    'v-login': login
   }
 }
 </script>
@@ -25,9 +23,6 @@ body {
   margin: 0;
   background-color: #efefef;
   min-width: 1024px;
-}
-html, body, article, main {
-  height: 100%;
 }
 #app {
   height: 100%;

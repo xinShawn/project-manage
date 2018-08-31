@@ -1,6 +1,4 @@
 
-import ApiReturnModel from "../../models/ApiReturnModel";
-import axios from "axios";
 
 export default {
   namespace: true,
@@ -10,41 +8,26 @@ export default {
    */
   state: {
     /**
-     * 是否已经登陆
+     * @type boolean 是否已经登录
      */
-    isLogin: false,
-    /**
-     * 是否已经初始化了管理员
-     */
-    isInit: true
+    loginStatus: false
   },
   
   /**
    * 变量获取的方法
    */
   getters: {
+    isLogin(state) {
+      return state.loginStatus;
+    }
   },
   
   /**
    * 对 mutations 的进一步封装，支持异步。
    */
   actions: {
-    /**
-     * 设置是否初始化了管理员账号
-     * @param commit
-     */
-    setIsInitAdmin ({ commit }) {
-      axios.post('/api/user/is-init-admin-user', {}).then((response) => {
-        let apiReturn = ApiReturnModel.initByAxiosResponse(response);
-        let isInit = apiReturn.data["isInitAdmin"];
-        if (isInit === "false") {
-          commit('setSysNotInit');
-        } else {
-          commit("setSysInit");
-        }
-      }).catch((e) => {
-        console.error(e);
-      })
+    setLogin ({ commit }) {
+      commit("setLogin");
     }
   },
   
@@ -52,19 +35,8 @@ export default {
    * 设置store的方法。不支持异步
    */
   mutations: {
-    /**
-     * 设置系统为未初始化
-     */
-    setSysNotInit (state) {
-      state.isInit = false;
-    },
-  
-    /**
-     * 设置系统为初始化
-     * @param state
-     */
-    setSysInit(state) {
-      state.isInit = true;
+    setLogin (state) {
+      state.loginStatus = true;
     }
   }
 }

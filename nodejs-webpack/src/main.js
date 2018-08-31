@@ -8,16 +8,17 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import Vuex from 'vuex'
 
-/**
- * 组建通信模块
- * @type {Store}
- */
-import store from './store/index'
 
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
 Vue.use(ElementUI)
 Vue.use(Vuex)
+
+/**
+ * 组建通信模块
+ * @type {Store}
+ */
+import store from './store/index'
 
 /* eslint-disable no-new */
 new Vue({
