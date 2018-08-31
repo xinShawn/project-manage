@@ -8,9 +8,9 @@ export default {
    */
   state: {
     /**
-     * @type boolean 是否已经登录
+     * @type Boolean 是否已经登录
      */
-    loginStatus: false
+    loginStatus: false,
   },
   
   /**

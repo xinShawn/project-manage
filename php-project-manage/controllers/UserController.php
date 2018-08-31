@@ -14,9 +14,9 @@ use Yii;
 class UserController extends BaseController {
     
     /**
-     * 是否已经初始化了管理员账号
+     * 获取系统是否已经初始化
      */
-    public function actionIsInitAdminUser() {
+    public function actionIsInitSystem() {
         $isInitAdmin = "true";
         if (!MP::getUserManager()->isInitAdmin()) {
             $isInitAdmin = "false";

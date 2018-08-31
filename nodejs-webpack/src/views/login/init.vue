@@ -61,23 +61,27 @@ export default {
       if (this.account.length < 4) {
         this.$message.warning('账号不能少于4个字符');
       }
-      let thisVue = this;
       
       this.axios.post(HttpUtil.getBaseUrl() + "/user/init-admin-user",
         HttpUtil.objectToPostParams({account: this.account, password: EncryptUtil.md5(this.password)})
       ).then((response) => {
+        
         let apiReturn = ApiReturnModel.initByAxiosResponse(response);
+        
         if (apiReturn.code > 0) {
           this.$message.success(apiReturn.message);
-          setTimeout(() => {
-            this.$store.commit("setSysInit");
-          }, 800);
+          this.$router.push({path: "/login"});
+        } else if (apiReturn.code === -4) {
+          // 已经初始化
+          this.$message.warning(apiReturn.message);
+          this.$router.push({path: "/login"})
         } else {
-          thisVue.$message.error(apiReturn.message);
+          this.$message.error(apiReturn.message);
         }
       }).catch((error) => {
+        
         console.error(error);
-        thisVue.$message.error("请求服务器异常");
+        this.$message.error("请求服务器异常");
       });
     }
   },
