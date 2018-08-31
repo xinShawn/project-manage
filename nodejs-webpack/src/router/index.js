@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import before from "./before"
 // import HelloWorld from '@/components/HelloWorld'
 import main from '../views/main/main'
 import missions from '../views/missions/missions'
 import projects from '../views/projects/projects'
 import backend from '../views/backend/backend'
+import init from '../views/login/init'
+import login from '../views/login/login'
 
 Vue.use(Router)
 
@@ -33,15 +36,17 @@ let router = new Router({
       path: '/backend',
       name: 'backend',
       component: backend
+    },
+    {
+      path: '/login',
+      component: login
     }
   ],
 });
-
-/**
- * 路由判断
- */
-router.beforeEach((to, from, next) => {
-  console.log(to, from, next);
-});
+//
+// /**
+//  * 路由守卫
+//  */
+// router.beforeEach(before);
 
 export default router

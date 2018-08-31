@@ -35,7 +35,7 @@ export default {
      */
     setIsInitAdmin ({ commit }) {
       axios.post('/api/user/is-init-admin-user', {}).then((response) => {
-        let apiReturn = ApiReturnModel.initByResponse(response)
+        let apiReturn = ApiReturnModel.initByAxiosResponse(response);
         let isInit = apiReturn.data["isInitAdmin"];
         if (isInit === "false") {
           commit('setSysNotInit');
@@ -57,7 +57,6 @@ export default {
      */
     setSysNotInit (state) {
       state.isInit = false;
-      console.log(false);
     },
   
     /**
@@ -66,7 +65,6 @@ export default {
      */
     setSysInit(state) {
       state.isInit = true;
-      console.log(true);
     }
   }
 }

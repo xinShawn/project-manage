@@ -32,12 +32,21 @@ export default class ApiReturnModel {
    * @param response
    * @throws
    */
-  public static initByResponse(response: any): ApiReturnModel {
+  public static initByAxiosResponse(response: any): ApiReturnModel {
     if (response.status === 200) {
       return new ApiReturnModel(response.data.code, response.data.msg, response.data.data);
     } else {
       console.error(response);
       throw new Error("请求失败");
     }
+  }
+
+  /**
+   *使用 XMLHttpRequest 的 response 实例化 ApiReturnModel 并返回
+   * @param response
+   */
+  public static initByXmlResponse(response: any): ApiReturnModel {
+    let json = JSON.parse(response);
+    return new ApiReturnModel(json.code, json.msg, json.data);
   }
 }

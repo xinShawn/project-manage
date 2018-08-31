@@ -10,5 +10,13 @@ use yii\web\Controller;
  * @package app\controllers
  */
 abstract class BaseController extends Controller {
-
+    
+    /**
+     * @param $action
+     * @return bool
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function beforeAction($action) {
+        return parent::beforeAction($action);
+    }
 }

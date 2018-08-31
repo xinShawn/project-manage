@@ -66,7 +66,7 @@ export default {
       this.axios.post(HttpUtil.getBaseUrl() + "/user/init-admin-user",
         HttpUtil.objectToPostParams({account: this.account, password: EncryptUtil.md5(this.password)})
       ).then((response) => {
-        let apiReturn = ApiReturnModel.initByResponse(response);
+        let apiReturn = ApiReturnModel.initByAxiosResponse(response);
         if (apiReturn.code > 0) {
           this.$message.success(apiReturn.message);
           setTimeout(() => {
