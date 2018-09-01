@@ -34,6 +34,7 @@
 <script>
 import HttpUtil from "../../utils/HttpUtil";
 import ApiReturnModel from "../../models/ApiReturnModel";
+import EncryptUtil from "../../utils/EncryptUtil";
 
 export default {
   name: 'login',
@@ -83,7 +84,27 @@ export default {
      * 提交登录表单
      */
     submitLogin() {
-    
+      let that = this;
+      
+      HttpUtil.xmlHttpRequestPost(
+        "user/login",
+        {account: this.from.account, password: EncryptUtil.md5(this.from.password)},
+        (response) => {
+          let apiReturn = ApiReturnModel.initByXmlResponse(response);
+          if (apiReturn.code > 0) {
+            let loginToken = apiReturn.data.loginToken;
+            that.$store.dispatch("setLoginToken", loginToken);
+            that.$message.success(apiReturn.message);
+            that.$router.push("../main");
+          } else {
+            that.$message.error(apiReturn.message)
+          }
+        },
+        (error) => {
+          console.error(error);
+        },
+        5000
+      )
     }
   }
 }

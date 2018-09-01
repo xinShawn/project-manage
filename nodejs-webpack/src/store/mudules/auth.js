@@ -8,9 +8,14 @@ export default {
    */
   state: {
     /**
-     * @type Boolean 是否已经登录
+     * @var Boolean 是否已经登录
      */
     loginStatus: false,
+  
+    /**
+     * @var string 登录令牌
+     */
+    loginToken: ""
   },
   
   /**
@@ -26,8 +31,13 @@ export default {
    * 对 mutations 的进一步封装，支持异步。
    */
   actions: {
-    setLogin ({ commit }) {
-      commit("setLogin");
+    /**
+     * 设置登录令牌并进行登录
+     * @param commit
+     * @param loginToken
+     */
+    setLoginToken ({ commit }, loginToken) {
+      commit("setLoginToken", loginToken);
     }
   },
   
@@ -35,8 +45,9 @@ export default {
    * 设置store的方法。不支持异步
    */
   mutations: {
-    setLogin (state) {
+    setLoginToken (state, loginToken) {
       state.loginStatus = true;
+      state.loginToken = loginToken;
     }
   }
 }

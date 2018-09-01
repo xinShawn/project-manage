@@ -2,7 +2,10 @@
 namespace app\managers;
 
 
+use app\exceptions\ProcessException;
+use app\models\cache\UserCacheModel;
 use app\models\db\SysUser;
+use app\utils\CacheUtil;
 use yii\db\Exception;
 
 /**
@@ -53,5 +56,32 @@ class UserManager extends BaseManager {
         if ( $user->insert() === false ) {
             throw new Exception("insert failed!");
         }
+    }
+    
+    /**
+     * 进行登录
+     * @param string $account 登录账号
+     * @param string $password 登录密码
+     * @return string 登录令牌
+     * @throws ProcessException
+     */
+    public function login($account, $password) {
+        $sysUserModel = SysUser::findOne(["account" => $account]);
+        
+        if ($sysUserModel === null) {
+            throw new ProcessException("account not exists");
+        }
+        
+        if ($password !== $sysUserModel->password) {
+            throw new ProcessException("password error");
+        }
+        
+        $loginToken = md5($account . time());
+        $userCacheModel = new UserCacheModel();
+        $userCacheModel->id = $sysUserModel->id;
+        $userCacheModel->loginToken = $loginToken;
+        CacheUtil::set(CacheUtil::PREFIX_USER_ID, $sysUserModel->id, $userCacheModel->toArray());
+        
+        return $loginToken;
     }
 }

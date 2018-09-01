@@ -49,6 +49,8 @@
 
 ## 目录结构
 
+> 带 * 的是重要的目录
+
 ```
 /                           项目根路径
     /nodejs-webpack         nodejs vue-template 源码目录
@@ -56,22 +58,33 @@
         /config             配置
         /src                源代码
             /assets         静态资源
-            /components     组件
-            /router         路由配置
-            /views          单个页面
-        /static             原静态资源生成后存放的目录（已改到[php-project-manage] web目录下）
+            /components     组件。一般是可重复使用的控件
+            /managres       管理器（业务层 TypeScript），这一层可能会使用 vuex 代替
+            /models         模型（TypeScript）。对一些数据格式的封装
+            /router         * 路由配置
+            /store          * vuex 代码存放路径
+            /utils          工具类（TypeScript）的封装
+            /views          * 单个页面
+        /static             原静态资源生成后存放的目录（已改到 php-project-manage/web目录下）
         /test               
     /php-project-manage     php yii 框架跟路径
         /assets             资源路径（这个可能用不到）
         /commands           命令行控制器。可以在命令行调用框架内的方法
         /config             配置文件路径
-        /controllers        web 控制器
-        /mail               
+        /controllers        * web 控制器
+        /exceptions         异常类
+        /mail               邮件模板
+        /managers           * 管理器（业务层），主要的逻辑处理代码放在这里
+        /messages           多语言包
         /migrations         数据库版本管理文件
-        /models             数据模型文件
-            /db             每个数据表对应的模型
+        /models             * 数据模型。对数据结构的封装
+            /cache          缓存 数据模型
+            /cmd            命令行 数据模型
+            /db             数据表 数据模型
+            /form           表单 数据模型
         /runtime            项目运行时产生的文件
         /tests              测试文件路径
+        /utils              工具类存放处，如 文件工具，时间工具等
         /vagrant            信息服务器配置参考
         /views              网页模板（html模板）
             /layouts        主模板（为模板提供父级模板） -- 日后将减少这一层的使用

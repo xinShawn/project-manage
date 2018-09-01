@@ -73,11 +73,15 @@ class ApiReturn extends BaseModel {
     }
     
     /**
+     * @param string|null $message 返回的消息
      * @return string json字符串
      */
-    public function toJsonStr() {
+    public function toJsonStr($message = null) {
         $array = $this->toArray();
-        $array["msg"] = $this->getMessage($this->code);
+        if ($message === null) {
+            $message = $this->getMessage($this->code);
+        }
+        $array["msg"] = $message;
         
         return json_encode($array);
     }
@@ -88,7 +92,7 @@ class ApiReturn extends BaseModel {
      */
     private function getMessage($code) {
         $messageArray = [
-            self::SUCC_SUCC => Yii::t("app", "success"),
+            self::SUCC_SUCC => "success",
             
             self::FAIL_FAIL => "failed",
             self::FAIL_EMPTY_DATA => "empty data",
@@ -96,7 +100,29 @@ class ApiReturn extends BaseModel {
             self::FAIL_ALREADY_INIT => "already init"
         ];
         
-        return isset($messageArray[$code]) ? $messageArray["$code"] : "unknown message";
+        $message = isset($messageArray[$code]) ? $messageArray["$code"] : "unknown message";
+        
+        return Yii::t("app", $message);
+    }
+    
+    /**
+     * 通用静态返回
+     * @param int $code 使用类中 SUCC_ 或 FAIL_ 开头的常量
+     * @param string|array $data 返回数据
+     * @return string
+     */
+    public static function ret($code, $data = "") {
+        return (new ApiReturn($code, $data))->toJsonStr();
+    }
+    
+    /**
+     * 返回处理失败的结果 消息给客户端
+     * @param string $message
+     * @param string|array $data
+     * @return string
+     */
+    public static function retFailMessage($message, $data = "") {
+        return (new ApiReturn(-10000, $data))->toJsonStr($message);
     }
     
     /**
@@ -124,15 +150,5 @@ class ApiReturn extends BaseModel {
      */
     public static function retFailEmptyData($data = "") {
         return self::ret(self::FAIL_EMPTY_DATA, $data);
-    }
-    
-    /**
-     * 通用静态返回
-     * @param int $code 使用类中 SUCC_ 或 FAIL_ 开头的常量
-     * @param string|array $data 返回数据
-     * @return string
-     */
-    public static function ret($code, $data = "") {
-        return (new ApiReturn($code, $data))->toJsonStr();
     }
 }

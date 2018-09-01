@@ -10,7 +10,7 @@ export default class HttpUtil {
 
   /**
    * 发送post请求
-   * @deprecated 向服务器发送 post 请求 注意：这个方法不做任何错误的处理，只做超时处理。而且方法会抛出位置的错误
+   * @deprecated 向服务器发送 post 请求 注意：这个方法不做任何错误的处理，只做超时处理。而且方法会抛出未知的错误
    * @param url 请求地址
    * @param params post参数
    * @param succCallback 成功回调
@@ -45,12 +45,12 @@ export default class HttpUtil {
   /**
    * 发送 post 请求。使用原声js的方法(XMLHttpRequest)
    * @param relativeUrl 请求相对路径
-   * @param params
-   * @param success
-   * @param error
-   * @param timeoutMS
+   * @param params 请求参数（json object格式）
+   * @param successCallback 成功回调
+   * @param errorCallback 失败回调
+   * @param timeoutMS 超时毫秒数
    */
-  public static xmlHttpRequestPost(relativeUrl: string, params: object, success: Function, error: Function, timeoutMS: number) {
+  public static xmlHttpRequestPost(relativeUrl: string, params: object, successCallback: Function, errorCallback: Function, timeoutMS: number) {
     if (relativeUrl.indexOf("/", 0) !== 0) {
       relativeUrl = "/" + relativeUrl;
     }
@@ -60,9 +60,9 @@ export default class HttpUtil {
     xmlHttp.onreadystatechange = function () {
 
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        success(xmlHttp.response);
+        successCallback(xmlHttp.response);
       } else if (xmlHttp.readyState == 4) {
-        error({
+        errorCallback({
           status: xmlHttp.status,
           response: xmlHttp.response
         });
@@ -79,7 +79,7 @@ export default class HttpUtil {
     setTimeout(function() {
       if (xmlHttp.readyState != 4) {
         xmlHttp.abort();
-        error("request timeout!");
+        errorCallback("request timeout!");
       }
     }, timeoutMS);
   }

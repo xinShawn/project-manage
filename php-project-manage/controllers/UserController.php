@@ -3,8 +3,10 @@
 namespace app\controllers;
 
 
+use app\exceptions\ProcessException;
 use app\managers\MP;
 use app\models\ApiReturn;
+use app\utils\SessionUtil;
 use Yii;
 
 /**
@@ -50,5 +52,31 @@ class UserController extends BaseController {
         $userManager->addUser(0, $account, $password, "系统管理员");
         
         return ApiReturn::retSucc();
+    }
+    
+    /**
+     * 检测是否已经登录
+     */
+    public function actionCheckLogin() {
+        $isLogin = "false";
+        
+        if (SessionUtil::get(SessionUtil::KEY_USER_ID) !== null) {
+            $isLogin = "true";
+        }
+        
+        return ApiReturn::retSucc(["isLogin" => $isLogin]);
+    }
+    
+    /**
+     * 进行登录
+     * @throws ProcessException
+     */
+    public function actionLogin() {
+        $account = $this->post("account");
+        $password = $this->post("password");
+    
+        $loginToken = MP::getUserManager()->login($account, $password);
+        
+        return ApiReturn::retSucc(["loginToken" => $loginToken]);
     }
 }
