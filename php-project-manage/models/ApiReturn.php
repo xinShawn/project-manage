@@ -2,6 +2,8 @@
 namespace app\models;
 
 
+use Yii;
+
 /**
  * Class ApiReturn 所有api请求的通用返回
  * @package app\models
@@ -86,7 +88,7 @@ class ApiReturn extends BaseModel {
      */
     private function getMessage($code) {
         $messageArray = [
-            self::SUCC_SUCC => "success",
+            self::SUCC_SUCC => Yii::t("app", "success"),
             
             self::FAIL_FAIL => "failed",
             self::FAIL_EMPTY_DATA => "empty data",
