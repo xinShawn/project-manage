@@ -97,12 +97,10 @@ export default {
 </style>
 <style lang="scss">
   .el-input__inner {
-    background: #808080;
-    color: #ffffff;
     border: none;
     border: {
       radius: 0;
-      right: 1px #ffffff solid;
+      right: 1px #545C64 solid;
     }
   }
   .search-content {
@@ -114,7 +112,6 @@ export default {
     }
   }
   .options {
-    background
     .el-select-dropdown__item {
       font-size: 12px;
     }

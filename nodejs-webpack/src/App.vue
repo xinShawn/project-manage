@@ -34,4 +34,7 @@ body {
     text-decoration: none;
   }
 }
+main {
+  padding: 20px 10px;
+}
 </style>
