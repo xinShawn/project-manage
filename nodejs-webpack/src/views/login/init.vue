@@ -1,7 +1,7 @@
 <template>
   <main id='loginInit'>
     <el-row>
-      <h3>初始化系统</h3>
+      <h3>{{ $t("login['init system']") }}</h3>
     </el-row>
     <el-row :gutter='20' class='login-row'>
       <!--START 两边空白占位区-->
@@ -10,18 +10,18 @@
       </el-col>
       <!--END 两边空白占位区-->
       <el-col :span='12' class='initPanel'>
-        <el-form ref='form' label-width='80px'>
-          <el-form-item label='系统账号'>
-            <el-input v-model='account' auto-complete='off'></el-input>
+        <el-form ref='form' label-width='100px'>
+          <el-form-item :label='$t("login[\"account\"]")'>
+            <el-input v-model='form.account' auto-complete='off'></el-input>
           </el-form-item>
-          <el-form-item label='登录密码'>
-            <el-input type='password' v-model='password' auto-complete='off'></el-input>
+          <el-form-item :label='$t("login[\"password\"]")'>
+            <el-input type='password' v-model='form.password' auto-complete='off'></el-input>
           </el-form-item>
-          <el-form-item label='再次确认'>
-            <el-input type='password' v-model='passwordCheck' auto-complete='off'></el-input>
+          <el-form-item :label='$t("login[\"confirmation\"]")'>
+            <el-input type='password' v-model='form.passwordCheck' auto-complete='off'></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type='primary' @click='submitAdmin'>初始化</el-button>
+            <el-button type='primary' @click='submitAdmin'>{{ $t("login['initialize']") }}</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -43,27 +43,29 @@ export default {
   name: 'init',
   data: () => {
     return {
-      account: '',
-      password: '',
-      passwordCheck: ''
+      form: {
+        account: '',
+        password: '',
+        passwordCheck: ''
+      }
     }
   },
   methods: {
     submitAdmin () {
-      if (this.password !== this.passwordCheck) {
-        this.$message.warning('两次输入的密码不同');
+      if (this.form.password !== this.form.passwordCheck) {
+        this.$message.warning(this.$t("login['the two passwords were different']"));
         return;
       }
-      if (this.password.length < 6) {
-        this.$message.warning('密码不能少于6个字符');
+      if (this.form.password.length < 6) {
+        this.$message.warning(this.$t("login['The password must be no less than 6 characters']"));
         return;
       }
-      if (this.account.length < 4) {
-        this.$message.warning('账号不能少于4个字符');
+      if (this.form.account.length < 4) {
+        this.$message.warning(this.$t("login['The account must be no less than 4 characters']"));
       }
       
       this.axios.post(HttpUtil.getBaseUrl() + "/user/init-admin-user",
-        HttpUtil.objectToPostParams({account: this.account, password: EncryptUtil.md5(this.password)})
+        HttpUtil.objectToPostParams({account: this.form.account, password: EncryptUtil.md5(this.form.password)})
       ).then((response) => {
         
         let apiReturn = ApiReturnModel.initByAxiosResponse(response);
@@ -81,7 +83,7 @@ export default {
       }).catch((error) => {
         
         console.error(error);
-        this.$message.error("请求服务器异常");
+        this.$message.error(this.$t("error['Request server exception']"));
       });
     }
   },

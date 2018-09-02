@@ -59,7 +59,7 @@
         /src                源代码
             /assets         静态资源
             /components     组件。一般是可重复使用的控件
-            /managres       管理器（业务层 TypeScript），这一层可能会使用 vuex 代替
+            /messages       国际化目录（多语言配置）
             /models         模型（TypeScript）。对一些数据格式的封装
             /router         * 路由配置
             /store          * vuex 代码存放路径

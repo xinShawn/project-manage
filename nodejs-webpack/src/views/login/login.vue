@@ -1,7 +1,7 @@
 <template>
   <main>
     <el-row>
-      <h3>登录页面</h3>
+      <h3>{{ $t("login['login page']") }}</h3>
     </el-row>
     <el-row :gutter='20' class='login-row'>
       <!--START 两边空白占位区-->
@@ -11,14 +11,14 @@
       <!--END 两边空白占位区-->
       <el-col :span='12' class='initPanel'>
         <el-form ref='form' label-width='80px'>
-          <el-form-item label='系统账号'>
+          <el-form-item :label='$t("login[\"account\"]")'>
             <el-input v-model='from.account' auto-complete='off'></el-input>
           </el-form-item>
-          <el-form-item label='登录密码'>
+          <el-form-item :label='$t("login[\"password\"]")'>
             <el-input type='password' v-model='from.password' auto-complete='off'></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type='primary' @click='submitLogin'>登陆</el-button>
+            <el-button type='primary' @click='submitLogin'>{{ $t("login['login']") }}</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -102,6 +102,7 @@ export default {
         },
         (error) => {
           console.error(error);
+          that.$message.error(that.$t("error['Request timeout']"));
         },
         5000
       )
