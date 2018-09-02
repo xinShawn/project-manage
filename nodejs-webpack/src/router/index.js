@@ -1,18 +1,41 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import HelloWorld from '@/components/HelloWorld'
 import main from '../views/main/main'
 import missions from '../views/missions/missions'
 import projects from '../views/projects/projects'
 import backend from '../views/backend/backend'
+import loginIndex from '../views/login/index'
+import loginLogin from '../views/login/login'
+import loginInit from '../views/login/init'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
-      redirect: 'main'
+      redirect: 'login'
+    },
+    // 系统初始化页面模块
+    {
+      path: '/login',
+      component: loginIndex,
+      children: [
+        {
+          path: '/',
+          redirect: 'login'
+        },
+        // 登录页面
+        {
+          path: 'login',
+          component: loginLogin
+        },
+        // 初始化系统页面
+        {
+          path: 'init',
+          component: loginInit
+        }
+      ]
     },
     {
       path: '/main',
@@ -34,5 +57,12 @@ export default new Router({
       name: 'backend',
       component: backend
     }
-  ]
-})
+  ],
+});
+//
+// /**
+//  * 路由守卫
+//  */
+// router.beforeEach(before);
+
+export default router

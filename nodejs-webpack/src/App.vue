@@ -1,13 +1,9 @@
 <template>
   <div id="app">
-    <template v-if="true">
       <v-nav></v-nav>
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
-      </template>
-    <template v-else>
-    </template>
   </div>
 </template>
 
@@ -17,7 +13,7 @@ import nav from './views/nav/nav'
 export default {
   name: 'App',
   components: {
-    'v-nav': nav
+    'v-nav': nav,
   }
 }
 </script>
@@ -29,6 +25,7 @@ body {
   min-width: 1024px;
 }
 #app {
+  height: 100%;
   text-align: center;
   a {
     text-decoration: none;

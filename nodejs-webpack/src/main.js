@@ -7,23 +7,26 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import Vuex from 'vuex'
+import VueI18n from "vue-i18n"
 
-/**
- * 组建通信模块
- * @type {Store}
- */
+
+Vue.config.productionTip = false;
+Vue.prototype.axios = axios;
+Vue.use(ElementUI);
+Vue.use(Vuex);
+Vue.use(VueI18n);
+
+// 组建通信模块
 import store from './store/index'
-
-Vue.config.productionTip = false
-Vue.prototype.axios = axios
-Vue.use(ElementUI)
-Vue.use(Vuex)
+// 多语言模块
+import i18n from './utils/i18n'
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  store: store,
+  store,
+  i18n,
   components: { App },
   template: '<App/>'
-})
+});
