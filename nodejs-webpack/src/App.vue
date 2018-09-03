@@ -1,42 +1,84 @@
 <template>
   <div id="app">
-    <el-container>
-      <!--顶部-->
-      <el-header class="pm-header">
-        <pm-nav></pm-nav>
-      </el-header>
-
-      <!--路由页面-->
-      <el-main class="pm-main">
-        <router-view/>
-      </el-main>
-    </el-container>
+      <v-nav></v-nav>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
   </div>
 </template>
 
 <script>
-  import PmNav from "./components/pm-nav";
+import nav from './views/nav/nav'
 
-  export default {
-    name: "App",
-    components: {
-      "pm-nav": PmNav
+export default {
+  name: 'App',
+  components: {
+    'v-nav': nav,
+  },
+  data () {
+    return {
+      /**
+       * 是否跳转到登录页面
+       */
+      isJumpToLoginPage: false
+    }
+  },
+  created() {
+    let that = this;
+    this.$store.dispatch("checkLogin", (needLogin) => {
+      if (needLogin) {
+        that.isJumpToLoginPage = true;
+      }
+    });
+  },
+  mounted() {
+  },
+  computed: {
+    /**
+     * 获取登录状态
+     */
+    isLogin () {
+      return this.$store.state.auth.loginStatus;
+    }
+  },
+  watch: {
+    /**
+     * 监听登录状态，一旦不是登录状态则跳转到登录页面
+     * @param val
+     */
+    isLogin(val) {
+      if (!val) {
+        this.$router.push("/login");
+      }
+    },
+  
+    /**
+     * 是否需要跳转到登陆页面
+     * @param val
+     */
+    isJumpToLoginPage (val) {
+      if (val) {
+        this.$router.push("/login");
+      }
     }
   }
+}
 </script>
 
-<style>
-  #app {
-    margin: 0;
-    padding: 0;
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+<style lang="scss">
+body {
+  margin: 0;
+  background-color: #efefef;
+  min-width: 1024px;
+}
+#app {
+  height: 100%;
+  text-align: center;
+  a {
+    text-decoration: none;
   }
-
-  .pm-header {
-    padding: 0;
-  }
+}
+main {
+  padding: 20px 10px;
+}
 </style>

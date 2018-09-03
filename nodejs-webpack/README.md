@@ -1,21 +1,21 @@
-#vue-template 单页前端页面
+# backend
 
-## 初始化
+> A Vue.js project
 
-    进入到项目路径
-    cd ./nodejs-webpack
-    安装 nodejs 依赖包
-    npm init
-    
-    
-    其他：
-    
-    本地运行服务
-    npm run dev
-    
-    编译生成文件
-    npm run build
+## Build Setup
 
-## 更多命令
+``` bash
+# install dependencies
+npm install
 
->可参考 nodejs-webpack/vue-template.md
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+```
+
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
