@@ -6,6 +6,7 @@ use app\exceptions\ProcessException;
 use app\models\cache\UserCacheModel;
 use app\models\db\SysUser;
 use app\utils\CacheUtil;
+use app\utils\SessionUtil;
 use yii\db\Exception;
 
 /**
@@ -76,6 +77,8 @@ class UserManager extends BaseManager {
             throw new ProcessException("password error");
         }
         
+        SessionUtil::set(SessionUtil::KEY_USER_ID, $sysUserModel->id);
+        
         $loginToken = md5($account . time());
         $userCacheModel = new UserCacheModel();
         $userCacheModel->id = $sysUserModel->id;
@@ -83,5 +86,18 @@ class UserManager extends BaseManager {
         CacheUtil::set(CacheUtil::PREFIX_USER_ID, $sysUserModel->id, $userCacheModel->toArray());
         
         return $loginToken;
+    }
+    
+    /**
+     * 获取当前用户的 loginToken 如果没有，则说明没有登录
+     * @return string|null 登录令牌
+     */
+    public function getLoginToken() {
+        $userId = (int) SessionUtil::get(SessionUtil::KEY_USER_ID, 0);
+        $cacheArray = CacheUtil::get(CacheUtil::PREFIX_USER_ID, $userId, []);
+        $userCacheModel = new UserCacheModel();
+        $userCacheModel->setAttributes($cacheArray);
+        
+        return !empty($userCacheModel->loginToken) ? $userCacheModel->loginToken : null;
     }
 }

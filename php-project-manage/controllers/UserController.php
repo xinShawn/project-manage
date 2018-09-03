@@ -55,16 +55,11 @@ class UserController extends BaseController {
     }
     
     /**
-     * 检测是否已经登录
+     * 检测是否已经登录，并返回 loginToken。如果 loginToken 为 null，则登录无效
      */
     public function actionCheckLogin() {
-        $isLogin = "false";
-        
-        if (SessionUtil::get(SessionUtil::KEY_USER_ID) !== null) {
-            $isLogin = "true";
-        }
-        
-        return ApiReturn::retSucc(["isLogin" => $isLogin]);
+        $loginToken = MP::getUserManager()->getLoginToken();
+        return ApiReturn::retSucc(["loginToken" => $loginToken]);
     }
     
     /**

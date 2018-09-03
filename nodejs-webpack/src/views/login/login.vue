@@ -15,7 +15,7 @@
             <el-input v-model='from.account' auto-complete='off'></el-input>
           </el-form-item>
           <el-form-item :label='$t("login[\"password\"]")'>
-            <el-input type='password' v-model='from.password' auto-complete='off'></el-input>
+            <el-input type='password' v-model='from.password' auto-complete='off' @keyup.enter.native="submitLogin"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type='primary' @click='submitLogin'>{{ $t("login['login']") }}</el-button>

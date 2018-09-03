@@ -1,3 +1,5 @@
+import HttpUtil from "../../utils/HttpUtil";
+import ApiReturnModel from "../../models/ApiReturnModel";
 
 
 export default {
@@ -38,16 +40,62 @@ export default {
      */
     setLoginToken ({ commit }, loginToken) {
       commit("setLoginToken", loginToken);
-    }
+    },
+  
+    /**
+     * 检测是否已经登录
+     */
+    async checkLogin ({ commit, state }, needLoginCallback) {
+      
+      if (state.loginToken !== "") {
+        commit("setLoginToken", state.loginToken);
+      } else {
+        HttpUtil.xmlHttpRequestPost("/user/check-login", {},
+          (response) => {
+            let apiReturn = ApiReturnModel.initByXmlResponse(response);
+            if (apiReturn.code < 0) {
+              console.error(response);
+              needLoginCallback(true);
+              return;
+            }
+            let loginToken = apiReturn.data.loginToken;
+            if (loginToken === "" || loginToken === null) {
+              commit("setNotLogin");
+              needLoginCallback(true);
+              return;
+            }
+            
+            commit("setLoginToken", loginToken);
+            needLoginCallback(false);
+          },
+          (error) => {
+            console.error(error);
+            needLoginCallback(true);
+          },
+          5000);
+      }
+    },
   },
   
   /**
    * 设置store的方法。不支持异步
    */
   mutations: {
+    /**
+     * 设置 loginToken 并把状态 已登录
+     * @param state
+     * @param loginToken
+     */
     setLoginToken (state, loginToken) {
       state.loginStatus = true;
       state.loginToken = loginToken;
+    },
+  
+    /**
+     * 设置状态为 未登录
+     */
+    setNotLogin(state) {
+      state.loginStatus = false;
     }
   }
 }

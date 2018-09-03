@@ -1,5 +1,5 @@
 <template>
-  <main v-if="$store.getters.isLogin">
+  <main id="nav" v-if="$store.getters.isLogin">
     <el-header>
       <h1>后台管理系统</h1>
       <!-- 导航菜单 -->
@@ -58,6 +58,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  #nav {
+    padding: 0;
+  }
   header {
     $line-height: 60px;
     background-color: rgb(84, 92, 100);
