@@ -64,7 +64,10 @@ class UserController extends BaseController {
     
     /**
      * 进行登录
+     * @return string
      * @throws ProcessException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionLogin() {
         $account = $this->post("account");
@@ -73,5 +76,13 @@ class UserController extends BaseController {
         $loginToken = MP::getUserManager()->login($account, $password);
         
         return ApiReturn::retSucc(["loginToken" => $loginToken]);
+    }
+    
+    /**
+     * 进行登出
+     */
+    public function actionLogout() {
+        MP::getUserManager()->logout();
+        return ApiReturn::retSucc();
     }
 }

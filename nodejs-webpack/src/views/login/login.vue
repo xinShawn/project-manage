@@ -50,6 +50,7 @@ export default {
     }
   },
   created() {
+    this.checkIsLogin();
     this.checkIsInit();
   },
   methods: {
@@ -79,6 +80,15 @@ export default {
         5000
       );
     },
+    
+    /**
+     * 检测是否已经登录
+     */
+    checkIsLogin() {
+      if (this.$store.state.auth.loginStatus) {
+        this.$router.push("/main");
+      }
+    },
   
     /**
      * 提交登录表单
@@ -106,6 +116,18 @@ export default {
         },
         5000
       )
+    }
+  },
+  computed: {
+    isLogin () {
+      return this.$store.state.auth.loginStatus;
+    }
+  },
+  watch: {
+    isLogin (loginStatus) {
+      if (loginStatus) {
+        this.$router.push("/main");
+      }
     }
   }
 }
