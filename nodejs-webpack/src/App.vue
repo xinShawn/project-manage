@@ -73,7 +73,6 @@ body {
 }
 #app {
   height: 100%;
-  text-align: center;
   a {
     text-decoration: none;
   }

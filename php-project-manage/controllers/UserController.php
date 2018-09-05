@@ -6,7 +6,7 @@ namespace app\controllers;
 use app\exceptions\ProcessException;
 use app\managers\MP;
 use app\models\ApiReturn;
-use app\utils\SessionUtil;
+use app\models\db\SysUser;
 use Yii;
 
 /**
@@ -84,5 +84,13 @@ class UserController extends BaseController {
     public function actionLogout() {
         MP::getUserManager()->logout();
         return ApiReturn::retSucc();
+    }
+    
+    /**
+     * 获取用户表格数据
+     */
+    public function actionGetUserTable() {
+        $tableData = SysUser::getUserTable();
+        return ApiReturn::retSucc($tableData);
     }
 }
