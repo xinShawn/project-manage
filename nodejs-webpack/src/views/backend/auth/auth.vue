@@ -1,8 +1,10 @@
 <template>
   <main class="backend-auth">
-    <el-tabs tab-position="right" style="padding: 0;margin: 0">
-      <el-tab-pane label="用户">
+    <el-tabs tab-position="right" style="padding: 0;margin: 0" value="user">
+      <el-tab-pane :label="$t('user')" name="user">
         <backend-auth-user></backend-auth-user>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('group')" name="group">
       </el-tab-pane>
     </el-tabs>
   </main>

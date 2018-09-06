@@ -4,7 +4,7 @@
 export default class TimeUtil {
   /**
    * 时间戳转时间
-   * @param {String|Number} timestamp
+   * @param {String|Number} timestamp 时间戳（秒 或 毫秒）
    */
   public static timestampToDate(timestamp) {
     let time = parseInt(timestamp);

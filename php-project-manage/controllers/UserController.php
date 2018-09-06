@@ -49,7 +49,7 @@ class UserController extends BaseController {
             return ApiReturn::ret(ApiReturn::FAIL_ALREADY_INIT);
         }
     
-        $userManager->addUser(0, $account, $password, "系统管理员");
+        $userManager->addUser(0, $account, $password, "系统管理员", "系统管理员");
         
         return ApiReturn::retSucc();
     }
@@ -92,5 +92,24 @@ class UserController extends BaseController {
     public function actionGetUserTable() {
         $tableData = SysUser::getUserTable();
         return ApiReturn::retSucc($tableData);
+    }
+    
+    /**
+     * 添加用户
+     * @throws \Throwable
+     */
+    public function actionAddUser() {
+        $account = $this->param("account");
+        $password = $this->param("password");
+        $real_name = $this->param("real_name");
+        $nickname = $this->param("nickname");
+        
+        if (empty($account) || empty($password) || empty($real_name) || empty($nickname)) {
+            return ApiReturn::retFailEmptyData();
+        }
+        
+        MP::getUserManager()->addUser(0, $account, $password, $real_name, $nickname);
+        
+        return ApiReturn::retSucc();
     }
 }

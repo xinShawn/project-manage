@@ -41,17 +41,20 @@ class UserManager extends BaseManager {
     
     /**
      * 添加用户
-     * @param int $groupId
-     * @param string $account
-     * @param string $password
-     * @param string $nickname
+     * @param int $groupId 组id
+     * @param string $account 账号
+     * @param string $password 登录密码
+     * @param string $real_name 真实姓名
+     * @param string $nickname 昵称
+     * @throws Exception
      * @throws \Throwable
      */
-    public function addUser($groupId, $account, $password, $nickname) {
+    public function addUser($groupId, $account, $password, $real_name, $nickname) {
         $user = new SysUser();
         $user->group_id = $groupId;
         $user->account = $account;
         $user->password = $password;
+        $user->real_name = $real_name;
         $user->nickname = $nickname;
         $user->create_time = time();
         

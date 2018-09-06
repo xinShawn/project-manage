@@ -5,7 +5,7 @@
       <!-- 导航菜单 -->
       <el-menu :default-active="activeName" class="nav" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <el-menu-item :index="item.link" :key="index" v-for="(item, index) in links">
-          <router-link :to="item.link">{{item.name}}</router-link>
+          <router-link :to="item.link">{{ item.name }}</router-link>
         </el-menu-item>
       </el-menu>
       <!-- 搜索框 -->
@@ -124,24 +124,25 @@ export default {
   }
 </style>
 <style lang="scss">
-  .el-input__inner {
-    border: none;
-    border: {
-      radius: 0;
-      right: 1px #545C64 solid;
-    }
-  }
-  .search-content {
-    .el-input__inner {
-      border: none;
-      &::placeholder {
-        color: #ffffff;
-      }
-    }
-  }
-  .options {
-    .el-select-dropdown__item {
-      font-size: 12px;
-    }
-  }
+  /*这里的属性修改会导致 App.vue 下所有的 el-input 的变化。应该寻找其他解决方案*/
+  /*.el-input__inner {*/
+    /*border: none;*/
+    /*border: {*/
+      /*radius: 0;*/
+      /*right: 1px #545C64 solid;*/
+    /*}*/
+  /*}*/
+  /*.search-content {*/
+    /*.el-input__inner {*/
+      /*border: none;*/
+      /*&::placeholder {*/
+        /*color: #ffffff;*/
+      /*}*/
+    /*}*/
+  /*}*/
+  /*.options {*/
+    /*.el-select-dropdown__item {*/
+      /*font-size: 12px;*/
+    /*}*/
+  /*}*/
 </style>

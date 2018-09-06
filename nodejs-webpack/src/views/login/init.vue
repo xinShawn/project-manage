@@ -1,7 +1,7 @@
 <template>
   <main id='loginInit'>
     <el-row>
-      <h3>{{ $t("login['init system']") }}</h3>
+      <h3>{{ $t("init system") }}</h3>
     </el-row>
     <el-row :gutter='20' class='login-row'>
       <!--START 两边空白占位区-->
@@ -21,7 +21,7 @@
             <el-input type='password' v-model='form.passwordCheck' auto-complete='off'></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type='primary' @click='submitAdmin'>{{ $t("login['initialize']") }}</el-button>
+            <el-button type='primary' @click='submitAdmin'>{{ $t("initialize") }}</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -53,15 +53,15 @@ export default {
   methods: {
     submitAdmin () {
       if (this.form.password !== this.form.passwordCheck) {
-        this.$message.warning(this.$t("login['the two passwords were different']"));
+        this.$message.warning(this.$t("the two passwords were different"));
         return;
       }
       if (this.form.password.length < 6) {
-        this.$message.warning(this.$t("login['The password must be no less than 6 characters']"));
+        this.$message.warning(this.$t("The password must be no less than 6 characters"));
         return;
       }
       if (this.form.account.length < 4) {
-        this.$message.warning(this.$t("login['The account must be no less than 4 characters']"));
+        this.$message.warning(this.$t("The account must be no less than 4 characters"));
       }
       
       this.axios.post(HttpUtil.getBaseUrl() + "/user/init-admin-user",
@@ -83,7 +83,7 @@ export default {
       }).catch((error) => {
         
         console.error(error);
-        this.$message.error(this.$t("error['Request server exception']"));
+        this.$message.error(this.$t("Request server exception"));
       });
     }
   },

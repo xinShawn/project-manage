@@ -1,14 +1,14 @@
 <template>
   <main>
-    <el-tabs tab-position="right" style="padding: 0;margin: 0">
-      <el-tab-pane label="权限">
+    <el-tabs tab-position="right" style="padding: 0;margin: 0" value="log">
+      <el-tab-pane :label="$t('auth')">
         <auth></auth>
       </el-tab-pane>
-      <el-tab-pane label="日志">
+      <el-tab-pane :label="$t('log')" name="log">
       </el-tab-pane>
-      <el-tab-pane label="设置">
+      <el-tab-pane :label="$t('setting')">
       </el-tab-pane>
-      <el-tab-pane label="工具">
+      <el-tab-pane :label="$t('tools')">
       </el-tab-pane>
     </el-tabs>
   </main>
