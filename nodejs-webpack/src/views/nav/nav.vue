@@ -1,7 +1,7 @@
 <template>
   <main id="nav" v-if="$store.getters.isLogin">
     <el-header>
-      <h1>后台管理系统</h1>
+      <h1>{{ $t("backend manage system") }}</h1>
       <!-- 导航菜单 -->
       <el-menu :default-active="activeName" class="nav" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <el-menu-item :index="item.link" :key="index" v-for="(item, index) in links">
@@ -14,12 +14,12 @@
           <el-option v-for="(item, index) in searchs" :key="index" :label="item" :value="item">
           </el-option>
         </el-select>
-        <el-input class="search-content" size="mini" placeholder="搜索的内容"></el-input>
-        <el-button size="mini" type="info">搜索</el-button>
+        <el-input class="search-content" size="mini" :placeholder="$t('search content')"></el-input>
+        <el-button size="mini" type="info">{{ $t("search") }}</el-button>
   
   
         <!--登出按钮-->
-        <el-button size="mini" type="danger" @click="logout">登出</el-button>
+        <el-button size="mini" type="danger" @click="logout">{{ $t("logout") }}</el-button>
       </el-form>
       <!-- 用户名 -->
     </el-header>
@@ -35,23 +35,23 @@ export default {
     return {
       // 导航名称与路由地址
       links: [{
-        name: '我的地盘',
+        name: this.$t('my site'),
         link: '/main'
       }, {
-        name: '任务列表',
+        name: this.$t('mission list'),
         link: '/missions'
       }, {
-        name: '项目管理',
+        name: this.$t('project manage'),
         link: '/projects'
       }, {
-        name: '后台管理',
+        name: this.$t('backend manage'),
         link: '/backend'
       }],
       // 搜索的选项列表
       searchs: [
-        'Bug', '任务', '项目', '用户', '发布', '测试单'
+        this.$t('bug'), this.$t('mission'), this.$t('project'), this.$t('user'), this.$t('publish'), this.$t('test order')
       ],
-      searchOption: '任务'
+      searchOption: this.$t('mission')
     }
   },
   created () {
