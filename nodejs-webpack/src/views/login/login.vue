@@ -11,10 +11,10 @@
       <!--END 两边空白占位区-->
       <el-col :span='12' class='initPanel'>
         <el-form ref='form' label-width='80px'>
-          <el-form-item :label='$t("login[\"account\"]")'>
+          <el-form-item :label='$t("account")'>
             <el-input v-model='from.account' auto-complete='off'></el-input>
           </el-form-item>
-          <el-form-item :label='$t("login[\"password\"]")'>
+          <el-form-item :label='$t("password")'>
             <el-input type='password' v-model='from.password' auto-complete='off' @keyup.enter.native="submitLogin"></el-input>
           </el-form-item>
           <el-form-item>

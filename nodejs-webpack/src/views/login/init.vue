@@ -11,13 +11,13 @@
       <!--END 两边空白占位区-->
       <el-col :span='12' class='initPanel'>
         <el-form ref='form' label-width='100px'>
-          <el-form-item :label='$t("login[\"account\"]")'>
+          <el-form-item :label='$t("account")'>
             <el-input v-model='form.account' auto-complete='off'></el-input>
           </el-form-item>
-          <el-form-item :label='$t("login[\"password\"]")'>
+          <el-form-item :label='$t("password")'>
             <el-input type='password' v-model='form.password' auto-complete='off'></el-input>
           </el-form-item>
-          <el-form-item :label='$t("login[\"confirmation\"]")'>
+          <el-form-item :label='$t("confirmation")'>
             <el-input type='password' v-model='form.passwordCheck' auto-complete='off'></el-input>
           </el-form-item>
           <el-form-item>
