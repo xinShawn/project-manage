@@ -1,7 +1,7 @@
 <template>
   <main>
     <el-row>
-      <h3>{{ $t("login['login page']") }}</h3>
+      <h3>{{ $t("login page") }}</h3>
     </el-row>
     <el-row :gutter='20' class='login-row'>
       <!--START 两边空白占位区-->
@@ -18,7 +18,7 @@
             <el-input type='password' v-model='from.password' auto-complete='off' @keyup.enter.native="submitLogin"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type='primary' @click='submitLogin'>{{ $t("login['login']") }}</el-button>
+            <el-button type='primary' @click='submitLogin'>{{ $t("login") }}</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -50,6 +50,7 @@ export default {
     }
   },
   created() {
+    this.checkIsLogin();
     this.checkIsInit();
   },
   methods: {
@@ -79,6 +80,15 @@ export default {
         5000
       );
     },
+    
+    /**
+     * 检测是否已经登录
+     */
+    checkIsLogin() {
+      if (this.$store.state.auth.loginStatus) {
+        this.$router.push("/main");
+      }
+    },
   
     /**
      * 提交登录表单
@@ -102,10 +112,22 @@ export default {
         },
         (error) => {
           console.error(error);
-          that.$message.error(that.$t("error['Request timeout']"));
+          that.$message.error(that.$t("Request timeout"));
         },
         5000
       )
+    }
+  },
+  computed: {
+    isLogin () {
+      return this.$store.state.auth.loginStatus;
+    }
+  },
+  watch: {
+    isLogin (loginStatus) {
+      if (loginStatus) {
+        this.$router.push("/main");
+      }
     }
   }
 }

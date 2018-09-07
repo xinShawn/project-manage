@@ -7,6 +7,7 @@ use app\models\cache\UserCacheModel;
 use app\models\db\SysUser;
 use app\utils\CacheUtil;
 use app\utils\SessionUtil;
+use Yii;
 use yii\db\Exception;
 
 /**
@@ -40,17 +41,20 @@ class UserManager extends BaseManager {
     
     /**
      * 添加用户
-     * @param int $groupId
-     * @param string $account
-     * @param string $password
-     * @param string $nickname
+     * @param int $groupId 组id
+     * @param string $account 账号
+     * @param string $password 登录密码
+     * @param string $real_name 真实姓名
+     * @param string $nickname 昵称
+     * @throws Exception
      * @throws \Throwable
      */
-    public function addUser($groupId, $account, $password, $nickname) {
+    public function addUser($groupId, $account, $password, $real_name, $nickname) {
         $user = new SysUser();
         $user->group_id = $groupId;
         $user->account = $account;
         $user->password = $password;
+        $user->real_name = $real_name;
         $user->nickname = $nickname;
         $user->create_time = time();
         
@@ -65,6 +69,8 @@ class UserManager extends BaseManager {
      * @param string $password 登录密码
      * @return string 登录令牌
      * @throws ProcessException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function login($account, $password) {
         $sysUserModel = SysUser::findOne(["account" => $account]);
@@ -77,13 +83,21 @@ class UserManager extends BaseManager {
             throw new ProcessException("password error");
         }
         
-        SessionUtil::set(SessionUtil::KEY_USER_ID, $sysUserModel->id);
+        $time = time();
         
-        $loginToken = md5($account . time());
+        // 设置登录状态信息
+        SessionUtil::set(SessionUtil::KEY_USER_ID, $sysUserModel->id);
+        $loginToken = md5($account . $time);
         $userCacheModel = new UserCacheModel();
         $userCacheModel->id = $sysUserModel->id;
         $userCacheModel->loginToken = $loginToken;
         CacheUtil::set(CacheUtil::PREFIX_USER_ID, $sysUserModel->id, $userCacheModel->toArray());
+        
+        // 更新用户登录状态
+        $sysUserModel->last_login_time = $time;
+        $sysUserModel->last_login_ip = Yii::$app->getRequest()->getUserIP();
+        
+        $sysUserModel->update();
         
         return $loginToken;
     }
@@ -99,5 +113,12 @@ class UserManager extends BaseManager {
         $userCacheModel->setAttributes($cacheArray);
         
         return !empty($userCacheModel->loginToken) ? $userCacheModel->loginToken : null;
+    }
+    
+    /**
+     * 注销
+     */
+    public function logout() {
+        SessionUtil::destroy();
     }
 }

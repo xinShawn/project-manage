@@ -41,14 +41,19 @@ export default {
     setLoginToken ({ commit }, loginToken) {
       commit("setLoginToken", loginToken);
     },
-  
+    
     /**
      * 检测是否已经登录
+     * @param commit
+     * @param state
+     * @param needLoginCallback。检测后结果的返回。带有一个参数是否需要登录 needLoginCallback(isNeedLogin);
+     * @return {Promise<void>}
      */
     async checkLogin ({ commit, state }, needLoginCallback) {
       
       if (state.loginToken !== "") {
         commit("setLoginToken", state.loginToken);
+        needLoginCallback(false);
       } else {
         HttpUtil.xmlHttpRequestPost("/user/check-login", {},
           (response) => {
@@ -96,6 +101,7 @@ export default {
      */
     setNotLogin(state) {
       state.loginStatus = false;
+      state.loginToken = "";
     }
   }
 }

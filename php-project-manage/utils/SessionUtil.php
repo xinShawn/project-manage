@@ -33,4 +33,19 @@ class SessionUtil {
     public static function get($key, $defaultValue = null) {
         return Yii::$app->getSession()->get($key, $defaultValue);
     }
+    
+    /**
+     * 删除某个key
+     * @param $key
+     */
+    public static function delete($key) {
+        Yii::$app->getSession()->remove($key);
+    }
+    
+    /**
+     * 销毁 session
+     */
+    public static function destroy() {
+        Yii::$app->getSession()->destroy();
+    }
 }

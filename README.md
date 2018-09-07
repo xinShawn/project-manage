@@ -2,7 +2,7 @@
 
 ## 项目所需环境
     nodejs  8.11 或以上
-    php     5.4 或以上(推荐 使用php7)
+    php     7.1.13 或以上(composer安装所需最低版本)
     mysql   5.6 或以上
     nginx|apache    (信息服务器)
     composer        (php包管理工具，类似于 nodejs 的 npm)
@@ -59,7 +59,6 @@
         /src                源代码
             /assets         静态资源
             /components     组件。一般是可重复使用的控件
-            /messages       国际化目录（多语言配置）
             /models         模型（TypeScript）。对一些数据格式的封装
             /router         * 路由配置
             /store          * vuex 代码存放路径

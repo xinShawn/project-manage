@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-      <v-nav></v-nav>
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+    <v-nav></v-nav>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -73,7 +73,6 @@ body {
 }
 #app {
   height: 100%;
-  text-align: center;
   a {
     text-decoration: none;
   }

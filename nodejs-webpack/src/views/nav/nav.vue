@@ -1,11 +1,11 @@
 <template>
   <main id="nav" v-if="$store.getters.isLogin">
     <el-header>
-      <h1>后台管理系统</h1>
+      <h1>{{ $t("backend manage system") }}</h1>
       <!-- 导航菜单 -->
       <el-menu :default-active="activeName" class="nav" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <el-menu-item :index="item.link" :key="index" v-for="(item, index) in links">
-          <router-link :to="item.link">{{item.name}}</router-link>
+          <router-link :to="item.link">{{ item.name }}</router-link>
         </el-menu-item>
       </el-menu>
       <!-- 搜索框 -->
@@ -14,8 +14,12 @@
           <el-option v-for="(item, index) in searchs" :key="index" :label="item" :value="item">
           </el-option>
         </el-select>
-        <el-input class="search-content" size="mini" placeholder="搜索的内容"></el-input>
-        <el-button size="mini" type="info">搜索</el-button>
+        <el-input class="search-content" size="mini" :placeholder="$t('search content')"></el-input>
+        <el-button size="mini" type="info">{{ $t("search") }}</el-button>
+  
+  
+        <!--登出按钮-->
+        <el-button size="mini" type="danger" @click="logout">{{ $t("logout") }}</el-button>
       </el-form>
       <!-- 用户名 -->
     </el-header>
@@ -23,31 +27,48 @@
 </template>
 
 <script>
+import HttpUtil from "../../utils/HttpUtil";
+import ApiReturnModel from "../../models/ApiReturnModel";
+
 export default {
   data() {
     return {
       // 导航名称与路由地址
       links: [{
-        name: '我的地盘',
-        link: 'main'
+        name: this.$t('my site'),
+        link: '/main'
       }, {
-        name: '任务列表',
-        link: 'missions'
+        name: this.$t('mission list'),
+        link: '/missions'
       }, {
-        name: '项目管理',
-        link: 'projects'
+        name: this.$t('project manage'),
+        link: '/projects'
       }, {
-        name: '后台管理',
-        link: 'backend'
+        name: this.$t('backend manage'),
+        link: '/backend'
       }],
       // 搜索的选项列表
       searchs: [
-        'Bug', '任务', '项目', '用户', '发布', '测试单'
+        this.$t('bug'), this.$t('mission'), this.$t('project'), this.$t('user'), this.$t('publish'), this.$t('test order')
       ],
-      searchOption: '任务'
+      searchOption: this.$t('mission')
     }
   },
   created () {
+  },
+  methods: {
+    logout () {
+      let that = this;
+      
+      this.axios.post(HttpUtil.getBaseUrl() + "/user/logout").then((response) => {
+        let apiReturn = ApiReturnModel.initByAxiosResponse(response);
+        if (apiReturn.code > 0) {
+          that.$store.commit("setNotLogin");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
   },
   computed: {
     activeName () {
@@ -103,24 +124,25 @@ export default {
   }
 </style>
 <style lang="scss">
-  .el-input__inner {
-    border: none;
-    border: {
-      radius: 0;
-      right: 1px #545C64 solid;
-    }
-  }
-  .search-content {
-    .el-input__inner {
-      border: none;
-      &::placeholder {
-        color: #ffffff;
-      }
-    }
-  }
-  .options {
-    .el-select-dropdown__item {
-      font-size: 12px;
-    }
-  }
+  /*这里的属性修改会导致 App.vue 下所有的 el-input 的变化。应该寻找其他解决方案*/
+  /*.el-input__inner {*/
+    /*border: none;*/
+    /*border: {*/
+      /*radius: 0;*/
+      /*right: 1px #545C64 solid;*/
+    /*}*/
+  /*}*/
+  /*.search-content {*/
+    /*.el-input__inner {*/
+      /*border: none;*/
+      /*&::placeholder {*/
+        /*color: #ffffff;*/
+      /*}*/
+    /*}*/
+  /*}*/
+  /*.options {*/
+    /*.el-select-dropdown__item {*/
+      /*font-size: 12px;*/
+    /*}*/
+  /*}*/
 </style>

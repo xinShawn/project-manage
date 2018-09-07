@@ -6,7 +6,7 @@ namespace app\controllers;
 use app\exceptions\ProcessException;
 use app\managers\MP;
 use app\models\ApiReturn;
-use app\utils\SessionUtil;
+use app\models\db\SysUser;
 use Yii;
 
 /**
@@ -49,7 +49,7 @@ class UserController extends BaseController {
             return ApiReturn::ret(ApiReturn::FAIL_ALREADY_INIT);
         }
     
-        $userManager->addUser(0, $account, $password, "系统管理员");
+        $userManager->addUser(0, $account, $password, "系统管理员", "系统管理员");
         
         return ApiReturn::retSucc();
     }
@@ -64,7 +64,10 @@ class UserController extends BaseController {
     
     /**
      * 进行登录
+     * @return string
      * @throws ProcessException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionLogin() {
         $account = $this->post("account");
@@ -73,5 +76,40 @@ class UserController extends BaseController {
         $loginToken = MP::getUserManager()->login($account, $password);
         
         return ApiReturn::retSucc(["loginToken" => $loginToken]);
+    }
+    
+    /**
+     * 进行登出
+     */
+    public function actionLogout() {
+        MP::getUserManager()->logout();
+        return ApiReturn::retSucc();
+    }
+    
+    /**
+     * 获取用户表格数据
+     */
+    public function actionGetUserTable() {
+        $tableData = SysUser::getUserTable();
+        return ApiReturn::retSucc($tableData);
+    }
+    
+    /**
+     * 添加用户
+     * @throws \Throwable
+     */
+    public function actionAddUser() {
+        $account = $this->param("account");
+        $password = $this->param("password");
+        $real_name = $this->param("real_name");
+        $nickname = $this->param("nickname");
+        
+        if (empty($account) || empty($password) || empty($real_name) || empty($nickname)) {
+            return ApiReturn::retFailEmptyData();
+        }
+        
+        MP::getUserManager()->addUser(0, $account, $password, $real_name, $nickname);
+        
+        return ApiReturn::retSucc();
     }
 }
