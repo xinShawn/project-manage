@@ -23,7 +23,7 @@ class UserManager extends BaseManager {
      */
     public static function getInstance() {
         if (self::$shareInstance === null) {
-            self::$shareInstance = new UserManager();
+            self::$shareInstance = new static();
         }
         return self::$shareInstance;
     }
@@ -120,5 +120,13 @@ class UserManager extends BaseManager {
      */
     public function logout() {
         SessionUtil::destroy();
+    }
+    
+    /**
+     * @return int 当前登录的用户id
+     */
+    public function getCurrentUserId() {
+        $userId = (int) SessionUtil::get(SessionUtil::KEY_USER_ID);
+        return $userId;
     }
 }

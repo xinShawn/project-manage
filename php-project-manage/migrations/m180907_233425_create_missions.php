@@ -20,6 +20,13 @@ class m180907_233425_create_missions extends Migration {
         ], "CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB COMMENT = '优先级配置表'");
         $this->createIndex("order", "cfg_priority", "order");
         
+        $time = time();
+        $this->batchInsert("cfg_priority", ["name", "order", "last_user_id", "update_time", "create_time"], [
+            ["高", 10, 0, $time, $time],
+            ["中", 20, 0, $time, $time],
+            ["低", 30, 0, $time, $time],
+        ]);
+        
         $this->createTable("mission", [
             "id" => $this->primaryKey()->unsigned(),
             "priority_id" => $this->integer()->unsigned()->notNull()->comment("优先级id"),

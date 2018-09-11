@@ -26,7 +26,7 @@ class PageController extends BaseController {
         $exception = Yii::$app->errorHandler->exception;
         if ($exception !== null) {
             Yii::$app->response->statusCode = 200;
-            return ApiReturn::retFailMessage(Yii::t("app", $exception->getMessage()));
+            return ApiReturn::retFailMessage($exception->getMessage());
         } else {
             return ApiReturn::retFailMessage(Yii::t("app", "unknown error"));
         }

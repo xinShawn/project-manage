@@ -48,4 +48,13 @@ class CfgPriority extends BaseDBModel
             'create_time' => 'Create Time',
         ];
     }
+    
+    /**
+     * @return array [index => 优先级详细信息]
+     */
+    public static function getRichOptions() {
+        $richOptions = CfgPriority::find()->asArray()->select(["id", "name"])->orderBy(["order" => SORT_ASC])->all();
+        
+        return $richOptions;
+    }
 }

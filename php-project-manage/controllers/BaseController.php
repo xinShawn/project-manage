@@ -49,7 +49,7 @@ abstract class BaseController extends Controller {
     public function param($name, $defaultValue = null) {
         $value = Yii::$app->getRequest()->post($name, $defaultValue);
         if ($value == $defaultValue) {
-            $value = Yii::$app->getRequest()->post($name, $defaultValue);
+            $value = Yii::$app->getRequest()->get($name, $defaultValue);
         }
         return $value;
     }

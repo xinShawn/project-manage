@@ -6,7 +6,7 @@
         <el-button type="primary" icon="el-icon-circle-plus" size="mini" @click="dialog.show = true">{{ $t("add user") }}</el-button>
       </el-row>
       
-      <!-- stripe 和 border 直接赋值，会报错。具体是因为给的值是 String 类型，不是 Boolean 类型-->
+      <!-- stripe 和 border 直接赋值，会报错。具体是因为给的值是 String 类型，不是 Boolean 类型。因此需要绑定赋值-->
       <el-table :data="table.rows" size="mini" :stripe="true" :border="true">
         <el-table-column :label="$t('nickname')" prop="nickname" align="center">
         </el-table-column>

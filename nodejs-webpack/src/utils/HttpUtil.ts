@@ -10,15 +10,16 @@ export default class HttpUtil {
 
   /**
    * 发送post请求
-   * @deprecated 向服务器发送 post 请求 注意：这个方法不做任何错误的处理，只做超时处理。而且方法会抛出未知的错误
+   * @author Cinling
+   * @version 该方法不能保证稳定运行，可能会出现未知的错误
+   * @see 向服务器发送 post 请求 注意：这个方法不做任何错误的处理，只做超时处理。而且方法会抛出未知的错误
    * @param url 请求地址
    * @param params post参数
    * @param succCallback 成功回调
-   * @param timeoutMS 超时：毫秒
    * @param timeoutCallback 超时回调
+   * @param timeoutMS 超时：毫秒
    */
-  public static axiosPost(url: string, params: object = {}, succCallback: Function = undefined,
-                     timeoutMS: Number = 500, timeoutCallback: Function = undefined): void {
+  public static axiosPost(url: string, params: object = {}, succCallback: Function = undefined, timeoutCallback: Function = undefined, timeoutMS: Number = 5000): void {
     let isSuccCallback = false;
 
     try {
@@ -32,7 +33,7 @@ export default class HttpUtil {
         }
       });
     } catch (error) {
-
+      console.error(error);
     }
 
     setTimeout(() => {
@@ -43,7 +44,9 @@ export default class HttpUtil {
   }
 
   /**
-   * 发送 post 请求。使用原声js的方法(XMLHttpRequest)
+   * 发送 post 请求。使用原生js的方法(XMLHttpRequest)
+   * @author Cinling
+   * @version 相对比较稳定的版本，但是功能不够齐全
    * @param relativeUrl 请求相对路径
    * @param params 请求参数（json object格式）
    * @param successCallback 成功回调

@@ -11,6 +11,10 @@ import VueI18n from "vue-i18n"
 
 
 Vue.config.productionTip = false;
+/**
+ * @deprecated 推荐使用 HttpUtil.axiosPost()。该方法对请求进行进一步封装，可简化请求参数
+ * @type {AxiosStatic}
+ */
 Vue.prototype.axios = axios;
 Vue.use(ElementUI);
 Vue.use(Vuex);

@@ -3,7 +3,7 @@ namespace app\managers;
 
 
 /**
- * Class MM 所有 manager 的代理类（）
+ * Class MM 所有 manager 的代理类
  * @package app\managers
  */
 class MP {
@@ -12,5 +12,12 @@ class MP {
      */
     public static function getUserManager() {
         return UserManager::getInstance();
+    }
+    
+    /**
+     * @return MissionManager
+     */
+    public static function getMissionManager() {
+        return MissionManager::getInstance();
     }
 }
