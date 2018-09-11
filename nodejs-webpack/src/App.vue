@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-nav></v-nav>
+    <Nav></Nav>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import nav from './views/nav/nav'
+import Nav from './views/nav/Nav'
 
 export default {
   name: 'App',
   components: {
-    'v-nav': nav,
+    Nav,
   },
   data () {
     return {

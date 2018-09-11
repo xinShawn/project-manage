@@ -37,7 +37,7 @@ import ApiReturnModel from "../../models/ApiReturnModel";
 import EncryptUtil from "../../utils/EncryptUtil";
 
 export default {
-  name: 'login',
+  name: 'LoginLogin',
   data() {
     return {
       /**

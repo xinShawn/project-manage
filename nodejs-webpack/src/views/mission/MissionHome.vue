@@ -9,7 +9,7 @@
         <el-table-column prop="id" label="ID"></el-table-column>
         <el-table-column prop="" :label="$t('mission title')">
           <template slot-scope="props">
-            {{ props.row.title }}
+            <router-link :to="{ name: 'detail', params: { id: props.row.id }}">{{ props.row.title }}</router-link>
           </template>
         </el-table-column>
         <el-table-column prop="priority_name" :label="$t('priority')"></el-table-column>
@@ -59,10 +59,10 @@
 </template>
 
 <script>
-  import HttpUtil from "../../../utils/HttpUtil";
+  import HttpUtil from "../../utils/HttpUtil";
   
   export default {
-    name: 'index',
+    name: 'MissionHome',
     data() {
       return {
         /**

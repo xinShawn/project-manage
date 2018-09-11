@@ -40,7 +40,7 @@ import EncryptUtil from '../../utils/EncryptUtil'
 import ApiReturnModel from "../../models/ApiReturnModel";
 
 export default {
-  name: 'init',
+  name: 'LoginInit',
   data: () => {
     return {
       form: {
