@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import main from '../views/main/main'
 import missions from '../views/missions/missions'
+import missionsDetail from '../views/missions/detail/detail'
+import missionsIndex from '../views/missions/index/index'
 import projects from '../views/projects/projects'
 import backend from '../views/backend/backend'
 import loginIndex from '../views/login/index'
@@ -12,51 +14,25 @@ Vue.use(Router)
 
 let router = new Router({
   routes: [
-    {
-      path: '/',
-      redirect: 'login'
-    },
+    {path: '/', redirect: 'login'},
     // 系统初始化页面模块
-    {
-      path: '/login',
-      component: loginIndex,
-      children: [
-        {
-          path: '/',
-          redirect: 'login'
-        },
+    {path: '/login', component: loginIndex, children: [
+        {path: '/', redirect: 'login'},
         // 登录页面
-        {
-          path: 'login',
-          component: loginLogin
-        },
+        {path: 'login', component: loginLogin},
         // 初始化系统页面
-        {
-          path: 'init',
-          component: loginInit
-        }
-      ]
+        {path: 'init', component: loginInit}
+        ]
     },
-    {
-      path: '/main',
-      name: 'main',
-      component: main
+    {path: '/main', name: 'main', component: main},
+    {path: '/missions', name: 'missions', component: missions, children: [
+        {path: '/', redirect: 'index'},
+        {path: 'index', component: missionsIndex},
+        {path: 'detail', component: missionsDetail}
+        ]
     },
-    {
-      path: '/missions',
-      name: 'missions',
-      component: missions
-    },
-    {
-      path: '/projects',
-      name: 'projects',
-      component: projects
-    },
-    {
-      path: '/backend',
-      name: 'backend',
-      component: backend
-    }
+    {path: '/projects', name: 'projects', component: projects},
+    {path: '/backend', name: 'backend', component: backend}
   ],
 });
 //

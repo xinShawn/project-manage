@@ -57,6 +57,9 @@ export default {
   created () {
   },
   methods: {
+    /**
+     * 登出annual执行的方法
+     */
     logout () {
       let that = this;
       
