@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\managers\MP;
 use app\models\ApiReturn;
 use app\models\db\CfgPriority;
+use app\models\db\Mission;
 
 /**
  * Class MissionController 任务控制器
@@ -40,5 +41,14 @@ class MissionController extends BaseController {
         $richOptions = CfgPriority::getRichOptions();
         
         return ApiReturn::retSucc($richOptions);
+    }
+    
+    /**
+     * 获取任务表格的数据
+     */
+    public static function actionGetMissionTable() {
+        $tableData = Mission::getTable(0, 50);
+        
+        return ApiReturn::retSucc($tableData);
     }
 }

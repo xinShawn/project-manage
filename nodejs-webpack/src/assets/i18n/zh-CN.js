@@ -56,4 +56,5 @@ module.exports = {
   "mission priority": "任务优先级",
   "end time": "截至时间",
   "select please": "请选择",
+  "status": "状态",
 };

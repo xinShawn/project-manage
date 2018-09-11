@@ -2,6 +2,8 @@
 
 namespace app\models\db;
 
+use Yii;
+
 /**
  * This is the model class for table "mission".
  *
@@ -79,6 +81,54 @@ class Mission extends BaseDBModel {
             'last_user_id' => 'Last User ID',
             'update_time' => 'Update Time',
             'create_time' => 'Create Time',
+        ];
+    }
+    
+    /**
+     * @return array [状态值 => 状态名字]
+     */
+    public static function getStatusOptions() {
+        return [
+            self::STATUS_NOT_START  => Yii::t("app", "not start"),
+            self::STATUS_START      => Yii::t("app", "underway"),
+            self::STATUS_PAUSE      => Yii::t("app", "pause"),
+            self::STATUS_FINISHED   => Yii::t("app", "finished"),
+            self::STATUS_CLOSED     => Yii::t("app", "closed"),
+            self::STATUS_CANCELED   => Yii::t("app", "canceled")
+        ];
+    }
+    
+    /**
+     * 获取表格数据
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     */
+    public static function getTable($offset, $limit) {
+        $query = self::find()->asArray()->select([
+            "mission.id             AS id",
+            "mission.priority_id    AS priority_id",
+            "cfg_priority.name      AS priority_name",
+            "mission.title          AS title",
+            "mission.status         AS status",
+            "mission.end_time       AS end_time",
+        ])->leftJoin("cfg_priority", "cfg_priority.id = mission.priority_id");
+        
+        $query->orderBy(["id" => SORT_ASC])->offset($offset)->limit($limit);
+    
+        $count = $query->count();
+        $data = $query->all();
+        
+        $statusOptions = self::getStatusOptions();
+        
+        foreach ($data as $key => $item) {
+            $data[$key]["status_name"] = $statusOptions[$item["status"]];
+            $data[$key]["end_time"] = date("Y-m-d H-i-s", $item["end_time"]);
+        }
+        
+        return [
+            "count" => $count,
+            "data" => $data
         ];
     }
 }

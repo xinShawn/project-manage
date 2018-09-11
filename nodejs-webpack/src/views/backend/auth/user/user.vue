@@ -23,8 +23,6 @@
         <el-table-column :label="$t('operate')" align="center">
           <template slot-scope="scope">
             {{ $t("developing") }}...
-            <!--<el-button type="primary" size="mini">修改</el-button>-->
-            <!--<el-button type="danger" size="mini">禁止登录</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -51,8 +49,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button>取 消</el-button>
-          <el-button type="primary" @click="submit">确 定</el-button>
+          <el-button>{{ $t("cancel") }}</el-button>
+          <el-button type="primary" @click="submit">{{ $t("confirmation") }}</el-button>
         </div>
       </el-dialog>
     </footer>

@@ -2,12 +2,22 @@
   <main>
     <!--主要内容-->
     <article>
+      
       <el-button type="primary" icon="el-icon-circle-plus" size="mini" @click="showDialog">{{ $t("add mission") }}</el-button>
+  
+      <el-table :data="table.data" style="width: 100%">
+        <el-table-column prop="id" label="ID"></el-table-column>
+        <el-table-column prop="title" :label="$t('mission title')"></el-table-column>
+        <el-table-column prop="priority_name" :label="$t('priority')"></el-table-column>
+        <el-table-column prop="status_name" :label="$t('status')"></el-table-column>
+        <el-table-column prop="end_time" :label="$t('end time')"></el-table-column>
+      </el-table>
     </article>
     
     <!--隐藏弹窗-->
     <footer>
       
+      <!--添加任务的弹窗-->
       <el-dialog :title="$t('add mission')" :visible.sync="isShowDialog">
         <el-form ref="form" :model="form.data">
           <el-form-item :label="$t('title')" :label-width="formLabelWidth">
@@ -59,7 +69,7 @@
         priorityList: [],
         
         /**
-         * @type {{}}
+         * @type {object} 表单数据封装
          */
         form: {
           /**
@@ -68,7 +78,7 @@
           lock: true,
           
           /**
-           * 表单需要提交的数据
+           * @type {object} 表单需要提交的数据
            */
           data: {
             title: "",
@@ -76,10 +86,21 @@
             content: "",
             endTime: ""
           }
+        },
+        
+        /**
+         * @type {object} 表格数据封装
+         */
+        table: {
+          page: 1,
+          rows: 10,
+          count: 0,
+          data: []
         }
       }
     },
     created() {
+      this.requestTable();
       this.requestPriorityRichOptions();
     },
     methods: {
@@ -87,7 +108,18 @@
        * 请求表格数据
        */
       requestTable() {
-      
+        let that = this;
+        
+        HttpUtil.axiosPost("/mission/get-mission-table", {}, (apiReturn) => {
+          if (apiReturn.code > 0) {
+            that.$set(that.table, "count", apiReturn.data.count);
+            that.$set(that.table, "data", apiReturn.data.data);
+          } else {
+            console.error(apiReturn);
+          }
+        }, (error) => {
+          console.error(error);
+        }, 5000);
       },
       
       /**
@@ -127,6 +159,7 @@
         
         HttpUtil.axiosPost("/mission/add", submitData, (apiReturn) => {
           if (apiReturn.code > 0) {
+            that.requestTable();
             that.$message.success(apiReturn.message);
             that.hideDialog();
           } else {
