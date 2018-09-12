@@ -58,10 +58,10 @@
 </template>
 
 <script>
-  import HttpUtil from "../../../../utils/HttpUtil";
-  import TimeUtil from "../../../../utils/TimeUtil";
-  import ApiReturnModel from "../../../../models/ApiReturnModel";
-  import EncryptUtil from "../../../../utils/EncryptUtil";
+  import HttpUtil from "../../utils/HttpUtil";
+  import TimeUtil from "../../utils/TimeUtil";
+  import ApiReturnModel from "../../models/ApiReturnModel";
+  import EncryptUtil from "../../utils/EncryptUtil";
   
   export default {
     name: 'user',

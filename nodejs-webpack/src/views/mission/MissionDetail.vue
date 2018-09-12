@@ -1,6 +1,6 @@
 <template>
   <main>
-    啊哈哈
+    传入id {{ id }}
   </main>
 </template>
 
@@ -9,13 +9,24 @@
     name: 'MissionDetail',
     data() {
       return {
-        id: undefined
+      
       };
     },
     created() {
-      console.log(this.$route.params);
     },
     mounted() {
+    },
+    computed: {
+      id() {
+        return this.$route.params.id;
+      }
+    },
+    watch: {
+      id(newValue) {
+        if (newValue !== undefined) {
+          console.log(newValue);
+        }
+      }
     }
   }
 </script>
