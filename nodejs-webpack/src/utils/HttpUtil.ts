@@ -24,12 +24,10 @@ export default class HttpUtil {
 
     try {
       axios.post(HttpUtil.getBaseUrl() + url, HttpUtil.objectToPostParams(params)).then((response: any) => {
-        if (response.status === 200) {
-          let apiReturn = new ApiReturnModel(response.data.code, response.data.msg, response.data.data);
-          if (succCallback !== undefined) {
-            isSuccCallback = true;
-            succCallback(apiReturn);
-          }
+        let apiReturn: ApiReturnModel = ApiReturnModel.initByAxiosResponse(response);
+        if (succCallback !== undefined) {
+          isSuccCallback = true;
+          succCallback(apiReturn);
         }
       });
     } catch (error) {

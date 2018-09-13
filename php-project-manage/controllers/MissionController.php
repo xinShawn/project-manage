@@ -46,9 +46,25 @@ class MissionController extends BaseController {
     /**
      * 获取任务表格的数据
      */
-    public static function actionGetMissionTable() {
+    public function actionGetMissionTable() {
         $tableData = Mission::getTable(0, 50);
         
         return ApiReturn::retSucc($tableData);
+    }
+    
+    /**
+     * 修改任务状态
+     * @return string
+     * @throws \Throwable
+     * @throws \app\exceptions\ProcessException
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionChangeMissionStatus() {
+        $id = $this->param("id");
+        $toStatus = $this->param("toStatus");
+        
+        MP::getMissionManager()->changeStatus($id, $toStatus);
+        
+        return ApiReturn::retSucc();
     }
 }

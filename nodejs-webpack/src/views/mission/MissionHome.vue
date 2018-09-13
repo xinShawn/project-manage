@@ -5,7 +5,7 @@
       
       <el-button type="primary" icon="el-icon-circle-plus" @click="showDialog">{{ $t("add mission") }}</el-button>
       
-      <el-table :data="table.data" style="width: 100%">
+      <el-table :data="table.data" v-loading="table.loading" style="width: 100%">
         <el-table-column prop="id" label="ID"></el-table-column>
         <el-table-column prop="" :label="$t('mission title')">
           <template slot-scope="props">
@@ -13,11 +13,18 @@
           </template>
         </el-table-column>
         <el-table-column prop="priority_name" :label="$t('priority')"></el-table-column>
-        <el-table-column prop="status_name" :label="$t('status')"></el-table-column>
+        <el-table-column :label="$t('status')">
+          <template slot-scope="props">
+            <span :style="{color: getColor(props.row.status)}">{{ props.row.status_name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="end_time" :label="$t('end time')"></el-table-column>
         <el-table-column :label="$t('operate')" align="center">
-          <template slot-scope="scope">
-            <el-button size="mini"></el-button>
+          <template slot-scope="props">
+            <el-button size="mini" v-if="isShowStartBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 10)">{{ $t("start") }}</el-button>
+            <el-button size="mini" v-if="isShowPauseBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 20)">{{ $t("pause") }}</el-button>
+            <el-button size="mini" v-if="isShowFinishBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 30)">{{ $t("finish") }}</el-button>
+            <el-button size="mini" v-if="isShowCloseBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 40)">{{ $t("close") }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -103,6 +110,7 @@
          * @type {object} 表格数据封装
          */
         table: {
+          loading: false,
           page: 1,
           rows: 10,
           count: 0,
@@ -163,6 +171,29 @@
       showDialog() {
         this.isShowDialog = true;
       },
+  
+      /**
+       * 修改任务状态
+       */
+      changeMissionStatus(missionId, toStatus) {
+        console.log(missionId);
+        this.table.loading = true;
+  
+        let that = this;
+        HttpUtil.axiosPost("mission/change-mission-status", {id: missionId, toStatus: toStatus}, (apiReturn) => {
+          if (apiReturn.code > 0) {
+            that.requestTable();
+            that.$message.success(apiReturn.message);
+          } else {
+            that.$message.error(apiReturn.message);
+          }
+          that.table.loading = false;
+        }, (error) => {
+          console.error(error);
+          that.table.loading = false;
+          that.$message.error(that.$t("Request server exception"));
+        }, 5000);
+      },
     
       /**
        * 提交要修改的数据
@@ -191,7 +222,66 @@
        */
       getSubmitData() {
         return Object.assign(this.form.data);
-      }
+      },
+      
+      /**
+       * 根据据状态获取颜色值
+       */
+      getColor(status) {
+        status = Number.parseInt(status);
+        switch (status) {
+          case 0:
+            return "#ff5e17";
+          case 10:
+            return "#1f5de7";
+          case 20:
+            return "#e7442d";
+          case 30:
+            return "#34e725";
+          case 40:
+            return "#79917f";
+        }
+      },
+  
+      /**
+       * 是否显示开始按钮
+       * @param status
+       * @return {boolean}
+       */
+      isShowStartBtn(status) {
+        status = Number.parseInt(status);
+        return ([0, 20].indexOf(status) !== -1)
+      },
+  
+      /**
+       * 是否显示暂停按钮
+       * @param status
+       * @return {boolean}
+       */
+      isShowPauseBtn(status) {
+        status = Number.parseInt(status);
+        return ([10].indexOf(status) !== -1)
+      },
+  
+      /**
+       * 是否显示完成按钮
+       * @param status
+       * @return {boolean}
+       */
+      isShowFinishBtn(status) {
+        status = Number.parseInt(status);
+        return ([10].indexOf(status) !== -1)
+      },
+  
+      /**
+       * 是否显示关闭按钮
+       * @param status
+       * @return {boolean}
+       */
+      isShowCloseBtn(status) {
+        status = Number.parseInt(status);
+        return ([30].indexOf(status) !== -1)
+      },
     },
   }
 </script>

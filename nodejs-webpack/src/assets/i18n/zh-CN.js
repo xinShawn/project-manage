@@ -57,4 +57,8 @@ module.exports = {
   "end time": "截至时间",
   "select please": "请选择",
   "status": "状态",
+  "start": "开始",
+  "pause": "暂停",
+  "finish": "完成",
+  "close": "关闭",
 };

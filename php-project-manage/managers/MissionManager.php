@@ -55,4 +55,30 @@ class MissionManager {
             throw new ProcessException(Yii::t("app", "Data write failed"));
         }
     }
+    
+    /**
+     * 修改任务状态
+     * @param int $id 任务id
+     * @param int $status 需要转换到的任务状态
+     * @throws ProcessException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function changeStatus($id, $status) {
+        // 检验状态值是否合法
+        $statusOptions = Mission::getStatusOptions();
+        if (!isset($statusOptions[$status])) {
+            throw new ProcessException(Yii::t("app", "illegal status value") . ". [status: " . $status . "]");
+        }
+        
+        $mission = Mission::findOne(["id" => $id]);
+        
+        $mission->status = $status;
+        $mission->update_time = time();
+        $mission->last_user_id = MP::getUserManager()->getCurrentUserId();
+        
+        if ($mission->update() === false) {
+            throw new ProcessException(Yii::t("app", "Data update failed"));
+        }
+    }
 }
