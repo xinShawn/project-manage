@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "element-ui": "^2.4.6",
     "ts-loader": "^3.1.1",
+    "element-ui": "^2.4.7",
     "ts-md5": "^1.2.4",
     "vue": "^2.5.17",
     "vue-i18n": "^8.0.0",
