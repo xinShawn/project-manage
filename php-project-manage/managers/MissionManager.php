@@ -4,6 +4,7 @@ namespace app\managers;
 
 use app\exceptions\ProcessException;
 use app\models\db\Mission;
+use app\models\form\MissionDetailForm;
 use Yii;
 
 /**
@@ -80,5 +81,23 @@ class MissionManager {
         if ($mission->update() === false) {
             throw new ProcessException(Yii::t("app", "Data update failed"));
         }
+    }
+    
+    /**
+     * 获取任务详情
+     * @param int $id 任务id
+     * @return MissionDetailForm
+     */
+    public function getDetail($id) {
+        $missionDetail = Mission::find()->asArray()->select([
+            "mission.id         AS id",
+            "mission.title      AS title",
+            "mission.content    AS content",
+        ])->where(["id" => $id])->all();
+        
+        $missionDetailForm = new MissionDetailForm();
+        $missionDetailForm->setAttributes($missionDetail);
+        
+        return $missionDetailForm;
     }
 }

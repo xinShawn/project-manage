@@ -7,7 +7,7 @@ namespace app\models\cmd;
  * Class CommandOptionModel 命令行参数模型。用于输出一个控制器可用的模型类型
  * @package app\models\cmd
  */
-class CommandOptionModel extends BaseCmdModel {
+class CommandOption extends BaseCmdModel {
     /**
      * @var string 动作
      */

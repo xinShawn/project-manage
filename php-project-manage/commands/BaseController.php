@@ -3,7 +3,7 @@
 namespace app\commands;
 
 
-use app\models\cmd\CommandOptionModel;
+use app\models\cmd\CommandOption;
 use yii\console\Controller;
 
 /**
@@ -24,7 +24,7 @@ abstract class BaseController extends Controller {
     /**
      * 打印出好看的命令行提示
      * @param string $controllerName 控制器命令名称。如：NodeJsController 应输入：node-js
-     * @param CommandOptionModel[] $commandOptions 命令列表
+     * @param CommandOption[] $commandOptions 命令列表
      * @throws BaseControllerException
      */
     public function printPrettyActionArray($controllerName, array $commandOptions) {

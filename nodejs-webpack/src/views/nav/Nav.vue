@@ -62,14 +62,11 @@ export default {
      * 登出annual执行的方法
      */
     logout () {
-      let that = this;
-      
-      this.axios.post(HttpUtil.getBaseUrl() + "/user/logout").then((response) => {
-        let apiReturn = ApiReturnModel.initByAxiosResponse(response);
+      HttpUtil.axiosPost("/user/logout", {}, (apiReturn) => {
         if (apiReturn.code > 0) {
-          that.$store.commit("setNotLogin");
+          this.$store.commit("setNotLogin");
         }
-      }).catch((error) => {
+      }, (error) => {
         console.error(error);
       });
     }

@@ -55,11 +55,10 @@ export default {
         commit("setLoginToken", state.loginToken);
         needLoginCallback(false);
       } else {
-        HttpUtil.xmlHttpRequestPost("/user/check-login", {},
-          (response) => {
-            let apiReturn = ApiReturnModel.initByXmlResponse(response);
+        HttpUtil.axiosPost("/user/check-login", {},
+          (apiReturn) => {
             if (apiReturn.code < 0) {
-              console.error(response);
+              console.error(apiReturn);
               needLoginCallback(true);
               return;
             }

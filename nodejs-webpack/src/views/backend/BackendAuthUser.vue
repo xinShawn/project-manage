@@ -33,19 +33,19 @@
       <el-dialog :title="$t('add account')" :visible.sync="dialog.show">
         <el-form ref="form" :model="form">
           <el-form-item :label="$t('account')" :label-width="formLabelWidth">
-            <el-input v-model="form.account" :placeholder="$t('input account please')" auto-complete="off"></el-input>
+            <el-input v-model="form.account" :placeholder="$t('input account please')" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('password')" :label-width="formLabelWidth">
-            <el-input v-model="form.password" :placeholder="$t('input password please')" type="password" auto-complete="off"></el-input>
+            <el-input v-model="form.password" :placeholder="$t('input password please')" type="password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('ensure')" :label-width="formLabelWidth">
-            <el-input v-model="form.checkPassword" :placeholder="$t('ensure password please')" type="password" auto-complete="off"></el-input>
+            <el-input v-model="form.checkPassword" :placeholder="$t('ensure password please')" type="password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('real name')" :label-width="formLabelWidth">
-            <el-input v-model="form.real_name" :placeholder="$t('input real name please')" auto-complete="off"></el-input>
+            <el-input v-model="form.real_name" :placeholder="$t('input real name please')" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('nickname')" :label-width="formLabelWidth">
-            <el-input v-model="form.nickname" :placeholder="$t('input nickname please')" auto-complete="off"></el-input>
+            <el-input v-model="form.nickname" :placeholder="$t('input nickname please')" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -115,17 +115,11 @@
        * 请求用户数据
        */
       requestUserTable() {
-        this.axios.post(HttpUtil.getBaseUrl() + "/user/get-user-table").then((response) => {
-          let apiReturn = ApiReturnModel.initByAxiosResponse(response);
+        HttpUtil.axiosPost("/user/get-user-table", {}, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.table.rows = Object.assign(apiReturn.data.rows);
             this.table.count = apiReturn.data.count;
-          } else {
-            // 服务器处理错误
-            console.error(apiReturn);
           }
-        }).catch((error) => {
-          console.error(error);
         });
       },
       
@@ -153,20 +147,18 @@
         delete submitData.checkPassword;
         submitData.password = EncryptUtil.md5(submitData.password);
         
-        this.axios.post(HttpUtil.getBaseUrl() + "/user/add-user", HttpUtil.objectToPostParams(submitData))
-        .then((response) => {
-          let apiReturn = ApiReturnModel.initByAxiosResponse(response);
+        HttpUtil.axiosPost("/user/add-user", submitData, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.dialog.show = false;
             this.requestUserTable();
-            
+    
             this.$message.success(apiReturn.message);
           } else {
             this.$message.error(apiReturn.message);
           }
-        }).catch((error) => {
+        }, (error) => {
           console.error(error);
-          this.$message.error(this.$t("Request server exception"))
+          this.$message.error(this.$t("Request server exception"));
         });
       }
     }

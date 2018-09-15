@@ -3,7 +3,7 @@
 namespace app\commands;
 
 
-use app\models\cmd\CommandOptionModel;
+use app\models\cmd\CommandOption;
 use app\utils\DirUtil;
 
 /**
@@ -19,7 +19,7 @@ class NodeJsController extends BaseController {
      */
     public function actionHelp() {
         $this->printPrettyActionArray("node-js", [
-            new CommandOptionModel("build", "编译 nodejs-webpack 到 php-project-manage/web 目录下"),
+            new CommandOption("build", "编译 nodejs-webpack 到 php-project-manage/web 目录下"),
         ]);
     }
 

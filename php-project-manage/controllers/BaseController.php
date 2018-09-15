@@ -39,18 +39,4 @@ abstract class BaseController extends Controller {
     public function get($name, $defaultValue = null) {
         return Yii::$app->getRequest()->post($name, $defaultValue);
     }
-    
-    /**
-     * 获取 post 或 get 的参数
-     * @param string $name 参数名字
-     * @param string|array|null $defaultValue 默认值
-     * @return array|string|null
-     */
-    public function param($name, $defaultValue = null) {
-        $value = Yii::$app->getRequest()->post($name, $defaultValue);
-        if ($value == $defaultValue) {
-            $value = Yii::$app->getRequest()->get($name, $defaultValue);
-        }
-        return $value;
-    }
 }

@@ -17,10 +17,10 @@ class MissionController extends BaseController {
      * @throws \Throwable
      */
     public function actionAdd() {
-        $title = $this->param("title");
-        $content = $this->param("content");
-        $priorityId = $this->param("priorityId");
-        $endTime = $this->param("endTime");
+        $title = $this->post("title");
+        $content = $this->post("content");
+        $priorityId = $this->post("priorityId");
+        $endTime = $this->post("endTime");
         
         if (empty($title) || empty($priorityId)) {
             return ApiReturn::retFailEmptyData();
@@ -60,11 +60,22 @@ class MissionController extends BaseController {
      * @throws \yii\db\StaleObjectException
      */
     public function actionChangeMissionStatus() {
-        $id = $this->param("id");
-        $toStatus = $this->param("toStatus");
+        $id = $this->post("id");
+        $toStatus = $this->post("toStatus");
         
         MP::getMissionManager()->changeStatus($id, $toStatus);
         
         return ApiReturn::retSucc();
+    }
+    
+    /**
+     * 获取任务详情的数据
+     */
+    public function actionGetMission() {
+        $id = (int) $this->post("id");
+        
+        $missionDetailForm = MP::getMissionManager()->getDetail($id);
+        
+        return ApiReturn::retSucc($missionDetailForm->toArray());
     }
 }

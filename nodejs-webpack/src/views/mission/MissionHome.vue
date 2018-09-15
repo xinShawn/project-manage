@@ -38,10 +38,10 @@
       <el-dialog :title="$t('add mission')" :visible.sync="isShowDialog">
         <el-form ref="form" :model="form.data">
           <el-form-item :label="$t('title')" :label-width="formLabelWidth">
-            <el-input v-model="form.data.title" :placeholder="$t('mission title')" auto-complete="off"></el-input>
+            <el-input v-model="form.data.title" :placeholder="$t('mission title')" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('content')" :label-width="formLabelWidth">
-            <el-input v-model="form.data.content" :placeholder="$t('mission content')" auto-complete="off"></el-input>
+            <el-input v-model="form.data.content" :placeholder="$t('mission content')" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('priority')" :label-width="formLabelWidth">
             <el-select v-model="form.data.priorityId" :placeholder="$t('select please')" value="">
@@ -50,8 +50,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('end time')" :label-width="formLabelWidth">
-            <el-date-picker width="100%" type="datetime" value-format="yyyy-MM-dd" v-model="form.data.endTime"
-                            :placeholder="$t('end time')">
+            <el-date-picker width="100%" type="datetime" value-format="yyyy-MM-dd" v-model="form.data.endTime" :placeholder="$t('end time')">
             </el-date-picker>
           </el-form-item>
         </el-form>

@@ -12,13 +12,13 @@
       <el-col :span='12' class='initPanel'>
         <el-form ref='form' label-width='100px'>
           <el-form-item :label='$t("account")'>
-            <el-input v-model='form.account' auto-complete='off'></el-input>
+            <el-input v-model='form.account' autocomplete='off'></el-input>
           </el-form-item>
           <el-form-item :label='$t("password")'>
-            <el-input type='password' v-model='form.password' auto-complete='off'></el-input>
+            <el-input type='password' v-model='form.password' autocomplete='off'></el-input>
           </el-form-item>
           <el-form-item :label='$t("confirmation")'>
-            <el-input type='password' v-model='form.passwordCheck' auto-complete='off'></el-input>
+            <el-input type='password' v-model='form.passwordCheck' autocomplete='off'></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type='primary' @click='submitAdmin'>{{ $t("initialize") }}</el-button>
@@ -64,12 +64,7 @@ export default {
         this.$message.warning(this.$t("The account must be no less than 4 characters"));
       }
       
-      this.axios.post(HttpUtil.getBaseUrl() + "/user/init-admin-user",
-        HttpUtil.objectToPostParams({account: this.form.account, password: EncryptUtil.md5(this.form.password)})
-      ).then((response) => {
-        
-        let apiReturn = ApiReturnModel.initByAxiosResponse(response);
-        
+      HttpUtil.axiosPost("/user/init-admin-user", {account: this.form.account, password: EncryptUtil.md5(this.form.password)}, (apiReturn) => {
         if (apiReturn.code > 0) {
           this.$message.success(apiReturn.message);
           this.$router.push({path: "/login"});
@@ -80,8 +75,7 @@ export default {
         } else {
           this.$message.error(apiReturn.message);
         }
-      }).catch((error) => {
-        
+      }, (error) => {
         console.error(error);
         this.$message.error(this.$t("Request server exception"));
       });
