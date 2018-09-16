@@ -3,6 +3,9 @@
 import axios from 'axios'
 import ApiReturnModel from "../models/ApiReturnModel";
 
+const Qs = require('querystring')
+
+
 /**
  * http 请求工具封装
  */
@@ -20,8 +23,22 @@ export default class HttpUtil {
    * @param timeoutMS 超时：毫秒
    */
   public static axiosPost(url: string, params: object = {}, succCallback: SuccCallback = undefined, errorCallback: Function = undefined, timeoutMS: number = 5000) {
+
     try {
-      axios.post(HttpUtil.getBaseUrl() + url, HttpUtil.objectToPostParams(params), {timeout: timeoutMS}).then((response: any) => {
+      axios.post(HttpUtil.getBaseUrl() + url, params, {
+        transformRequest: [
+          function (data) {
+            Object.keys(data).forEach((key) => {
+              if ((typeof data[key]) === 'object') {
+                data[key] = JSON.stringify(data[key]) // 这里必须使用内置JSON对象转换
+              }
+            });
+            data = Qs.stringify(data); // 这里必须使用qs库进行转换
+            return data
+          }
+        ],
+        timeout: timeoutMS,
+      }).then((response: any) => {
         let apiReturn: ApiReturnModel = ApiReturnModel.initByAxiosResponse(response);
         if (succCallback !== undefined) {
           succCallback(apiReturn);
@@ -87,22 +104,6 @@ export default class HttpUtil {
    */
   public static getBaseUrl(): string {
     return (process.env.NODE_ENV === 'development') ? '/api' : ''
-  }
-
-  /**
-   * 把 对象数据 转为 提交格式的字符串
-   */
-  public static objectToPostParams(obj: object): URLSearchParams {
-    let params: URLSearchParams = new URLSearchParams();
-
-    for (let name in obj) {
-      if (obj.hasOwnProperty(name)) {
-        let value = obj[name];
-        params.append(name, value);
-      }
-    }
-
-    return params;
   }
 
   /**

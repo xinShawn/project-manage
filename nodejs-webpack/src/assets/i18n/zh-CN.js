@@ -61,4 +61,9 @@ module.exports = {
   "pause": "暂停",
   "finish": "完成",
   "close": "关闭",
+  "Fetch data failed": "获取数据失败",
+  "mission detail": "任务详情",
+  "Do not click many times": "请勿多次点击",
+  "submit change": "提交修改",
+  "back": "返回",
 };

@@ -37,7 +37,7 @@ let router = new Router({
     {path: '/mission', name: 'mission', component: Mission, children: [
         {path: '/', redirect: 'home'},
         {path: 'home', name: 'home', component: MissionsHome},
-        {path: 'detail/:id', name: 'detail', component: MissionsDetail},
+        {path: 'detail', name: 'detail', component: MissionsDetail},
       ],
     },
     // 项目

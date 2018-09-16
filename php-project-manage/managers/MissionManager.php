@@ -93,11 +93,31 @@ class MissionManager {
             "mission.id         AS id",
             "mission.title      AS title",
             "mission.content    AS content",
-        ])->where(["id" => $id])->all();
+        ])->where(["mission.id" => $id])->one();
         
         $missionDetailForm = new MissionDetailForm();
         $missionDetailForm->setAttributes($missionDetail);
         
         return $missionDetailForm;
+    }
+    
+    /**
+     * 修改任务
+     * @param MissionDetailForm $missionDetailForm
+     * @throws ProcessException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function changeDetail(MissionDetailForm $missionDetailForm) {
+        $oldMission = Mission::findOne(["id" => $missionDetailForm->id]);
+        $newMissionData = $missionDetailForm->toMission()->toArray();
+        
+        foreach ($newMissionData as $prop => $value) {
+            $oldMission->$prop = $value;
+        }
+        
+        if ($oldMission->update() === false) {
+            throw new ProcessException(Yii::t("app", "Data update failed"));
+        }
     }
 }

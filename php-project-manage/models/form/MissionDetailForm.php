@@ -1,6 +1,8 @@
 <?php
 namespace app\models\form;
 
+use app\models\db\Mission;
+
 /**
  * Class MissionDetailForm 任务详情模型
  * @package app\models\form
@@ -26,5 +28,15 @@ class MissionDetailForm extends BaseFormModel {
         return [
             [["id", "title", "content"], "safe"]
         ];
+    }
+    
+    /**
+     * 获取 Mission 对象
+     * @return Mission
+     */
+    public function toMission() {
+        $mission = new Mission();
+        $mission->setAttributes($this->toArray());
+        return $mission;
     }
 }

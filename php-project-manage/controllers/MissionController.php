@@ -5,6 +5,7 @@ use app\managers\MP;
 use app\models\ApiReturn;
 use app\models\db\CfgPriority;
 use app\models\db\Mission;
+use app\models\form\MissionDetailForm;
 
 /**
  * Class MissionController 任务控制器
@@ -71,11 +72,25 @@ class MissionController extends BaseController {
     /**
      * 获取任务详情的数据
      */
-    public function actionGetMission() {
+    public function actionGetDetail() {
         $id = (int) $this->post("id");
         
         $missionDetailForm = MP::getMissionManager()->getDetail($id);
         
         return ApiReturn::retSucc($missionDetailForm->toArray());
+    }
+    
+    /**
+     * 修改任务
+     * @throws \Throwable
+     * @throws \app\exceptions\ProcessException
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionChange() {
+        $missionDetailForm = MissionDetailForm::initByParam("form");
+        
+        MP::getMissionManager()->changeDetail($missionDetailForm);
+        
+        return ApiReturn::retSucc();
     }
 }
