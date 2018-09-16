@@ -6,7 +6,7 @@
         <el-button type="primary" icon="el-icon-circle-plus" size="mini" @click="dialog.show = true">{{ $t("add user") }}</el-button>
       </el-row>
       
-      <!-- stripe 和 border 直接赋值，会报错。具体是因为给的值是 String 类型，不是 Boolean 类型-->
+      <!-- stripe 和 border 直接赋值，会报错。具体是因为给的值是 String 类型，不是 Boolean 类型。因此需要绑定赋值-->
       <el-table :data="table.rows" size="mini" :stripe="true" :border="true">
         <el-table-column :label="$t('nickname')" prop="nickname" align="center">
         </el-table-column>
@@ -23,8 +23,6 @@
         <el-table-column :label="$t('operate')" align="center">
           <template slot-scope="scope">
             {{ $t("developing") }}...
-            <!--<el-button type="primary" size="mini">修改</el-button>-->
-            <!--<el-button type="danger" size="mini">禁止登录</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -35,24 +33,24 @@
       <el-dialog :title="$t('add account')" :visible.sync="dialog.show">
         <el-form ref="form" :model="form">
           <el-form-item :label="$t('account')" :label-width="formLabelWidth">
-            <el-input v-model="form.account" :placeholder="$t('input account please')" auto-complete="off"></el-input>
+            <el-input v-model="form.account" :placeholder="$t('input account please')" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('password')" :label-width="formLabelWidth">
-            <el-input v-model="form.password" :placeholder="$t('input password please')" type="password" auto-complete="off"></el-input>
+            <el-input v-model="form.password" :placeholder="$t('input password please')" type="password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('ensure')" :label-width="formLabelWidth">
-            <el-input v-model="form.checkPassword" :placeholder="$t('ensure password please')" type="password" auto-complete="off"></el-input>
+            <el-input v-model="form.checkPassword" :placeholder="$t('ensure password please')" type="password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('real name')" :label-width="formLabelWidth">
-            <el-input v-model="form.real_name" :placeholder="$t('input real name please')" auto-complete="off"></el-input>
+            <el-input v-model="form.real_name" :placeholder="$t('input real name please')" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('nickname')" :label-width="formLabelWidth">
-            <el-input v-model="form.nickname" :placeholder="$t('input nickname please')" auto-complete="off"></el-input>
+            <el-input v-model="form.nickname" :placeholder="$t('input nickname please')" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button>取 消</el-button>
-          <el-button type="primary" @click="submit">确 定</el-button>
+          <el-button>{{ $t("cancel") }}</el-button>
+          <el-button type="primary" @click="submit">{{ $t("confirmation") }}</el-button>
         </div>
       </el-dialog>
     </footer>
@@ -60,10 +58,10 @@
 </template>
 
 <script>
-  import HttpUtil from "../../../../utils/HttpUtil";
-  import TimeUtil from "../../../../utils/TimeUtil";
-  import ApiReturnModel from "../../../../models/ApiReturnModel";
-  import EncryptUtil from "../../../../utils/EncryptUtil";
+  import HttpUtil from "../../utils/HttpUtil";
+  import TimeUtil from "../../utils/TimeUtil";
+  import ApiReturnModel from "../../models/ApiReturnModel";
+  import EncryptUtil from "../../utils/EncryptUtil";
   
   export default {
     name: 'user',
@@ -117,17 +115,11 @@
        * 请求用户数据
        */
       requestUserTable() {
-        this.axios.post(HttpUtil.getBaseUrl() + "/user/get-user-table").then((response) => {
-          let apiReturn = ApiReturnModel.initByAxiosResponse(response);
+        HttpUtil.axiosPost("/user/get-user-table", {}, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.table.rows = Object.assign(apiReturn.data.rows);
             this.table.count = apiReturn.data.count;
-          } else {
-            // 服务器处理错误
-            console.error(apiReturn);
           }
-        }).catch((error) => {
-          console.error(error);
         });
       },
       
@@ -155,20 +147,18 @@
         delete submitData.checkPassword;
         submitData.password = EncryptUtil.md5(submitData.password);
         
-        this.axios.post(HttpUtil.getBaseUrl() + "/user/add-user", HttpUtil.objectToPostParams(submitData))
-        .then((response) => {
-          let apiReturn = ApiReturnModel.initByAxiosResponse(response);
+        HttpUtil.axiosPost("/user/add-user", submitData, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.dialog.show = false;
             this.requestUserTable();
-            
+    
             this.$message.success(apiReturn.message);
           } else {
             this.$message.error(apiReturn.message);
           }
-        }).catch((error) => {
+        }, (error) => {
           console.error(error);
-          this.$message.error(this.$t("Request server exception"))
+          this.$message.error(this.$t("Request server exception"));
         });
       }
     }

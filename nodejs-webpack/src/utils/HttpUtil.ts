@@ -1,7 +1,10 @@
-'use strict'
+'use strict';
 
 import axios from 'axios'
 import ApiReturnModel from "../models/ApiReturnModel";
+
+const Qs = require('querystring')
+
 
 /**
  * http 请求工具封装
@@ -9,48 +12,59 @@ import ApiReturnModel from "../models/ApiReturnModel";
 export default class HttpUtil {
 
   /**
-   * 发送post请求
-   * @deprecated 向服务器发送 post 请求 注意：这个方法不做任何错误的处理，只做超时处理。而且方法会抛出未知的错误
+   * 发送post请求 使用 axios
+   * @author Cinling
+   * @version 该方法不能保证稳定运行，可能会出现未知的错误
+   * @see 向服务器发送 post 请求 注意：这个方法不做任何错误的处理，只做超时处理。而且方法会抛出未知的错误
    * @param url 请求地址
    * @param params post参数
    * @param succCallback 成功回调
+   * @param errorCallback 错误回调
    * @param timeoutMS 超时：毫秒
-   * @param timeoutCallback 超时回调
    */
-  public static axiosPost(url: string, params: object = {}, succCallback: Function = undefined,
-                     timeoutMS: Number = 500, timeoutCallback: Function = undefined): void {
-    let isSuccCallback = false;
+  public static axiosPost(url: string, params: object = {}, succCallback: SuccCallback = undefined, errorCallback: Function = undefined, timeoutMS: number = 5000) {
 
     try {
-      axios.post(HttpUtil.getBaseUrl() + url, HttpUtil.objectToPostParams(params)).then((response: any) => {
-        if (response.status === 200) {
-          let apiReturn = new ApiReturnModel(response.data.code, response.data.msg, response.data.data);
-          if (succCallback !== undefined) {
-            isSuccCallback = true;
-            succCallback(apiReturn);
+      axios.post(HttpUtil.getBaseUrl() + url, params, {
+        transformRequest: [
+          function (data) {
+            Object.keys(data).forEach((key) => {
+              if ((typeof data[key]) === 'object') {
+                data[key] = JSON.stringify(data[key]) // 这里必须使用内置JSON对象转换
+              }
+            });
+            data = Qs.stringify(data); // 这里必须使用qs库进行转换
+            return data
           }
+        ],
+        timeout: timeoutMS,
+      }).then((response: any) => {
+        let apiReturn: ApiReturnModel = ApiReturnModel.initByAxiosResponse(response);
+        if (succCallback !== undefined) {
+          succCallback(apiReturn);
         }
       });
     } catch (error) {
-
-    }
-
-    setTimeout(() => {
-      if (!isSuccCallback && timeoutCallback !== undefined) {
-        timeoutCallback();
+      console.error(error);
+      if (errorCallback !== undefined) {
+        errorCallback(error);
       }
-    }, timeoutMS);
+    }
   }
 
   /**
-   * 发送 post 请求。使用原声js的方法(XMLHttpRequest)
+   * 发送 post 请求。使用原生js的方法(XMLHttpRequest)
+   * @deprecated 推荐使用 axiosPost 代替
+   * @see axiosPost()
+   * @author Cinling
+   * @version 相对比较稳定的版本，但是功能不够齐全
    * @param relativeUrl 请求相对路径
    * @param params 请求参数（json object格式）
    * @param successCallback 成功回调
    * @param errorCallback 失败回调
    * @param timeoutMS 超时毫秒数
    */
-  public static xmlHttpRequestPost(relativeUrl: string, params: object, successCallback: Function, errorCallback: Function, timeoutMS: number) {
+  public static xmlHttpRequestPost(relativeUrl: string, params: object, successCallback: SuccCallback, errorCallback: Function, timeoutMS: number) {
     if (relativeUrl.indexOf("/", 0) !== 0) {
       relativeUrl = "/" + relativeUrl;
     }
@@ -60,7 +74,8 @@ export default class HttpUtil {
     xmlHttp.onreadystatechange = function () {
 
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        successCallback(xmlHttp.response);
+        let apiReturn = ApiReturnModel.initByXmlResponse(xmlHttp.response);
+        successCallback(apiReturn);
       } else if (xmlHttp.readyState == 4) {
         errorCallback({
           status: xmlHttp.status,
@@ -92,22 +107,6 @@ export default class HttpUtil {
   }
 
   /**
-   * 把 对象数据 转为 提交格式的字符串
-   */
-  public static objectToPostParams(obj: object): URLSearchParams {
-    let params: URLSearchParams = new URLSearchParams();
-
-    for (let name in obj) {
-      if (obj.hasOwnProperty(name)) {
-        let value = obj[name];
-        params.append(name, value);
-      }
-    }
-
-    return params;
-  }
-
-  /**
    * 把对象转为 post 请求的字符串
    * @param object
    * @return {string}
@@ -126,4 +125,11 @@ export default class HttpUtil {
 
     return postStr;
   }
+}
+
+/**
+ * http成功回调方法接口定义
+ */
+export interface SuccCallback {
+  (apiReturn: ApiReturnModel): void;
 }

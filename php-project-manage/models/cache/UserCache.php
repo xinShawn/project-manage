@@ -6,7 +6,7 @@ namespace app\models\cache;
  * Class UserCacheModel 用户数据的缓存模型
  * @package app\models\cache
  */
-class UserCacheModel extends BaseCacheModel {
+class UserCache extends BaseCacheModel {
     public $id;
     public $loginToken;
     

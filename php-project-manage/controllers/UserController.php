@@ -32,8 +32,8 @@ class UserController extends BaseController {
      * @throws \Throwable
      */
     public function actionInitAdminUser() {
-        $account = Yii::$app->request->post("account");
-        $password = Yii::$app->request->post("password");
+        $account = $this->post("account");
+        $password = $this->post("password");
         
         if (empty($account) || empty($password)) {
             return ApiReturn::retFailEmptyData(["account" => $account, "password" => $password]);
@@ -99,10 +99,10 @@ class UserController extends BaseController {
      * @throws \Throwable
      */
     public function actionAddUser() {
-        $account = $this->param("account");
-        $password = $this->param("password");
-        $real_name = $this->param("real_name");
-        $nickname = $this->param("nickname");
+        $account = $this->post("account");
+        $password = $this->post("password");
+        $real_name = $this->post("real_name");
+        $nickname = $this->post("nickname");
         
         if (empty($account) || empty($password) || empty($real_name) || empty($nickname)) {
             return ApiReturn::retFailEmptyData();

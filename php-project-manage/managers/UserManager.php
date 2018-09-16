@@ -3,7 +3,7 @@ namespace app\managers;
 
 
 use app\exceptions\ProcessException;
-use app\models\cache\UserCacheModel;
+use app\models\cache\UserCache;
 use app\models\db\SysUser;
 use app\utils\CacheUtil;
 use app\utils\SessionUtil;
@@ -23,7 +23,7 @@ class UserManager extends BaseManager {
      */
     public static function getInstance() {
         if (self::$shareInstance === null) {
-            self::$shareInstance = new UserManager();
+            self::$shareInstance = new static();
         }
         return self::$shareInstance;
     }
@@ -88,7 +88,7 @@ class UserManager extends BaseManager {
         // 设置登录状态信息
         SessionUtil::set(SessionUtil::KEY_USER_ID, $sysUserModel->id);
         $loginToken = md5($account . $time);
-        $userCacheModel = new UserCacheModel();
+        $userCacheModel = new UserCache();
         $userCacheModel->id = $sysUserModel->id;
         $userCacheModel->loginToken = $loginToken;
         CacheUtil::set(CacheUtil::PREFIX_USER_ID, $sysUserModel->id, $userCacheModel->toArray());
@@ -109,7 +109,7 @@ class UserManager extends BaseManager {
     public function getLoginToken() {
         $userId = (int) SessionUtil::get(SessionUtil::KEY_USER_ID, 0);
         $cacheArray = CacheUtil::get(CacheUtil::PREFIX_USER_ID, $userId, []);
-        $userCacheModel = new UserCacheModel();
+        $userCacheModel = new UserCache();
         $userCacheModel->setAttributes($cacheArray);
         
         return !empty($userCacheModel->loginToken) ? $userCacheModel->loginToken : null;
@@ -120,5 +120,13 @@ class UserManager extends BaseManager {
      */
     public function logout() {
         SessionUtil::destroy();
+    }
+    
+    /**
+     * @return int 当前登录的用户id
+     */
+    public function getCurrentUserId() {
+        $userId = (int) SessionUtil::get(SessionUtil::KEY_USER_ID);
+        return $userId;
     }
 }

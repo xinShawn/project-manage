@@ -45,5 +45,5 @@ module.exports = {
   "backend": "後臺",
   "publish": "發行",
   "search content": "搜索內容",
-  "mission list": "任務列表",行在線轉換
+  "mission list": "任務列表",
 };

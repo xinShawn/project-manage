@@ -1,6 +1,6 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
+  "name": "project-manage",
+  "version": "0.0.0",
   "description": "A Vue.js project",
   "author": "sean <504762354@qq.com>",
   "private": true,
@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "element-ui": "^2.4.6",
+    "element-ui": "^2.4.7",
+    "qs": "^6.5.2",
     "ts-loader": "^3.1.1",
     "ts-md5": "^1.2.4",
     "vue": "^2.5.17",

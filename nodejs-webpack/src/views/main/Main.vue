@@ -39,6 +39,7 @@ import cardhead from '../../components/cardhead/cardhead'
 import table from '../../components/table/table'
 
 export default {
+  name: "Main",
   data () {
     return {
       liucheng: {

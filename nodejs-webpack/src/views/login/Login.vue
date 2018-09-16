@@ -12,7 +12,7 @@
  * 登录的主页
  */
 export default {
-  name: 'index',
+  name: 'Login',
   components: {
   },
   data () {

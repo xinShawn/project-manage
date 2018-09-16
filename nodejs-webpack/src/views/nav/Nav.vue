@@ -10,7 +10,7 @@
       </el-menu>
       <!-- 搜索框 -->
       <el-form class="search">
-        <el-select size="mini" popper-class="options" class="search-select" v-model="searchOption">
+        <el-select size="mini" popper-class="options" class="search-select" v-model="searchOption" value="">
           <el-option v-for="(item, index) in searchs" :key="index" :label="item" :value="item">
           </el-option>
         </el-select>
@@ -31,6 +31,7 @@ import HttpUtil from "../../utils/HttpUtil";
 import ApiReturnModel from "../../models/ApiReturnModel";
 
 export default {
+  name: "Nav",
   data() {
     return {
       // 导航名称与路由地址
@@ -39,10 +40,10 @@ export default {
         link: '/main'
       }, {
         name: this.$t('mission list'),
-        link: '/missions'
+        link: '/mission'
       }, {
         name: this.$t('project manage'),
-        link: '/projects'
+        link: '/project'
       }, {
         name: this.$t('backend manage'),
         link: '/backend'
@@ -57,15 +58,15 @@ export default {
   created () {
   },
   methods: {
+    /**
+     * 登出annual执行的方法
+     */
     logout () {
-      let that = this;
-      
-      this.axios.post(HttpUtil.getBaseUrl() + "/user/logout").then((response) => {
-        let apiReturn = ApiReturnModel.initByAxiosResponse(response);
+      HttpUtil.axiosPost("/user/logout", {}, (apiReturn) => {
         if (apiReturn.code > 0) {
-          that.$store.commit("setNotLogin");
+          this.$store.commit("setNotLogin");
         }
-      }).catch((error) => {
+      }, (error) => {
         console.error(error);
       });
     }

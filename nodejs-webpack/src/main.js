@@ -5,16 +5,15 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import axios from 'axios'
 import Vuex from 'vuex'
 import VueI18n from "vue-i18n"
 
 
 Vue.config.productionTip = false;
-Vue.prototype.axios = axios;
 Vue.use(ElementUI);
 Vue.use(Vuex);
 Vue.use(VueI18n);
+
 
 // 组建通信模块
 import store from './store/index'
