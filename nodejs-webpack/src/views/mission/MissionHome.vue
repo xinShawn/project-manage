@@ -129,12 +129,14 @@
        * 请求表格数据
        */
       requestTable() {
-        let that = this;
+        this.$set(this.table, "count", 0);
+        this.$set(this.table, "data", []);
       
         HttpUtil.axiosPost("/mission/get-mission-table", {}, (apiReturn) => {
           if (apiReturn.code > 0) {
-            that.$set(that.table, "count", apiReturn.data.count);
-            that.$set(that.table, "data", apiReturn.data.data);
+            this.$set(this.table, "count", apiReturn.data.count);
+            this.$set(this.table, "data", apiReturn.data.data);
+            this.$store.commit("offMissionHomeTable");
           } else {
             console.error(apiReturn);
           }
@@ -206,7 +208,7 @@
       
         HttpUtil.axiosPost("/mission/add", submitData, (apiReturn) => {
           if (apiReturn.code > 0) {
-            that.requestTable();
+            this.$store.commit("onMissionHomeTable");
             that.$message.success(apiReturn.message);
             that.hideDialog();
           } else {
@@ -285,6 +287,26 @@
         return ([30].indexOf(status) !== -1)
       },
     },
+    computed: {
+      /**
+       * 封装变量
+       * @return {boolean}
+       */
+      isTableNeedRefresh() {
+        return this.$store.state.refresh.missionHome.table;
+      }
+    },
+    watch: {
+      /**
+       * 监听表格是否需要刷新
+       * @param val
+       */
+      isTableNeedRefresh(val) {
+        if (val) {
+          this.requestTable();
+        }
+      }
+    }
   }
 </script>
 

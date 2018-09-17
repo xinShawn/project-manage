@@ -1,7 +1,8 @@
 import HttpUtil from "../../utils/HttpUtil";
-import ApiReturnModel from "../../models/ApiReturnModel";
 
-
+/**
+ * 权限相关的处理封装
+ */
 export default {
   namespace: true,
   
