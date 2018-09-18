@@ -66,4 +66,6 @@ module.exports = {
   "Do not click many times": "请勿多次点击",
   "submit change": "提交修改",
   "back": "返回",
+  "all": "所有",
+  "unfinished": "未完成",
 };

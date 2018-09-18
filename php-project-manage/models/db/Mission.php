@@ -98,37 +98,5 @@ class Mission extends BaseDBModel {
         ];
     }
     
-    /**
-     * 获取表格数据
-     * @param int $offset
-     * @param int $limit
-     * @return array
-     */
-    public static function getTable($offset, $limit) {
-        $query = self::find()->asArray()->select([
-            "mission.id             AS id",
-            "mission.priority_id    AS priority_id",
-            "cfg_priority.name      AS priority_name",
-            "mission.title          AS title",
-            "mission.status         AS status",
-            "mission.end_time       AS end_time",
-        ])->leftJoin("cfg_priority", "cfg_priority.id = mission.priority_id");
-        
-        $query->orderBy(["id" => SORT_ASC])->offset($offset)->limit($limit);
     
-        $count = $query->count();
-        $data = $query->all();
-        
-        $statusOptions = self::getStatusOptions();
-        
-        foreach ($data as $key => $item) {
-            $data[$key]["status_name"] = $statusOptions[$item["status"]];
-            $data[$key]["end_time"] = date("Y-m-d H-i-s", $item["end_time"]);
-        }
-        
-        return [
-            "count" => $count,
-            "data" => $data
-        ];
-    }
 }

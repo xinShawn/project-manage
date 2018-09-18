@@ -1,5 +1,13 @@
 <template>
   <main>
+    <!--搜索栏-->
+    <div class="text item missionHome-search-panel">
+      <el-radio-group v-model="table.params.radio" @change="requestTable" size="mini">
+        <el-radio-button label="all">{{ $t("all") }}</el-radio-button>
+        <el-radio-button label="unfinished">{{ $t("unfinished") }}</el-radio-button>
+      </el-radio-group>
+    </div>
+    
     <!--主要内容-->
     <el-card class="box-card">
       <div slot="header" class="clearfix">
@@ -7,8 +15,7 @@
         <el-button style="float: right" type="primary" size="mini" icon="el-icon-circle-plus" @click="showDialog">{{ $t("add mission") }}</el-button>
       </div>
       <div class="text item">
-      
-        <el-table :data="table.data" v-loading="table.loading" style="width: 100%">
+        <el-table :data="table.data" v-loading="table.loading" size="mini">
           <el-table-column prop="id" label="ID"></el-table-column>
           <el-table-column prop="" :label="$t('mission title')">
             <template slot-scope="props">
@@ -113,8 +120,16 @@
          */
         table: {
           loading: false,
-          page: 1,
-          rows: 10,
+          
+          /**
+           * 查询时需要提交的参数
+           */
+          params: {
+            page: 1,
+            rows: 10,
+            radio: "unfinished"
+          },
+          
           count: 0,
           data: []
         }
@@ -132,7 +147,7 @@
         this.$set(this.table, "count", 0);
         this.$set(this.table, "data", []);
       
-        HttpUtil.axiosPost("/mission/get-mission-table", {}, (apiReturn) => {
+        HttpUtil.axiosPost("/mission/get-mission-table", this.table.params, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.$set(this.table, "count", apiReturn.data.count);
             this.$set(this.table, "data", apiReturn.data.data);
