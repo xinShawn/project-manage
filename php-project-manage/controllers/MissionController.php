@@ -4,7 +4,6 @@ namespace app\controllers;
 use app\managers\MP;
 use app\models\ApiReturn;
 use app\models\db\CfgPriority;
-use app\models\db\Mission;
 use app\models\form\MissionDetailForm;
 
 /**
@@ -48,7 +47,14 @@ class MissionController extends BaseController {
      * 获取任务表格的数据
      */
     public function actionGetMissionTable() {
-        $tableData = Mission::getTable(0, 50);
+        $page = $this->post("page");
+        $rows = $this->post("rows");
+        $radio = $this->post("radio");
+        
+        $offset = ($page - 1) * $rows;
+        $limit = $rows;
+        
+        $tableData = MP::getMissionManager()->getMissionTable($radio, $offset, $limit);
         
         return ApiReturn::retSucc($tableData);
     }

@@ -122,6 +122,7 @@
         HttpUtil.axiosPost("/mission/change", {form: Object.assign(this.form.data)}, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.$message.success(apiReturn.message);
+            this.$store.commit("onMissionHomeTable");
             this.backToMission();
           } else {
             console.error(apiReturn);

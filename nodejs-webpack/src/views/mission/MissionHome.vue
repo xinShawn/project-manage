@@ -1,5 +1,13 @@
 <template>
   <main>
+    <!--搜索栏-->
+    <div class="text item missionHome-search-panel">
+      <el-radio-group v-model="table.params.radio" @change="requestTable" size="mini">
+        <el-radio-button label="all">{{ $t("all") }}</el-radio-button>
+        <el-radio-button label="unfinished">{{ $t("unfinished") }}</el-radio-button>
+      </el-radio-group>
+    </div>
+    
     <!--主要内容-->
     <el-card class="box-card">
       <div slot="header" class="clearfix">
@@ -7,22 +15,31 @@
         <el-button style="float: right" type="primary" size="mini" icon="el-icon-circle-plus" @click="showDialog">{{ $t("add mission") }}</el-button>
       </div>
       <div class="text item">
-      
-        <el-table :data="table.data" v-loading="table.loading" style="width: 100%">
-          <el-table-column prop="id" label="ID"></el-table-column>
+        <el-pagination
+          @size-change="onSizeChange"
+          @current-change="onPageChange"
+          :current-page="table.params.page"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="table.params.rows"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="table.count">
+        </el-pagination>
+        
+        <el-table :data="table.data" v-loading="table.loading" size="mini">
+          <el-table-column prop="id" label="ID" width="60"></el-table-column>
           <el-table-column prop="" :label="$t('mission title')">
             <template slot-scope="props">
               <router-link :to="{ name: 'detail', params: { id: props.row.id }}">{{ props.row.title }}</router-link>
             </template>
           </el-table-column>
-          <el-table-column prop="priority_name" :label="$t('priority')"></el-table-column>
-          <el-table-column :label="$t('status')">
+          <el-table-column prop="priority_name" :label="$t('priority')" width="70"></el-table-column>
+          <el-table-column :label="$t('status')" width="70px">
             <template slot-scope="props">
               <span :style="{color: getColor(props.row.status)}">{{ props.row.status_name }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="end_time" :label="$t('end time')"></el-table-column>
-          <el-table-column :label="$t('operate')" align="center">
+          <el-table-column prop="end_time" :label="$t('end time')" width="160"></el-table-column>
+          <el-table-column :label="$t('operate')" align="center" width="160">
             <template slot-scope="props">
               <el-button size="mini" v-if="isShowStartBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 10)">{{ $t("start") }}</el-button>
               <el-button size="mini" v-if="isShowPauseBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 20)">{{ $t("pause") }}</el-button>
@@ -31,7 +48,7 @@
             </template>
           </el-table-column>
         </el-table>
-    
+        
       </div>
     </el-card>
     
@@ -113,8 +130,16 @@
          */
         table: {
           loading: false,
-          page: 1,
-          rows: 10,
+          
+          /**
+           * 查询时需要提交的参数
+           */
+          params: {
+            page: 1,
+            rows: 10,
+            radio: "unfinished"
+          },
+          
           count: 0,
           data: []
         }
@@ -129,12 +154,13 @@
        * 请求表格数据
        */
       requestTable() {
-        let that = this;
+        this.$set(this.table, "data", []);
       
-        HttpUtil.axiosPost("/mission/get-mission-table", {}, (apiReturn) => {
+        HttpUtil.axiosPost("/mission/get-mission-table", this.table.params, (apiReturn) => {
           if (apiReturn.code > 0) {
-            that.$set(that.table, "count", apiReturn.data.count);
-            that.$set(that.table, "data", apiReturn.data.data);
+            this.$set(this.table, "count", Number.parseInt(apiReturn.data.count));
+            this.$set(this.table, "data", apiReturn.data.data);
+            this.$store.commit("offMissionHomeTable");
           } else {
             console.error(apiReturn);
           }
@@ -175,6 +201,22 @@
       },
   
       /**
+       * 监听每页显示行数的变化
+       */
+      onSizeChange(size) {
+        this.table.params.rows = size;
+        this.requestTable();
+      },
+  
+      /**
+       * 监听当前页数的变化
+       */
+      onPageChange(page) {
+        this.table.params.page = page;
+        this.requestTable();
+      },
+  
+      /**
        * 修改任务状态
        */
       changeMissionStatus(missionId, toStatus) {
@@ -206,7 +248,7 @@
       
         HttpUtil.axiosPost("/mission/add", submitData, (apiReturn) => {
           if (apiReturn.code > 0) {
-            that.requestTable();
+            this.$store.commit("onMissionHomeTable");
             that.$message.success(apiReturn.message);
             that.hideDialog();
           } else {
@@ -285,6 +327,26 @@
         return ([30].indexOf(status) !== -1)
       },
     },
+    computed: {
+      /**
+       * 封装变量
+       * @return {boolean}
+       */
+      isTableNeedRefresh() {
+        return this.$store.state.refresh.missionHome.table;
+      }
+    },
+    watch: {
+      /**
+       * 监听表格是否需要刷新
+       * @param val
+       */
+      isTableNeedRefresh(val) {
+        if (val) {
+          this.requestTable();
+        }
+      }
+    }
   }
 </script>
 
