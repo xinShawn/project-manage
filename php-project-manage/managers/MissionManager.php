@@ -40,6 +40,10 @@ class MissionManager {
         $currentTime = time();
         $currentUserId = MP::getUserManager()->getCurrentUserId();
         
+        if (empty($content)) {
+            $content = "[无]";
+        }
+        
         $mission = new Mission();
         
         $mission->priority_id = $priorityId;

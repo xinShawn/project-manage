@@ -15,21 +15,31 @@
         <el-button style="float: right" type="primary" size="mini" icon="el-icon-circle-plus" @click="showDialog">{{ $t("add mission") }}</el-button>
       </div>
       <div class="text item">
+        <el-pagination
+          @size-change="onSizeChange"
+          @current-change="onPageChange"
+          :current-page="table.params.page"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="table.params.rows"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="table.count">
+        </el-pagination>
+        
         <el-table :data="table.data" v-loading="table.loading" size="mini">
-          <el-table-column prop="id" label="ID"></el-table-column>
+          <el-table-column prop="id" label="ID" width="60"></el-table-column>
           <el-table-column prop="" :label="$t('mission title')">
             <template slot-scope="props">
               <router-link :to="{ name: 'detail', params: { id: props.row.id }}">{{ props.row.title }}</router-link>
             </template>
           </el-table-column>
-          <el-table-column prop="priority_name" :label="$t('priority')"></el-table-column>
-          <el-table-column :label="$t('status')">
+          <el-table-column prop="priority_name" :label="$t('priority')" width="70"></el-table-column>
+          <el-table-column :label="$t('status')" width="70px">
             <template slot-scope="props">
               <span :style="{color: getColor(props.row.status)}">{{ props.row.status_name }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="end_time" :label="$t('end time')"></el-table-column>
-          <el-table-column :label="$t('operate')" align="center">
+          <el-table-column prop="end_time" :label="$t('end time')" width="160"></el-table-column>
+          <el-table-column :label="$t('operate')" align="center" width="160">
             <template slot-scope="props">
               <el-button size="mini" v-if="isShowStartBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 10)">{{ $t("start") }}</el-button>
               <el-button size="mini" v-if="isShowPauseBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 20)">{{ $t("pause") }}</el-button>
@@ -38,7 +48,7 @@
             </template>
           </el-table-column>
         </el-table>
-    
+        
       </div>
     </el-card>
     
@@ -144,12 +154,11 @@
        * 请求表格数据
        */
       requestTable() {
-        this.$set(this.table, "count", 0);
         this.$set(this.table, "data", []);
       
         HttpUtil.axiosPost("/mission/get-mission-table", this.table.params, (apiReturn) => {
           if (apiReturn.code > 0) {
-            this.$set(this.table, "count", apiReturn.data.count);
+            this.$set(this.table, "count", Number.parseInt(apiReturn.data.count));
             this.$set(this.table, "data", apiReturn.data.data);
             this.$store.commit("offMissionHomeTable");
           } else {
@@ -189,6 +198,22 @@
        */
       showDialog() {
         this.isShowDialog = true;
+      },
+  
+      /**
+       * 监听每页显示行数的变化
+       */
+      onSizeChange(size) {
+        this.table.params.rows = size;
+        this.requestTable();
+      },
+  
+      /**
+       * 监听当前页数的变化
+       */
+      onPageChange(page) {
+        this.table.params.page = page;
+        this.requestTable();
       },
   
       /**
