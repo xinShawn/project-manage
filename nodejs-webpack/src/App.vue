@@ -24,10 +24,9 @@ export default {
     }
   },
   created() {
-    let that = this;
     this.$store.dispatch("checkLogin", (needLogin) => {
       if (needLogin) {
-        that.isJumpToLoginPage = true;
+        this.isJumpToLoginPage = true;
       }
     });
   },
@@ -39,7 +38,7 @@ export default {
      */
     isLogin () {
       return this.$store.state.auth.loginStatus;
-    }
+    },
   },
   watch: {
     /**
@@ -60,7 +59,7 @@ export default {
       if (val) {
         this.$router.push("/login");
       }
-    }
+    },
   }
 }
 </script>

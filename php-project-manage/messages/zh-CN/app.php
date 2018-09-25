@@ -15,4 +15,5 @@ return [
     "finished" => "已完成",
     "closed" => "已关闭",
     "canceled" => "已取消",
+    "password error" => "密码错误",
 ];

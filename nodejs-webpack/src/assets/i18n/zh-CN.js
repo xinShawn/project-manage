@@ -68,4 +68,5 @@ module.exports = {
   "back": "返回",
   "all": "所有",
   "unfinished": "未完成",
+  "base info": "基本信息",
 };

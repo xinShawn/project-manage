@@ -76,11 +76,11 @@ class UserManager extends BaseManager {
         $sysUserModel = SysUser::findOne(["account" => $account]);
         
         if ($sysUserModel === null) {
-            throw new ProcessException("account not exists");
+            throw new ProcessException(Yii::t("app", "account not exists"));
         }
         
         if ($password !== $sysUserModel->password) {
-            throw new ProcessException("password error");
+            throw new ProcessException(Yii::t("app", "password error"));
         }
         
         $time = time();
