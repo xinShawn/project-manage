@@ -66,7 +66,7 @@
           </el-form-item>
           <el-form-item :label="$t('priority')" :label-width="formLabelWidth">
             <el-select v-model="form.data.priorityId" :placeholder="$t('select please')" value="" style="width: 100%">
-              <el-option v-for="item in priorityList" :key="item.name" :label="item.name" :value="item.id">
+              <el-option v-for="item in view.priorityOptions" :key="item.name" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -86,6 +86,7 @@
 
 <script>
   import HttpUtil from "../../utils/HttpUtil";
+  import OptionsManage from "../../store/manage/OptionsManage";
   
   export default {
     name: 'MissionHome',
@@ -99,11 +100,16 @@
          * 表格提示文字的宽度
          */
         formLabelWidth: "120px",
-      
+        
         /**
-         * @type [] 优先级下拉框数据
+         * 页面需要便利的数据
          */
-        priorityList: [],
+        view: {
+          /**
+           * 优先级选项
+           */
+          priorityOptions: []
+        },
       
         /**
          * @type {object} 表单数据封装
@@ -147,9 +153,18 @@
     },
     created() {
       this.requestTable();
-      this.requestPriorityRichOptions();
+      this.requestViewData();
     },
     methods: {
+      /**
+       * 请求页面模板数据
+       */
+      requestViewData() {
+        OptionsManage.getInstance().setPriorityOptions((options) => {
+          this.$set(this.view, "priorityOptions", options);
+        });
+      },
+      
       /**
        * 请求表格数据
        */
@@ -163,23 +178,6 @@
             this.$store.commit("offMissionHomeTable");
           } else {
             console.error(apiReturn);
-          }
-        }, (error) => {
-          console.error(error);
-        }, 5000);
-      },
-    
-      /**
-       * 请求优先级的数据
-       */
-      requestPriorityRichOptions() {
-        let that = this;
-      
-        HttpUtil.axiosPost("/mission/get-priority-rich-options", {}, (apiReturn) => {
-          if (apiReturn.code > 0) {
-            that.priorityList = Object.assign(apiReturn.data);
-          } else {
-            console.error(error);
           }
         }, (error) => {
           console.error(error);
@@ -220,22 +218,20 @@
        * 修改任务状态
        */
       changeMissionStatus(missionId, toStatus) {
-        console.log(missionId);
         this.table.loading = true;
   
-        let that = this;
         HttpUtil.axiosPost("mission/change-mission-status", {id: missionId, toStatus: toStatus}, (apiReturn) => {
           if (apiReturn.code > 0) {
-            that.requestTable();
-            that.$message.success(apiReturn.message);
+            this.requestTable();
+            this.$message.success(apiReturn.message);
           } else {
-            that.$message.error(apiReturn.message);
+            this.$message.error(apiReturn.message);
           }
-          that.table.loading = false;
+          this.table.loading = false;
         }, (error) => {
           console.error(error);
-          that.table.loading = false;
-          that.$message.error(that.$t("Request server exception"));
+          this.table.loading = false;
+          this.$message.error(this.$t("Request server exception"));
         }, 5000);
       },
     
@@ -243,29 +239,18 @@
        * 提交要修改的数据
        */
       submit() {
-        let submitData = this.getSubmitData();
-        let that = this;
-      
-        HttpUtil.axiosPost("/mission/add", submitData, (apiReturn) => {
+        HttpUtil.axiosPost("/mission/add", this.form.data, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.$store.commit("onMissionHomeTable");
-            that.$message.success(apiReturn.message);
-            that.hideDialog();
+            this.$message.success(apiReturn.message);
+            this.hideDialog();
           } else {
-            that.$message.error(apiReturn.message);
+            this.$message.error(apiReturn.message);
           }
         }, (error) => {
           console.error(error);
-          that.$message.error(that.$t("Request server exception"))
+          this.$message.error(this.$t("Request server exception"))
         }, 5000);
-      },
-    
-      /**
-       * 获取请求需要提交的数据
-       * @return {any}
-       */
-      getSubmitData() {
-        return Object.assign(this.form.data);
       },
       
       /**

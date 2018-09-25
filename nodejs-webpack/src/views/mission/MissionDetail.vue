@@ -29,7 +29,21 @@
     
       <!--基础信息-->
       <el-col :span="8">
-    
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>{{$t("base info")}}</span>
+          </div>
+          <div class="text item">
+            <el-row>
+              <el-col :span="16">
+                <el-select>
+                  <el-option>
+                  </el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
     
