@@ -1,0 +1,6 @@
+#!/usr/bin/env php
+<?php
+$realArgv = $argv;
+unset($realArgv[0]);
+chdir(__DIR__ . "/php-project-manage/");
+system("php yii " . implode(" ", $realArgv));
