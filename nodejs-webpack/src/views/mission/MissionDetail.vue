@@ -34,14 +34,20 @@
             <span>{{$t("base info")}}</span>
           </div>
           <div class="text item">
-            <el-row>
-              <el-col :span="16">
-                <el-select>
-                  <el-option>
+  
+            <el-form ref="form" :model="form" label-width="80px" v-loading="form.load">
+              <el-form-item :label="$t('priority')">
+                <el-select v-model="form.data.priority_id" :placeholder="$t('select please')" value="" style="width: 100%">
+                  <el-option v-for="item in view.priorityOptions" :key="item.name" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
-              </el-col>
-            </el-row>
+              </el-form-item>
+              
+              <el-form-item :label="$t('end time')">
+                <el-date-picker v-model="form.data.end_time" type="datetime" style="width: 100%" value-format="yyyy-MM-dd hh:mm:ss" :placeholder="$t('end time')"></el-date-picker>
+              </el-form-item>
+            </el-form>
+            
           </div>
         </el-card>
       </el-col>
@@ -52,11 +58,17 @@
 
 <script>
   import HttpUtil from "../../utils/HttpUtil";
+  import OptionsManage from "../../store/manage/OptionsManage";
 
   export default {
     name: 'MissionDetail',
     data() {
       return {
+        view: {
+          // 优先级详情
+          priorityOptions: {}
+        },
+        
         /**
          * 任务表单数据
          */
@@ -74,18 +86,32 @@
            */
           data: {
             id: "",
+            // 任务详情
             title: "",
             content: "",
+  
+            // 基本信息
+            priority_id: "",
+            // 截至时间
+            end_time: "",
           }
         }
       };
     },
     created() {
-    },
-    mounted() {
+      this.requestViewData();
       this.requestMission();
     },
     methods: {
+      /**
+       * 请求页面模板数据
+       */
+      requestViewData() {
+        OptionsManage.getInstance().setPriorityOptions((options) => {
+          this.$set(this.view, "priorityOptions", options);
+        });
+      },
+      
       /**
        * 请求任务所有的数据
        */

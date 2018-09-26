@@ -85,6 +85,17 @@ class Mission extends BaseDBModel {
     }
     
     /**
+     * @param array $values
+     * @param bool $safeOnly
+     */
+    public function setAttributes($values, $safeOnly = true) {
+        if (!is_numeric($values["end_time"])) {
+            $values["end_time"] = strtotime($values["end_time"]);
+        }
+        parent::setAttributes($values, $safeOnly);
+    }
+    
+    /**
      * @return array [状态值 => 状态名字]
      */
     public static function getStatusOptions() {

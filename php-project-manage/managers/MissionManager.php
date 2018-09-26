@@ -95,9 +95,11 @@ class MissionManager {
      */
     public function getDetail($id) {
         $missionDetail = Mission::find()->asArray()->select([
-            "mission.id         AS id",
-            "mission.title      AS title",
-            "mission.content    AS content",
+            "mission.id             AS id",
+            "mission.title          AS title",
+            "mission.content        AS content",
+            "mission.priority_id    AS priority_id",
+            "mission.end_time       AS end_time",
         ])->where(["mission.id" => $id])->one();
         
         $missionDetailForm = new MissionDetailForm();

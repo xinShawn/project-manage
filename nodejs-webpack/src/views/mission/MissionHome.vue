@@ -71,7 +71,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('end time')" :label-width="formLabelWidth">
-            <el-date-picker v-model="form.data.endTime" type="datetime" style="width: 100%" value-format="yyyy-MM-dd" :placeholder="$t('end time')"></el-date-picker>
+            <el-date-picker v-model="form.data.endTime" type="datetime" style="width: 100%" value-format="yyyy-MM-dd hh:mm:ss" :placeholder="$t('end time')"></el-date-picker>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
