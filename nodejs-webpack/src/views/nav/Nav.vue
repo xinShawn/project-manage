@@ -28,7 +28,7 @@
 
 <script>
 import HttpUtil from "../../utils/HttpUtil";
-import ApiReturnModel from "../../models/ApiReturnModel";
+import DataUtil from "../../utils/DataUtil";
 
 export default {
   name: "Nav",
@@ -55,8 +55,6 @@ export default {
       searchOption: this.$t('mission')
     }
   },
-  created () {
-  },
   methods: {
     /**
      * 登出annual执行的方法
@@ -72,8 +70,17 @@ export default {
     }
   },
   computed: {
+    /**
+     * 自动计算当前活跃的页签
+     * @return {string}
+     */
     activeName () {
-      return this.$route.name
+      let activeName = "";
+      let pathArray = DataUtil.split(this.$route.path, "/");
+      if (pathArray.length > 1) {
+        activeName = "/" + pathArray[1];
+      }
+      return activeName;
     }
   },
 }
