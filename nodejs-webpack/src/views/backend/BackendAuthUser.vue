@@ -60,8 +60,8 @@
 <script>
   import HttpUtil from "../../utils/HttpUtil";
   import TimeUtil from "../../utils/TimeUtil";
-  import ApiReturnModel from "../../models/ApiReturnModel";
   import EncryptUtil from "../../utils/EncryptUtil";
+  import NotifyUtil from "../../utils/NotifyUtil";
   
   export default {
     name: 'user',
@@ -141,7 +141,7 @@
       submit() {
         let submitData = Object.assign(this.form);
         if (submitData.password !== submitData.checkPassword) {
-          this.$message.warning(this.$t("The two passwords were different"));
+          NotifyUtil.warning(this.$t("The two passwords were different"));
           return;
         }
         delete submitData.checkPassword;
@@ -152,13 +152,13 @@
             this.dialog.show = false;
             this.requestUserTable();
     
-            this.$message.success(apiReturn.message);
+            NotifyUtil.success(apiReturn.message);
           } else {
-            this.$message.error(apiReturn.message);
+            NotifyUtil.error(apiReturn.message);
           }
         }, (error) => {
           console.error(error);
-          this.$message.error(this.$t("Request server exception"));
+          NotifyUtil.error(this.$t("Request server exception"));
         });
       }
     }

@@ -37,7 +37,7 @@
 <script>
 import HttpUtil from '../../utils/HttpUtil'
 import EncryptUtil from '../../utils/EncryptUtil'
-import ApiReturnModel from "../../models/ApiReturnModel";
+import NotifyUtil from "../../utils/NotifyUtil";
 
 export default {
   name: 'LoginInit',
@@ -53,31 +53,31 @@ export default {
   methods: {
     submitAdmin () {
       if (this.form.password !== this.form.passwordCheck) {
-        this.$message.warning(this.$t("the two passwords were different"));
+        NotifyUtil.warning(this.$t("the two passwords were different"));
         return;
       }
       if (this.form.password.length < 6) {
-        this.$message.warning(this.$t("The password must be no less than 6 characters"));
+        NotifyUtil.warning(this.$t("The password must be no less than 6 characters"));
         return;
       }
       if (this.form.account.length < 4) {
-        this.$message.warning(this.$t("The account must be no less than 4 characters"));
+        NotifyUtil.warning(this.$t("The account must be no less than 4 characters"));
       }
       
       HttpUtil.axiosPost("/user/init-admin-user", {account: this.form.account, password: EncryptUtil.md5(this.form.password)}, (apiReturn) => {
         if (apiReturn.code > 0) {
-          this.$message.success(apiReturn.message);
+          NotifyUtil.success(apiReturn.message);
           this.$router.push({path: "/login"});
         } else if (apiReturn.code === -4) {
           // 已经初始化
-          this.$message.warning(apiReturn.message);
+          NotifyUtil.warning(apiReturn.message);
           this.$router.push({path: "/login"})
         } else {
-          this.$message.error(apiReturn.message);
+          NotifyUtil.error(apiReturn.message);
         }
       }, (error) => {
         console.error(error);
-        this.$message.error(this.$t("Request server exception"));
+        NotifyUtil.error(this.$t("Request server exception"));
       });
     }
   },

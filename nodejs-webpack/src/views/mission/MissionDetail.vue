@@ -59,6 +59,7 @@
 <script>
   import HttpUtil from "../../utils/HttpUtil";
   import OptionsManage from "../../store/manage/OptionsManage";
+  import NotifyUtil from "../../utils/NotifyUtil";
 
   export default {
     name: 'MissionDetail',
@@ -124,12 +125,12 @@
             this.$set(this.form, "data", apiReturn.data);
             this.$set(this.form, "lock", false);
           } else {
-            this.$message.warning(this.$t("Fetch data failed"));
+            NotifyUtil.warning(this.$t("Fetch data failed"));
           }
           this.$set(this.form, "load", false);
         }, (error) => {
           console.error(error);
-          this.$message.warning(this.$t("Request server exception"));
+          NotifyUtil.warning(this.$t("Request server exception"));
           this.$set(this.form, "load", false);
         });
       },
@@ -155,24 +156,24 @@
        */
       submitChange() {
         if (this.form.lock) {
-          this.$message.warning(this.$t("Do not click many times"))
+          NotifyUtil.warning(this.$t("Do not click many times"))
         }
         this.form.lock = true;
         
         HttpUtil.axiosPost("/mission/change", {form: Object.assign(this.form.data)}, (apiReturn) => {
           if (apiReturn.code > 0) {
-            this.$message.success(apiReturn.message);
+            NotifyUtil.success(apiReturn.message);
             this.$store.commit("onMissionHomeTable");
             this.backToMission();
           } else {
             console.error(apiReturn);
             this.form.lock = false;
-            this.$message.error(apiReturn.message);
+            NotifyUtil.error(apiReturn.message);
           }
         }, (error) => {
           console.error(error);
           this.form.lock = false;
-          this.$message.error(this.$t("Request server exception"));
+          NotifyUtil.error(this.$t("Request server exception"));
         })
       }
     },

@@ -33,8 +33,8 @@
 
 <script>
 import HttpUtil from "../../utils/HttpUtil";
-import ApiReturnModel from "../../models/ApiReturnModel";
 import EncryptUtil from "../../utils/EncryptUtil";
+import NotifyUtil from "../../utils/NotifyUtil";
 
 export default {
   name: 'LoginLogin',
@@ -95,15 +95,15 @@ export default {
           if (apiReturn.code > 0) {
             let loginToken = apiReturn.data.loginToken;
             that.$store.dispatch("setLoginToken", loginToken);
-            that.$message.success(apiReturn.message);
+            NotifyUtil.success(apiReturn.message);
             that.$router.push("../main");
           } else {
-            that.$message.error(apiReturn.message)
+            NotifyUtil.error(apiReturn.message)
           }
         },
         (error) => {
           console.error(error);
-          that.$message.error(that.$t("Request timeout"));
+          NotifyUtil.error(that.$t("Request timeout"));
         }
       )
     }

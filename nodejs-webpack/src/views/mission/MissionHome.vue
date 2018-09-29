@@ -87,6 +87,7 @@
 <script>
   import HttpUtil from "../../utils/HttpUtil";
   import OptionsManage from "../../store/manage/OptionsManage";
+  import NotifyUtil from "../../utils/NotifyUtil";
   
   export default {
     name: 'MissionHome',
@@ -223,15 +224,15 @@
         HttpUtil.axiosPost("mission/change-mission-status", {id: missionId, toStatus: toStatus}, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.requestTable();
-            this.$message.success(apiReturn.message);
+            NotifyUtil.success(apiReturn.message);
           } else {
-            this.$message.error(apiReturn.message);
+            NotifyUtil.error(apiReturn.message);
           }
           this.table.loading = false;
         }, (error) => {
           console.error(error);
           this.table.loading = false;
-          this.$message.error(this.$t("Request server exception"));
+          NotifyUtil.error(this.$t("Request server exception"));
         }, 5000);
       },
     
@@ -242,14 +243,14 @@
         HttpUtil.axiosPost("/mission/add", this.form.data, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.$store.commit("onMissionHomeTable");
-            this.$message.success(apiReturn.message);
+            NotifyUtil.success(apiReturn.message);
             this.hideDialog();
           } else {
-            this.$message.error(apiReturn.message);
+            NotifyUtil.error(apiReturn.message);
           }
         }, (error) => {
           console.error(error);
-          this.$message.error(this.$t("Request server exception"))
+          NotifyUtil.error(this.$t("Request server exception"))
         }, 5000);
       },
       
