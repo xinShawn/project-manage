@@ -18,6 +18,15 @@ use Yii;
 class Project extends BaseDBModel
 {
     /**
+     * 状态：未开始
+     */
+    const STATUS_NOT_START = 0;
+    /**
+     * 状态：进行中
+     */
+    const STATUS_UNDERWAY = 1;
+    
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -52,5 +61,19 @@ class Project extends BaseDBModel
             'update_time' => 'Update Time',
             'create_time' => 'Create Time',
         ];
+    }
+    
+    /**
+     * 获取表格数据
+     * @return array
+     */
+    public static function getTable() {
+        $query = self::find()->asArray()->select([
+            "project.id         AS id",
+            "project.name       AS name",
+            "project.remark     AS remark",
+        ]);
+        
+        return $query->all();
     }
 }

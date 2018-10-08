@@ -28,7 +28,6 @@
 
 <script>
 import HttpUtil from "../../utils/HttpUtil";
-import DataUtil from "../../utils/DataUtil";
 
 export default {
   name: "Nav",
@@ -76,7 +75,7 @@ export default {
      */
     activeName () {
       let activeName = "";
-      let pathArray = DataUtil.split(this.$route.path, "/");
+      let pathArray = this.$route.path.split("/");
       if (pathArray.length > 1) {
         activeName = "/" + pathArray[1];
       }

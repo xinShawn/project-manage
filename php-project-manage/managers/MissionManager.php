@@ -89,26 +89,6 @@ class MissionManager {
     }
     
     /**
-     * 获取任务详情
-     * @param int $id 任务id
-     * @return MissionDetailForm
-     */
-    public function getDetail($id) {
-        $missionDetail = Mission::find()->asArray()->select([
-            "mission.id             AS id",
-            "mission.title          AS title",
-            "mission.content        AS content",
-            "mission.priority_id    AS priority_id",
-            "mission.end_time       AS end_time",
-        ])->where(["mission.id" => $id])->one();
-        
-        $missionDetailForm = new MissionDetailForm();
-        $missionDetailForm->setAttributes($missionDetail);
-        
-        return $missionDetailForm;
-    }
-    
-    /**
      * 修改任务
      * @param MissionDetailForm $missionDetailForm
      * @throws ProcessException
@@ -125,62 +105,6 @@ class MissionManager {
         
         if ($oldMission->update() === false) {
             throw new ProcessException(Yii::t("app", "Data update failed"));
-        }
-    }
-    
-    /**
-     * 获取任务表格数据
-     * @param string $radio 快速查询选项
-     * @param int $offset
-     * @param int $limit
-     * @return array
-     */
-    public function getMissionTable($radio, $offset, $limit) {
-        $query = Mission::find()->asArray()->select([
-            "mission.id             AS id",
-            "mission.priority_id    AS priority_id",
-            "cfg_priority.name      AS priority_name",
-            "mission.title          AS title",
-            "mission.status         AS status",
-            "mission.end_time       AS end_time",
-        ])->leftJoin("cfg_priority", "cfg_priority.id = mission.priority_id");
-        
-        if (!empty($radio)) {
-            $this->setQueryMissionRadio($query, $radio);
-        }
-        
-        $query->orderBy(["id" => SORT_ASC])->offset($offset)->limit($limit);
-        
-        $count = $query->count();
-        $data = $query->all();
-        
-        $statusOptions = Mission::getStatusOptions();
-        
-        foreach ($data as $key => $item) {
-            $data[$key]["status_name"] = $statusOptions[$item["status"]];
-            $data[$key]["end_time"] = date("Y-m-d H-i-s", $item["end_time"]);
-        }
-        
-        return [
-            "count" => $count,
-            "data" => $data
-        ];
-    }
-    
-    /**
-     * 设置任务查询的快速选项
-     * @param ActiveQuery $query
-     * @param string $radio 具体查询类型
-     *      all         所有
-     *      unfinished  未完成
-     */
-    private function setQueryMissionRadio(ActiveQuery &$query, $radio) {
-        switch ($radio) {
-            case "all":
-                break;
-            case "unfinished":
-                $query->andWhere("mission.status < :status", [":status" => Mission::STATUS_FINISHED]);
-                break;
         }
     }
 }
