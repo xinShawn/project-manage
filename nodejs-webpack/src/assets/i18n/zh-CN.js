@@ -69,4 +69,11 @@ module.exports = {
   "all": "所有",
   "unfinished": "未完成",
   "base info": "基本信息",
+  "operate successfully": "操作成功",
+  "operation failure": "操作失败",
+  "warning": "警告",
+  "create project": "创建项目",
+  "project name": "项目名称",
+  "remark": "备注",
+  "project overview": "项目总览",
 };

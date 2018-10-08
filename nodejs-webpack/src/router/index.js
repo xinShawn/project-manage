@@ -1,50 +1,55 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue"
+import Router from "vue-router"
 
-import Login from '../views/login/Login'
-import LoginLogin from '../views/login/LoginLogin'
-import LoginInit from '../views/login/LoginInit'
+import Login from "../views/login/Login"
+import LoginLogin from "../views/login/LoginLogin"
+import LoginInit from "../views/login/LoginInit"
 
-import Main from '../views/main/Main'
+import Main from "../views/main/Main"
 
-import Mission from '../views/mission/Mission'
-import MissionsHome from '../views/mission/MissionHome'
-import MissionsDetail from '../views/mission/MissionDetail'
+import Mission from "../views/mission/Mission"
+import MissionsHome from "../views/mission/MissionHome"
+import MissionsDetail from "../views/mission/MissionDetail"
 
-import Project from '../views/project/Project'
+import Project from "../views/project/Project"
+import ProjectHome from "../views/project/ProjectHome"
 
-import Backend from '../views/backend/Backend'
-import BackendAuthUser from '../views/backend/BackendAuthUser'
+import Backend from "../views/backend/Backend"
+import BackendAuthUser from "../views/backend/BackendAuthUser"
 
 Vue.use(Router);
 
 let router = new Router({
   routes: [
     // 默认页
-    {path: '/', redirect: 'login'},
+    {path: "/", redirect: "login"},
     // 系统初始化页面模块
-    {path: '/login', component: Login, children: [
-        {path: '/', redirect: 'login'},
+    {path: "/login", component: Login, children: [
+        {path: "/", redirect: "login"},
         // 登录页面
-        {path: 'login', component: LoginLogin},
+        {path: "login", component: LoginLogin},
         // 初始化系统页面
-        {path: 'init', component: LoginInit},
+        {path: "init", component: LoginInit},
       ],
     },
     // 主页（我的地盘）
-    {path: '/main', name: 'main', component: Main},
+    {path: "/main", name: "main", component: Main},
     // 任务
-    {path: '/mission', name: 'mission', component: Mission, children: [
-        {path: '/', redirect: 'home'},
-        {path: 'home', name: 'home', component: MissionsHome},
-        {path: 'detail', name: 'detail', component: MissionsDetail},
+    {path: "/mission", name: "mission", component: Mission, children: [
+        {path: "/", redirect: "home"},
+        {path: "home", name: "home", component: MissionsHome},
+        {path: "detail", name: "detail", component: MissionsDetail},
       ],
     },
     // 项目
-    {path: '/project', name: 'project', component: Project},
+    {path: "/project", name: "project", component: Project, children: [
+        {path: "/", redirect: "home"},
+        {path: "home", name: "home", component: ProjectHome},
+      ]
+    },
     // 后台
-    {path: '/backend', name: 'backend', component: Backend, children: [
-        {path: 'auth_user', name: 'auth_user', component: BackendAuthUser},
+    {path: "/backend", name: "backend", component: Backend, children: [
+        {path: "auth_user", name: "auth_user", component: BackendAuthUser},
       ],
     },
   ],

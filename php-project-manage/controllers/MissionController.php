@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\managers\MP;
 use app\models\ApiReturn;
 use app\models\db\CfgPriority;
+use app\models\db\Mission;
 use app\models\form\MissionDetailForm;
 
 /**
@@ -54,7 +55,7 @@ class MissionController extends BaseController {
         $offset = ($page - 1) * $rows;
         $limit = $rows;
         
-        $tableData = MP::getMissionManager()->getMissionTable($radio, $offset, $limit);
+        $tableData = Mission::getTable($radio, $offset, $limit);
         
         return ApiReturn::retSucc($tableData);
     }
@@ -81,7 +82,7 @@ class MissionController extends BaseController {
     public function actionGetDetail() {
         $id = (int) $this->post("id");
         
-        $missionDetailForm = MP::getMissionManager()->getDetail($id);
+        $missionDetailForm = Mission::getDetail($id);
         
         return ApiReturn::retSucc($missionDetailForm->toArray());
     }
@@ -93,7 +94,7 @@ class MissionController extends BaseController {
      * @throws \yii\db\StaleObjectException
      */
     public function actionChange() {
-        $missionDetailForm = MissionDetailForm::initByParam("form");
+        $missionDetailForm = MissionDetailForm::initByForm("form");
         
         MP::getMissionManager()->changeDetail($missionDetailForm);
         

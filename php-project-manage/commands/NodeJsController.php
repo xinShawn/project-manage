@@ -11,17 +11,7 @@ use app\utils\DirUtil;
  * @package app\commands
  */
 class NodeJsController extends BaseController {
-
-    /**
-     * 输出帮助信息
-     * @return void
-     * @throws BaseControllerException
-     */
-    public function actionHelp() {
-        $this->printPrettyActionArray("node-js", [
-            new CommandOption("build", "编译 nodejs-webpack 到 php-project-manage/web 目录下"),
-        ]);
-    }
+    public $defaultAction = "dev";
 
     /**
      * 编译 nodejs-webpack 到 php-project-manage/web 目录下
@@ -31,7 +21,13 @@ class NodeJsController extends BaseController {
         chdir($webpackDir);
         system("npm run build");
     }
-
-
-
+    
+    /**
+     * 启动测试环境
+     */
+    public function actionDev() {
+        $webpackDir = DirUtil::getAbsWebPackDir();
+        chdir($webpackDir);
+        system("npm run dev");
+    }
 }

@@ -15,13 +15,6 @@ abstract class BaseController extends Controller {
     public $defaultAction = "help";
 
     /**
-     * 输出帮助信息
-     * @return void
-     * @throws BaseControllerException
-     */
-    public abstract function actionHelp();
-
-    /**
      * 打印出好看的命令行提示
      * @param string $controllerName 控制器命令名称。如：NodeJsController 应输入：node-js
      * @param CommandOption[] $commandOptions 命令列表

@@ -71,7 +71,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('end time')" :label-width="formLabelWidth">
-            <el-date-picker v-model="form.data.endTime" type="datetime" style="width: 100%" value-format="yyyy-MM-dd" :placeholder="$t('end time')"></el-date-picker>
+            <el-date-picker v-model="form.data.endTime" type="datetime" style="width: 100%" value-format="yyyy-MM-dd hh:mm:ss" :placeholder="$t('end time')"></el-date-picker>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -87,6 +87,7 @@
 <script>
   import HttpUtil from "../../utils/HttpUtil";
   import OptionsManage from "../../store/manage/OptionsManage";
+  import NotifyUtil from "../../utils/NotifyUtil";
   
   export default {
     name: 'MissionHome',
@@ -142,7 +143,7 @@
            */
           params: {
             page: 1,
-            rows: 10,
+            rows: 50,
             radio: "unfinished"
           },
           
@@ -223,15 +224,15 @@
         HttpUtil.axiosPost("mission/change-mission-status", {id: missionId, toStatus: toStatus}, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.requestTable();
-            this.$message.success(apiReturn.message);
+            NotifyUtil.success(apiReturn.message);
           } else {
-            this.$message.error(apiReturn.message);
+            NotifyUtil.error(apiReturn.message);
           }
           this.table.loading = false;
         }, (error) => {
           console.error(error);
           this.table.loading = false;
-          this.$message.error(this.$t("Request server exception"));
+          NotifyUtil.error(this.$t("Request server exception"));
         }, 5000);
       },
     
@@ -242,14 +243,14 @@
         HttpUtil.axiosPost("/mission/add", this.form.data, (apiReturn) => {
           if (apiReturn.code > 0) {
             this.$store.commit("onMissionHomeTable");
-            this.$message.success(apiReturn.message);
+            NotifyUtil.success(apiReturn.message);
             this.hideDialog();
           } else {
-            this.$message.error(apiReturn.message);
+            NotifyUtil.error(apiReturn.message);
           }
         }, (error) => {
           console.error(error);
-          this.$message.error(this.$t("Request server exception"))
+          NotifyUtil.error(this.$t("Request server exception"))
         }, 5000);
       },
       

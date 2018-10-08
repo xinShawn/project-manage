@@ -11,7 +11,7 @@ abstract class BaseFormModel extends BaseModel {
      * @param string $formParamName post\get 参数名称（值可以是 json对象 或 json字符串）
      * @return static|null
      */
-    public static function initByParam($formParamName) {
+    public static function initByForm($formParamName) {
         $params = Yii::$app->request->post($formParamName, null);
         if ($params === null) {
             $params = Yii::$app->request->get($formParamName, null);

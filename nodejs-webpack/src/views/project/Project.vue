@@ -1,5 +1,9 @@
 <template>
-  <h2>项目管理页面</h2>
+  <main>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+  </main>
 </template>
 
 <script>
