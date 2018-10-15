@@ -10,6 +10,7 @@ use yii\db\ActiveQuery;
  * This is the model class for table "mission".
  *
  * @property int $id [int(10) unsigned]
+ * @property int $project_id [int(11) unsigned]  所属项目id
  * @property int $priority_id [int(11) unsigned]  优先级id
  * @property string $title [varchar(255)]  任务标题
  * @property string $content 任务详情
@@ -58,10 +59,11 @@ class Mission extends BaseDBModel {
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
+            [['project_id', 'priority_id', 'status', 'end_time', 'finish_user_id', 'create_user_id', 'last_user_id', 'update_time', 'create_time'], 'integer'],
             [['priority_id', 'title', 'content', 'create_user_id', 'last_user_id', 'update_time', 'create_time'], 'required'],
-            [['priority_id', 'status', 'end_time', 'finish_user_id', 'create_user_id', 'last_user_id', 'update_time', 'create_time'], 'integer'],
             [['content'], 'string'],
             [['title'], 'string', 'max' => 255],
         ];
@@ -70,9 +72,11 @@ class Mission extends BaseDBModel {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
+            'project_id' => 'Project ID',
             'priority_id' => 'Priority ID',
             'title' => 'Title',
             'content' => 'Content',

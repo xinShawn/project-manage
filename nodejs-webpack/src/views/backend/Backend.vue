@@ -9,8 +9,8 @@
       <el-col :span="4">
         <el-menu default-active="1-1" :collapse="false"
                  background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-          <el-submenu index="1">
-            <template v-for="item_1 in menu">
+          <el-submenu v-for="(item_1, index_1) in menu" :index="'' + index_1" :key="index_1">
+            <template>
               <template slot="title">
                 <i :class="item_1.icon"></i><span>{{ item_1.name }}</span>
               </template>

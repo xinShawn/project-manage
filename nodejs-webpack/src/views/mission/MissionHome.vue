@@ -1,12 +1,23 @@
 <template>
   <main>
     <!--搜索栏-->
-    <div class="text item missionHome-search-panel">
-      <el-radio-group v-model="table.params.radio" @change="requestTable" size="mini">
-        <el-radio-button label="all">{{ $t("all") }}</el-radio-button>
-        <el-radio-button label="unfinished">{{ $t("unfinished") }}</el-radio-button>
-      </el-radio-group>
-    </div>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <el-select v-model="table.params.project_id" size="mini" placeholder="项目id">
+          <el-option
+            v-for="(name, id) in view.projectOptions"
+            :key="id"
+            :label="name"
+            :value="id">
+          </el-option>
+        </el-select>
+  
+        <el-radio-group v-model="table.params.radio" @change="requestTable" size="mini">
+          <el-radio-button label="all">{{ $t("all") }}</el-radio-button>
+          <el-radio-button label="unfinished">{{ $t("unfinished") }}</el-radio-button>
+        </el-radio-group>
+      </div>
+    </el-card>
     
     <!--主要内容-->
     <el-card class="box-card">
@@ -106,24 +117,15 @@
          * 页面需要便利的数据
          */
         view: {
-          /**
-           * 优先级选项
-           */
-          priorityOptions: []
+          priorityOptions: [],
+          projectOptions: [],
         },
       
         /**
          * @type {object} 表单数据封装
          */
         form: {
-          /**
-           * @type {Boolean} 表单锁，防止多次点击提交了多次
-           */
           lock: true,
-        
-          /**
-           * @type {object} 表单需要提交的数据
-           */
           data: {
             title: "",
             priorityId: "",
@@ -137,16 +139,13 @@
          */
         table: {
           loading: false,
-          
-          /**
-           * 查询时需要提交的参数
-           */
+          // 查询时需要提交的参数
           params: {
             page: 1,
             rows: 50,
-            radio: "unfinished"
+            radio: "unfinished",
+            project_id: "",
           },
-          
           count: 0,
           data: []
         }
@@ -161,8 +160,12 @@
        * 请求页面模板数据
        */
       requestViewData() {
-        OptionsManage.getInstance().setPriorityOptions((options) => {
+        let optionsManage = OptionsManage.getInstance();
+        optionsManage.setPriorityFullOptions((options) => {
           this.$set(this.view, "priorityOptions", options);
+        });
+        optionsManage.setProjectOptions((options) => {
+          this.$set(this.view, "projectOptions", options);
         });
       },
       

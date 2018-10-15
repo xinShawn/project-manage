@@ -108,7 +108,7 @@
        * 请求页面模板数据
        */
       requestViewData() {
-        OptionsManage.getInstance().setPriorityOptions((options) => {
+        OptionsManage.getInstance().setPriorityFullOptions((options) => {
           this.$set(this.view, "priorityOptions", options);
         });
       },

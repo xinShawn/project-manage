@@ -31,6 +31,17 @@ class ProjectController extends BaseController {
      */
     public function actionGetTable() {
         $tableData = Project::getTable();
+        
         return ApiReturn::retSucc($tableData);
+    }
+    
+    /**
+     * 获取选项数据
+     * @return string
+     */
+    public function actionGetOptions() {
+        $options = Project::getOptions();
+        
+        return ApiReturn::retSucc($options);
     }
 }
