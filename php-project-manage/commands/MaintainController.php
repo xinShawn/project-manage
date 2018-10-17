@@ -26,13 +26,13 @@ class MaintainController extends BaseController {
         // 更新远端仓库
         chdir($PROJECT_MANAGE_DIR);
         system("git pull");
+    
+        // 更新php数据库
+        chdir($PROJECT_MANAGE_DIR . "php-project-manage");
+        system("./yii migrate/up --interactive=0");
 
         // webpack打包
         chdir($PROJECT_MANAGE_DIR . "nodejs-webpack");
         system("npm run build");
-
-        // 更新php数据库
-        chdir($PROJECT_MANAGE_DIR . "php-project-manage");
-        system("./yii migrate/up --interactive=0");
     }
 }

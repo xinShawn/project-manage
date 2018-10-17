@@ -14,6 +14,10 @@ class SessionUtil {
      * SESSION KEY：用户id
      */
     const KEY_USER_ID = "ui";
+    /**
+     * SESSION KEY：项目id
+     */
+    const KEY_PROJECT_ID = "pi";
     
     /**
      * 设置 session 值

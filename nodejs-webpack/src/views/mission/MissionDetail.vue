@@ -100,14 +100,14 @@
       };
     },
     created() {
-      this.requestViewData();
+      this.initViewData();
       this.requestMission();
     },
     methods: {
       /**
        * 请求页面模板数据
        */
-      requestViewData() {
+      initViewData() {
         OptionsManage.getInstance().setPriorityFullOptions((options) => {
           this.$set(this.view, "priorityOptions", options);
         });

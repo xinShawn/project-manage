@@ -3,15 +3,17 @@
     <!--搜索栏-->
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-select v-model="table.params.project_id" size="mini" placeholder="项目id">
+        项目：
+        <el-select v-model="table.params.projectId" size="mini" placeholder="项目id">
           <el-option
             v-for="(name, id) in view.projectOptions"
             :key="id"
             :label="name"
-            :value="id">
+            :value="parseInt(id)">
           </el-option>
         </el-select>
   
+        状态：
         <el-radio-group v-model="table.params.radio" @change="requestTable" size="mini">
           <el-radio-button label="all">{{ $t("all") }}</el-radio-button>
           <el-radio-button label="unfinished">{{ $t("unfinished") }}</el-radio-button>
@@ -144,7 +146,7 @@
             page: 1,
             rows: 50,
             radio: "unfinished",
-            project_id: "",
+            projectId: "",
           },
           count: 0,
           data: []
@@ -152,20 +154,53 @@
       }
     },
     created() {
-      this.requestTable();
-      this.requestViewData();
+      this.initViewData();
     },
     methods: {
       /**
        * 请求页面模板数据
        */
-      requestViewData() {
+      initViewData() {
         let optionsManage = OptionsManage.getInstance();
         optionsManage.setPriorityFullOptions((options) => {
           this.$set(this.view, "priorityOptions", options);
         });
         optionsManage.setProjectOptions((options) => {
           this.$set(this.view, "projectOptions", options);
+          this.requestProjectId();
+        });
+      },
+      
+      /**
+       * 请求默认的项目id
+       */
+      requestProjectId() {
+        HttpUtil.axiosPost("/project/get-project-id", {}, (apiReturn) => {
+          if (apiReturn.code > 0) {
+            let projectId = apiReturn.data;
+            
+            if (projectId === null) {
+              projectId = Object.keys(this.view.projectOptions)[0];
+            }
+            this.$set(this.table.params, "projectId", parseInt(projectId));
+          } else {
+            console.error(apiReturn);
+          }
+        }, (error) => {
+          console.error(error);
+        }, 5000);
+      },
+      
+      /**
+       * 请求设置项目id
+       */
+      requestSetProjectId() {
+        HttpUtil.axiosPost("/project/set-project-id", {projectId: this.table.params.projectId}, (apiReturn) => {
+          if (apiReturn.code < 0) {
+            console.error(apiReturn);
+          }
+        }, (error) => {
+          console.error(error);
         });
       },
       
@@ -173,6 +208,11 @@
        * 请求表格数据
        */
       requestTable() {
+        if (this.table.loading) {
+          return;
+        }
+        this.table.loading = true;
+        
         this.$set(this.table, "data", []);
       
         HttpUtil.axiosPost("/mission/get-mission-table", this.table.params, (apiReturn) => {
@@ -183,8 +223,10 @@
           } else {
             console.error(apiReturn);
           }
+          this.table.loading = false;
         }, (error) => {
           console.error(error);
+          this.table.loading = false;
         }, 5000);
       },
     
@@ -323,6 +365,13 @@
        */
       isTableNeedRefresh() {
         return this.$store.state.refresh.missionHome.table;
+      },
+      
+      /**
+       * 封装 projectId 选项
+       */
+      projectId() {
+        return this.table.params.projectId;
       }
     },
     watch: {
@@ -334,6 +383,14 @@
         if (val) {
           this.requestTable();
         }
+      },
+  
+      /**
+       * 监听项目id
+       */
+      projectId() {
+        this.requestSetProjectId();
+        this.requestTable();
       }
     }
   }

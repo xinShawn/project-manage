@@ -103,12 +103,13 @@ class Mission extends BaseDBModel {
     
     /**
      * 获取任务表格数据
+     * @param int|array $projectId 项目id
      * @param string $radio 快速查询选项
      * @param int $offset
      * @param int $limit
      * @return array
      */
-    public static function getTable($radio, $offset, $limit) {
+    public static function getTable($projectId, $radio, $offset, $limit) {
         $query = Mission::find()->asArray()->select([
             "mission.id             AS id",
             "mission.priority_id    AS priority_id",
@@ -118,6 +119,9 @@ class Mission extends BaseDBModel {
             "mission.end_time       AS end_time",
         ])->leftJoin("cfg_priority", "cfg_priority.id = mission.priority_id");
     
+        if (!empty($projectId)) {
+            $query->andWhere(["mission.project_id" => $projectId]);
+        }
         if (!empty($radio)) {
             self::setQueryMissionRadio($query, $radio);
         }
