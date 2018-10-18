@@ -7,15 +7,15 @@
         <div class="login-panel">
           <div class="login-form">
             <section>
-              <h1 style="color: white">{{ $t("sign in project manage") }}</h1>
+              <h1 class="login-form-title">{{ $t("sign in project manage") }}</h1>
             </section>
             <section>
-              <el-input v-model="from.account"
+              <el-input v-model="form.data.account"
                 autocomplete="off"
                 :placeholder="$t('account')"></el-input>
             </section>
             <section>
-              <el-input v-model="from.password"
+              <el-input v-model="form.data.password"
                 @keyup.enter.native="submitLogin"
                 type="password"
                 autocomplete="off"
@@ -23,6 +23,7 @@
             </section>
             <section>
               <el-button @click='submitLogin'
+                         v-loading="form.loading"
                 style="width: 100%"
                 type='primary'>{{ $t("login") }}</el-button>
             </section>
@@ -45,9 +46,12 @@ export default {
       /**
        * 表单数据
        */
-      from: {
-        account: "",
-        password: ""
+      form: {
+        loading: false,
+        data: {
+          account: "",
+          password: ""
+        }
       }
     }
   },
@@ -91,21 +95,23 @@ export default {
      * 提交登录表单
      */
     submitLogin() {
-      let that = this;
+      this.form.loading = true;
       
-      HttpUtil.axiosPost("user/login", {account: this.from.account, password: EncryptUtil.md5(this.from.password)}, (apiReturn) => {
+      HttpUtil.axiosPost("user/login", {account: this.form.data.account, password: EncryptUtil.md5(this.form.data.password)}, (apiReturn) => {
           if (apiReturn.code > 0) {
             let loginToken = apiReturn.data.loginToken;
-            that.$store.dispatch("setLoginToken", loginToken);
+            this.$store.dispatch("setLoginToken", loginToken);
             NotifyUtil.success(apiReturn.message);
-            that.$router.push("../main");
+            this.$router.push("../main");
           } else {
             NotifyUtil.error(apiReturn.message)
           }
+          this.form.loading = false;
         },
         (error) => {
           console.error(error);
-          NotifyUtil.error(that.$t("Request timeout"));
+          NotifyUtil.error(this.$t("Request timeout"));
+          this.form.loading = false;
         }
       )
     }
@@ -126,7 +132,7 @@ export default {
 </script>
 
 <!--局部样式（仅本页有效）-->
-<style scoped>
+<style lang="scss" scoped>
   .login-login {
     width: 100%;
     height: 100%;
@@ -135,16 +141,19 @@ export default {
   }
   
   .login-panel {
-    margin-top: 100px;
+    margin: 100px auto 0;
     padding: 5px;
+    width: 400px;
   }
 
   .login-form {
     padding: 5px 20px;
+    background-color: white;
+    border-radius: 4px;
+  }
+  
+  .login-form-title {
     text-align: center;
-    border: 1px solid #333;
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
   }
   
   .login-form section {
@@ -153,22 +162,9 @@ export default {
   
   /*手机端兼容*/
   @media only screen and (max-width: 768px) {
-
-  }
-</style>
-
-<!--全局样式-->
-<style>
-  /*设置输入框样式*/
-  .login-form .el-input__inner {
-    color: white;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-color: #333;
-  }
-  
-  /*按钮样式*/
-  .login-form .el-button--primary {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-color: #333;
+    .login-panel {
+      padding: 0;
+      width: 96%;
+    }
   }
 </style>
