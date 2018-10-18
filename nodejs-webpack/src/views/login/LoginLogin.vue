@@ -1,32 +1,34 @@
 <template>
-  <main>
+  <main class="login-login">
     <el-row>
-      <h3>{{ $t("login page") }}</h3>
-    </el-row>
-    <el-row :gutter='20' class='login-row'>
-      <!--START 两边空白占位区-->
-      <el-col :span='6'>
-        <div>&nbsp;</div>
+      <el-col
+        :sm="{span: 8, offset: 8}"
+        :xs="24">
+        <div class="login-panel">
+          <div class="login-form">
+            <section>
+              <h1 style="color: white">{{ $t("sign in project manage") }}</h1>
+            </section>
+            <section>
+              <el-input v-model="from.account"
+                autocomplete="off"
+                :placeholder="$t('account')"></el-input>
+            </section>
+            <section>
+              <el-input v-model="from.password"
+                @keyup.enter.native="submitLogin"
+                type="password"
+                autocomplete="off"
+                :placeholder="$t('password')"></el-input>
+            </section>
+            <section>
+              <el-button @click='submitLogin'
+                style="width: 100%"
+                type='primary'>{{ $t("login") }}</el-button>
+            </section>
+          </div>
+        </div>
       </el-col>
-      <!--END 两边空白占位区-->
-      <el-col :span='12' class='initPanel'>
-        <el-form ref='form' label-width='80px'>
-          <el-form-item :label='$t("account")'>
-            <el-input v-model='from.account' autocomplete='off'></el-input>
-          </el-form-item>
-          <el-form-item :label='$t("password")'>
-            <el-input type='password' v-model='from.password' autocomplete='off' @keyup.enter.native="submitLogin"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type='primary' @click='submitLogin'>{{ $t("login") }}</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
-      <!--START 两边空白占位区-->
-      <el-col :span='6'>
-        <div>&nbsp;</div>
-      </el-col>
-      <!--END 两边空白占位区-->
     </el-row>
   </main>
 </template>
@@ -123,6 +125,50 @@ export default {
 }
 </script>
 
+<!--局部样式（仅本页有效）-->
 <style scoped>
+  .login-login {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background: url("./../../assets/img/login-bg.jpg") center center;
+  }
+  
+  .login-panel {
+    margin-top: 100px;
+    padding: 5px;
+  }
 
+  .login-form {
+    padding: 5px 20px;
+    text-align: center;
+    border: 1px solid #333;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+  }
+  
+  .login-form section {
+    margin: 20px 0;
+  }
+  
+  /*手机端兼容*/
+  @media only screen and (max-width: 768px) {
+
+  }
+</style>
+
+<!--全局样式-->
+<style>
+  /*设置输入框样式*/
+  .login-form .el-input__inner {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-color: #333;
+  }
+  
+  /*按钮样式*/
+  .login-form .el-button--primary {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-color: #333;
+  }
 </style>

@@ -51,7 +51,8 @@ class ProjectController extends BaseController {
      */
     public function actionSetProjectId() {
         $projectId = $this->post("projectId");
-        SessionUtil::set(SessionUtil::KEY_PROJECT_ID, $projectId);
+        
+        MP::getProjectManager()->setCurrProjectId($projectId);
         
         return ApiReturn::retSucc();
     }
@@ -60,7 +61,7 @@ class ProjectController extends BaseController {
      * 获取项目id
      */
     public function actionGetProjectId() {
-        $projectId = SessionUtil::get(SessionUtil::KEY_PROJECT_ID, null);
+        $projectId = MP::getProjectManager()->getCurrProjectId();
         
         return ApiReturn::retSucc($projectId);
     }

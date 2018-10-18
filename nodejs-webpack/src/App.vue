@@ -66,17 +66,21 @@ export default {
 
 <style lang="scss">
 body {
-  margin: 0;
   background-color: #efefef;
-  min-width: 1024px;
+}
+html, body, main {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+div, article, section, footer, nav, header {
+  margin: 0;
+  padding: 0;
 }
 #app {
   height: 100%;
   a {
     text-decoration: none;
   }
-}
-main {
-  padding: 20px 10px;
 }
 </style>

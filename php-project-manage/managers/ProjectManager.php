@@ -10,6 +10,7 @@ namespace app\managers;
 
 use app\exceptions\ProcessException;
 use app\models\db\Project;
+use app\utils\SessionUtil;
 
 /**
  * Class ProjectManager 项目 manager
@@ -55,5 +56,25 @@ class ProjectManager {
         if ($project->insert() === false) {
             throw new ProcessException("数据写入失败");
         }
+    }
+    
+    /**
+     * 获取当前项目的id
+     */
+    public function getCurrProjectId() {
+        $projectId = SessionUtil::get(SessionUtil::KEY_PROJECT_ID, null);
+        if ($projectId === null) {
+            $project = Project::find()->one();
+            $projectId = $project->id;
+        }
+        return $projectId;
+    }
+    
+    /**
+     * 设置当前项目的id
+     * @param $projectId
+     */
+    public function setCurrProjectId($projectId) {
+        SessionUtil::set(SessionUtil::KEY_PROJECT_ID, $projectId);
     }
 }
