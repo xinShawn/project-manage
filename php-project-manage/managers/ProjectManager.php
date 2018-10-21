@@ -61,7 +61,7 @@ class ProjectManager {
     /**
      * 获取当前项目的id
      */
-    public function getCurrProjectId() {
+    public function getSessionProjectId() {
         $projectId = SessionUtil::get(SessionUtil::KEY_PROJECT_ID, null);
         if ($projectId === null) {
             $project = Project::find()->one();
@@ -74,7 +74,7 @@ class ProjectManager {
      * 设置当前项目的id
      * @param $projectId
      */
-    public function setCurrProjectId($projectId) {
+    public function setSessionProjectId($projectId) {
         SessionUtil::set(SessionUtil::KEY_PROJECT_ID, $projectId);
     }
 }

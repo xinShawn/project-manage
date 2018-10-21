@@ -45,7 +45,12 @@ class MissionManager {
         }
         
         $mission = new Mission();
+        $projectId = MP::getProjectManager()->getSessionProjectId();
+        if ($projectId === 0) {
+            throw new ProcessException(Yii::t("app", "No project is currently selected"));
+        }
         
+        $mission->project_id = $projectId;
         $mission->priority_id = $priorityId;
         $mission->title = $title;
         $mission->content = $content;

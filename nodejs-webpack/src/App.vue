@@ -65,22 +65,25 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  background-color: #efefef;
-}
-html, body, main {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-div, article, section, footer, nav, header {
-  margin: 0;
-  padding: 0;
-}
-#app {
-  height: 100%;
-  a {
-    text-decoration: none;
+  body {
+    background-color: #efefef;
   }
-}
+  
+  html, body, main {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  div, article, section, footer, nav, header {
+    margin: 0;
+    padding: 0;
+  }
+  
+  #app {
+    height: 100%;
+    a {
+      text-decoration: none;
+    }
+  }
 </style>

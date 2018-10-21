@@ -16,4 +16,5 @@ return [
     "closed" => "已关闭",
     "canceled" => "已取消",
     "password error" => "密码错误",
+    "No project is currently selected" => "目前没有选择任何项目"
 ];
