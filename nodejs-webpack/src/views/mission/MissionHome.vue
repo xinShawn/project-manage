@@ -46,12 +46,16 @@
             </template>
           </el-table-column>
           <el-table-column prop="priority_name" :label="$t('priority')" width="70"></el-table-column>
-          <el-table-column :label="$t('status')" width="70px">
+          <el-table-column :label="$t('status')" width="70">
             <template slot-scope="props">
-              <span :style="{color: getColor(props.row.status)}">{{ props.row.status_name }}</span>
+              <span :style="{color: getStatusColor(props.row.status)}">{{ props.row.status_name }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="end_time" :label="$t('end time')" width="160"></el-table-column>
+          <el-table-column :label="$t('end time')" width="160">
+            <template slot-scope="props">
+              <span :style="{color: getEndTimeColor(props.row.end_time)}">{{ toDateTime(props.row.end_time) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('operate')" align="center" width="160">
             <template slot-scope="props">
               <el-button size="mini" v-if="isShowStartBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 10)">{{ $t("start") }}</el-button>
@@ -101,6 +105,7 @@
   import HttpUtil from "../../utils/HttpUtil";
   import OptionsManage from "../../store/manage/OptionsManage";
   import NotifyUtil from "../../utils/NotifyUtil";
+  import TimeUtil from "../../utils/TimeUtil";
   
   export default {
     name: 'MissionHome',
@@ -267,13 +272,13 @@
         this.table.loading = true;
   
         HttpUtil.axiosPost("mission/change-mission-status", {id: missionId, toStatus: toStatus}, (apiReturn) => {
+          this.table.loading = false;
           if (apiReturn.code > 0) {
-            this.requestTable();
             NotifyUtil.success(apiReturn.message);
+            this.requestTable();
           } else {
             NotifyUtil.error(apiReturn.message);
           }
-          this.table.loading = false;
         }, (error) => {
           console.error(error);
           this.table.loading = false;
@@ -301,8 +306,9 @@
       
       /**
        * 根据据状态获取颜色值
+       * @return string 颜色值
        */
-      getColor(status) {
+      getStatusColor(status) {
         status = Number.parseInt(status);
         switch (status) {
           case 0:
@@ -316,6 +322,25 @@
           case 40:
             return "#79917f";
         }
+      },
+      
+      /**
+       * 获取结束时间的颜色值
+       * @return string 颜色值
+       */
+      getEndTimeColor(endTime) {
+        let currentTime = TimeUtil.currentTime();
+        if (currentTime > endTime) {
+          return "#ff0000";
+        }
+        return "";
+      },
+      
+      /**
+       * 把时间戳转为日期
+       */
+      toDateTime(time) {
+        return TimeUtil.timestampToDateTime(time);
       },
   
       /**

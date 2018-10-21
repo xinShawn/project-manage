@@ -135,7 +135,6 @@ class Mission extends BaseDBModel {
     
         foreach ($data as $key => $item) {
             $data[$key]["status_name"] = $statusOptions[$item["status"]];
-            $data[$key]["end_time"] = date("Y-m-d H-i-s", $item["end_time"]);
         }
     
         return [
