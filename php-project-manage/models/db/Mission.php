@@ -24,29 +24,17 @@ use yii\db\ActiveQuery;
  */
 class Mission extends BaseDBModel {
     
-    /**
-     * 状态：未开始
-     */
+    /** 状态：未开始 */
     const STATUS_NOT_START = 0;
-    /**
-     * 状态：进行中
-     */
+    /** 状态：进行中 */
     const STATUS_START = 10;
-    /**
-     * 状态：暂停
-     */
+    /** 状态：暂停 */
     const STATUS_PAUSE = 20;
-    /**
-     * 状态：已完成
-     */
+    /** 状态：已完成 */
     const STATUS_FINISHED = 30;
-    /**
-     * 状态：已关闭
-     */
+    /** 状态：已关闭 */
     const STATUS_CLOSED = 40;
-    /**
-     * 状态：已取消
-     */
+    /** 状态：已取消 */
     const STATUS_CANCELED = -10;
     
     /**
@@ -165,7 +153,7 @@ class Mission extends BaseDBModel {
      * @param int $id 任务id
      * @return MissionDetailForm
      */
-    public static function getDetail($id) {
+    public static function getDetailForm($id) {
         $missionDetail = Mission::find()->asArray()->select([
             "mission.id             AS id",
             "mission.title          AS title",
@@ -193,6 +181,4 @@ class Mission extends BaseDBModel {
             self::STATUS_CANCELED   => Yii::t("app", "canceled")
         ];
     }
-    
-    
 }

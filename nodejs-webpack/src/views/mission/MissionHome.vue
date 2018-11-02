@@ -58,10 +58,11 @@
           </el-table-column>
           <el-table-column :label="$t('operate')" align="center" width="160">
             <template slot-scope="props">
-              <el-button size="mini" v-if="isShowStartBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 10)">{{ $t("start") }}</el-button>
-              <el-button size="mini" v-if="isShowPauseBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 20)">{{ $t("pause") }}</el-button>
-              <el-button size="mini" v-if="isShowFinishBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 30)">{{ $t("finish") }}</el-button>
-              <el-button size="mini" v-if="isShowCloseBtn(props.row.status)" @click="changeMissionStatus(props.row.id, 40)">{{ $t("close") }}</el-button>
+              <el-button size="mini" v-if="isShowStartBtn(props.row.status)" @click="changeMissionStatus(props.row.id, conf.STATUS_START)">{{ $t("start") }}</el-button>
+              <el-button size="mini" v-if="isShowPauseBtn(props.row.status)" @click="changeMissionStatus(props.row.id, conf.STATUS_PAUSE)">{{ $t("pause") }}</el-button>
+              <el-button size="mini" v-if="isShowFinishBtn(props.row.status)" @click="changeMissionStatus(props.row.id, conf.STATUS_FINISHED)">{{ $t("finish") }}</el-button>
+              <el-button size="mini" v-if="isShowCloseBtn(props.row.status)" @click="changeMissionStatus(props.row.id, conf.STATUS_CLOSED)">{{ $t("close") }}</el-button>
+              <el-button size="mini" v-if="isShowCancelBtn(props.row.status)" @click="changeMissionStatus(props.row.id, conf.STATUS_CANCELED)">{{ $t("cancel") }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -111,26 +112,34 @@
     name: 'MissionHome',
     data() {
       return {
-        /**
-         * 是否显示弹窗
-         */
+        /** 是否显示弹窗 */
         isShowDialog: false,
-        /**
-         * 表格提示文字的宽度
-         */
+        /** 表格提示文字的宽度 */
         formLabelWidth: "120px",
         
-        /**
-         * 页面需要便利的数据
-         */
+        /** 配置 */
+        conf: {
+          /** 状态：未开始 */
+          STATUS_NOT_START: 0,
+          /** 状态：进行中 */
+          STATUS_START: 10,
+          /** 状态：暂停 */
+          STATUS_PAUSE: 20,
+          /** 状态：已完成 */
+          STATUS_FINISHED: 30,
+          /** 状态：已关闭 */
+          STATUS_CLOSED: 40,
+          /** 状态：已取消 */
+          STATUS_CANCELED: -10,
+        },
+        
+        /** 页面需要便利的数据 */
         view: {
           priorityOptions: [],
           projectOptions: [],
         },
       
-        /**
-         * @type {object} 表单数据封装
-         */
+        /** @type {object} 表单数据封装 */
         form: {
           lock: true,
           data: {
@@ -141,9 +150,7 @@
           }
         },
       
-        /**
-         * @type {object} 表格数据封装
-         */
+        /** @type {object} 表格数据封装 */
         table: {
           loading: false,
           // 查询时需要提交的参数
@@ -234,39 +241,43 @@
           this.table.loading = false;
         }, 5000);
       },
-    
+      
       /**
        * 隐藏弹窗
        */
       hideDialog() {
         this.isShowDialog = false;
       },
-    
+      
       /**
        * 显示弹窗
        */
       showDialog() {
         this.isShowDialog = true;
       },
-  
+      
       /**
        * 监听每页显示行数的变化
+       * @param {int} size
        */
       onSizeChange(size) {
         this.table.params.rows = size;
         this.requestTable();
       },
-  
+      
       /**
        * 监听当前页数的变化
+       * @param {int} page
        */
       onPageChange(page) {
         this.table.params.page = page;
         this.requestTable();
       },
-  
+      
       /**
        * 修改任务状态
+       * @param {string|int} missionId
+       * @param {int} toStatus
        */
       changeMissionStatus(missionId, toStatus) {
         this.table.loading = true;
@@ -285,7 +296,7 @@
           NotifyUtil.error(this.$t("Request server exception"));
         }, 5000);
       },
-    
+      
       /**
        * 提交要修改的数据
        */
@@ -342,46 +353,56 @@
       toDateTime(time) {
         return TimeUtil.timestampToDateTime(time);
       },
-  
+      
       /**
        * 是否显示开始按钮
-       * @param status
+       * @param {string|number} status
        * @return {boolean}
        */
       isShowStartBtn(status) {
         status = Number.parseInt(status);
-        return ([0, 20].indexOf(status) !== -1)
+        return ([this.conf.STATUS_NOT_START, this.conf.STATUS_PAUSE].indexOf(status) !== -1)
       },
-  
+      
       /**
        * 是否显示暂停按钮
-       * @param status
+       * @param {string|number} status
        * @return {boolean}
        */
       isShowPauseBtn(status) {
         status = Number.parseInt(status);
-        return ([10].indexOf(status) !== -1)
+        return ([this.conf.STATUS_START].indexOf(status) !== -1)
       },
-  
+      
       /**
        * 是否显示完成按钮
-       * @param status
+       * @param {string|number} status
        * @return {boolean}
        */
       isShowFinishBtn(status) {
         status = Number.parseInt(status);
-        return ([10].indexOf(status) !== -1)
+        return ([this.conf.STATUS_START].indexOf(status) !== -1)
       },
-  
+      
       /**
        * 是否显示关闭按钮
-       * @param status
+       * @param {string|number} status
        * @return {boolean}
        */
       isShowCloseBtn(status) {
         status = Number.parseInt(status);
-        return ([30].indexOf(status) !== -1)
+        return ([this.conf.STATUS_FINISHED].indexOf(status) !== -1)
       },
+      
+      /**
+       * 是否显示取消按钮
+       * @param {string|number} status
+       * @return {boolean}
+       */
+      isShowCancelBtn(status) {
+        status = Number.parseInt(status);
+        return ([this.conf.STATUS_CANCELED, this.conf.STATUS_CANCELED].indexOf(status) === -1);
+      }
     },
     computed: {
       /**

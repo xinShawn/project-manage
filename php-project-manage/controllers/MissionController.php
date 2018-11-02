@@ -83,7 +83,7 @@ class MissionController extends BaseController {
     public function actionGetDetail() {
         $id = (int) $this->post("id");
         
-        $missionDetailForm = Mission::getDetail($id);
+        $missionDetailForm = Mission::getDetailForm($id);
         
         return ApiReturn::retSucc($missionDetailForm->toArray());
     }
