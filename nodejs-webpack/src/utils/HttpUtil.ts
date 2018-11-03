@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import ApiReturnModel from "../models/ApiReturnModel";
-import CONF from "./CONF";
+import CheckLoginUtil from "./CheckLoginUtil";
 
 const Qs = require('querystring')
 
@@ -40,20 +40,21 @@ export default class HttpUtil {
         ],
         timeout: timeoutMS,
       }).then((response: any) => {
-        let apiReturn: ApiReturnModel = ApiReturnModel.initByAxiosResponse(response);
-        if (succCallback !== undefined) {
-          if (apiReturn.code === CONF.RE_LOGIN_CODE) {
-            // 如果返回码需要重新登录，则刷新页面
-            window.location.reload();
+        try {
+          let apiReturn: ApiReturnModel = ApiReturnModel.initByAxiosResponse(response);
+          if (succCallback !== undefined) {
+            succCallback(apiReturn);
           }
-          succCallback(apiReturn);
+        } catch (e) {
+          CheckLoginUtil.checkNow();
+          throw e;
         }
       });
     } catch (error) {
-      console.error(error);
       if (errorCallback !== undefined) {
         errorCallback(error);
       }
+      CheckLoginUtil.checkNow();
     }
   }
 

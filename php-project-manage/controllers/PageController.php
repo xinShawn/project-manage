@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\exceptions\ReLoginException;
 use app\models\ApiReturn;
 use Yii;
 
@@ -26,10 +25,6 @@ class PageController extends BaseController {
     public function actionError() {
         $exception = Yii::$app->errorHandler->exception;
         if ($exception !== null) {
-            Yii::$app->response->statusCode = 200;
-            if ($exception instanceof ReLoginException) {
-                return ApiReturn::ret(ApiReturn::FAIL_RE_LOGIN, $exception->getMessage());
-            }
             Yii::$app->response->statusCode = 200;
             return ApiReturn::retFailMessage($exception->getMessage());
         } else {

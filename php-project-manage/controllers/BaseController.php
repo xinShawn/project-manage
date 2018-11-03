@@ -23,10 +23,17 @@ abstract class BaseController extends Controller {
      * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action) {
-        if (!MP::getUserManager()->isLogin() && !$this->isSkipLoginCheck($action)) {
-            throw new ReLoginException(Yii::t("app", "not login"));
+        if (!parent::beforeAction($action)) {
+            return false;
         }
-        return parent::beforeAction($action);
+        
+        $userManager = MP::getUserManager();
+        if (!$userManager->isLogin() && !$this->isSkipLoginCheck($action)) {
+            $userManager->logout();
+            throw new ReLoginException();
+        }
+        
+        return true;
     }
     
     /**
@@ -60,6 +67,7 @@ abstract class BaseController extends Controller {
             "user/init-admin-user" => "",
             "user/check-login" => "",
             "user/login" => "",
+            "user/logout" => "",
         ];
         
         if (isset($skipRouteKey[$action->getUniqueId()])) {

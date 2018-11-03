@@ -36,4 +36,11 @@ class CookieUtil {
     public static function get($name, $defaultValue = null) {
         return Yii::$app->request->getCookies()->getValue($name, $defaultValue);
     }
+    
+    /**
+     * 销毁所有 cookie
+     */
+    public static function destroy() {
+        Yii::$app->response->getCookies()->removeAll();
+    }
 }

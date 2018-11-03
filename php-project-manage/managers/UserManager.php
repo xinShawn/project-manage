@@ -70,6 +70,15 @@ class UserManager extends BaseManager {
     }
     
     /**
+     * 获取当天登录的用户
+     * @return SysUser
+     */
+    public function getSessionUser() {
+        $userId = $this->helper->getSessionUserId();
+        return SysUser::findOne($userId);
+    }
+    
+    /**
      * 进行登录
      * @param string $account 登录账号
      * @param string $password 登录密码
@@ -110,16 +119,29 @@ class UserManager extends BaseManager {
         $sysUser->last_login_time = $time;
         $sysUser->last_login_ip = Yii::$app->getRequest()->getUserIP();
         
-        $sysUser->update();
+        if ($sysUser->update() === false) {
+            throw new ProcessException(Yii::t("app", "failed"));
+        }
         
         return $loginToken;
     }
     
     /**
      * 注销
+     * @throws ProcessException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function logout() {
+        $sysUser = $this->getSessionUser();
+        if ($sysUser !== null) {
+            $sysUser->auth_code_dead_time = 0;
+            if ($sysUser->update() === false) {
+                throw new ProcessException(Yii::t("app", "failed"));
+            }
+        }
         SessionUtil::destroy();
+        CookieUtil::destroy();
     }
     
     /**

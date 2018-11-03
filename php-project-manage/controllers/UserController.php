@@ -80,6 +80,10 @@ class UserController extends BaseController {
     
     /**
      * 进行登出
+     * @return string
+     * @throws ProcessException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionLogout() {
         MP::getUserManager()->logout();

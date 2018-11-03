@@ -9,6 +9,7 @@
 
 <script>
 import Nav from './views/nav/Nav'
+import CheckLoginUtil from "./utils/CheckLoginUtil";
 
 export default {
   name: 'App',
@@ -29,6 +30,7 @@ export default {
         this.isJumpToLoginPage = true;
       }
     });
+    CheckLoginUtil.startLoop();
   },
   mounted() {
   },
