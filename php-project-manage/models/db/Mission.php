@@ -10,6 +10,7 @@ use yii\db\ActiveQuery;
  * This is the model class for table "mission".
  *
  * @property int $id [int(10) unsigned]
+ * @property int $project_id [int(11) unsigned]  所属项目id
  * @property int $priority_id [int(11) unsigned]  优先级id
  * @property string $title [varchar(255)]  任务标题
  * @property string $content 任务详情
@@ -23,29 +24,17 @@ use yii\db\ActiveQuery;
  */
 class Mission extends BaseDBModel {
     
-    /**
-     * 状态：未开始
-     */
+    /** 状态：未开始 */
     const STATUS_NOT_START = 0;
-    /**
-     * 状态：进行中
-     */
+    /** 状态：进行中 */
     const STATUS_START = 10;
-    /**
-     * 状态：暂停
-     */
+    /** 状态：暂停 */
     const STATUS_PAUSE = 20;
-    /**
-     * 状态：已完成
-     */
+    /** 状态：已完成 */
     const STATUS_FINISHED = 30;
-    /**
-     * 状态：已关闭
-     */
+    /** 状态：已关闭 */
     const STATUS_CLOSED = 40;
-    /**
-     * 状态：已取消
-     */
+    /** 状态：已取消 */
     const STATUS_CANCELED = -10;
     
     /**
@@ -58,10 +47,11 @@ class Mission extends BaseDBModel {
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
+            [['project_id', 'priority_id', 'status', 'end_time', 'finish_user_id', 'create_user_id', 'last_user_id', 'update_time', 'create_time'], 'integer'],
             [['priority_id', 'title', 'content', 'create_user_id', 'last_user_id', 'update_time', 'create_time'], 'required'],
-            [['priority_id', 'status', 'end_time', 'finish_user_id', 'create_user_id', 'last_user_id', 'update_time', 'create_time'], 'integer'],
             [['content'], 'string'],
             [['title'], 'string', 'max' => 255],
         ];
@@ -70,9 +60,11 @@ class Mission extends BaseDBModel {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
+            'project_id' => 'Project ID',
             'priority_id' => 'Priority ID',
             'title' => 'Title',
             'content' => 'Content',
@@ -99,12 +91,13 @@ class Mission extends BaseDBModel {
     
     /**
      * 获取任务表格数据
+     * @param int|array $projectId 项目id
      * @param string $radio 快速查询选项
      * @param int $offset
      * @param int $limit
      * @return array
      */
-    public static function getTable($radio, $offset, $limit) {
+    public static function getTable($projectId, $radio, $offset, $limit) {
         $query = Mission::find()->asArray()->select([
             "mission.id             AS id",
             "mission.priority_id    AS priority_id",
@@ -114,6 +107,9 @@ class Mission extends BaseDBModel {
             "mission.end_time       AS end_time",
         ])->leftJoin("cfg_priority", "cfg_priority.id = mission.priority_id");
     
+        if (!empty($projectId)) {
+            $query->andWhere(["mission.project_id" => $projectId]);
+        }
         if (!empty($radio)) {
             self::setQueryMissionRadio($query, $radio);
         }
@@ -127,7 +123,6 @@ class Mission extends BaseDBModel {
     
         foreach ($data as $key => $item) {
             $data[$key]["status_name"] = $statusOptions[$item["status"]];
-            $data[$key]["end_time"] = date("Y-m-d H-i-s", $item["end_time"]);
         }
     
         return [
@@ -148,7 +143,11 @@ class Mission extends BaseDBModel {
             case "all":
                 break;
             case "unfinished":
-                $query->andWhere("mission.status < :status", [":status" => Mission::STATUS_FINISHED]);
+                $query->andWhere(["mission.status" => [
+                    self::STATUS_NOT_START,
+                    self::STATUS_START,
+                    self::STATUS_PAUSE,
+                ]]);
                 break;
         }
     }
@@ -158,7 +157,7 @@ class Mission extends BaseDBModel {
      * @param int $id 任务id
      * @return MissionDetailForm
      */
-    public static function getDetail($id) {
+    public static function getDetailForm($id) {
         $missionDetail = Mission::find()->asArray()->select([
             "mission.id             AS id",
             "mission.title          AS title",
@@ -186,6 +185,4 @@ class Mission extends BaseDBModel {
             self::STATUS_CANCELED   => Yii::t("app", "canceled")
         ];
     }
-    
-    
 }

@@ -2,7 +2,7 @@
 
 namespace app\models\db;
 
-use Yii;
+use app\utils\DataUtil;
 
 /**
  * This is the model class for table "project".
@@ -75,5 +75,14 @@ class Project extends BaseDBModel
         ]);
         
         return $query->all();
+    }
+    
+    /**
+     * @return array [项目id => 项目名字]
+     */
+    public static function getOptions() {
+        $data = self::find()->asArray()->select(["id", "name"])->all();
+        
+        return DataUtil::makeKeyValueArray($data, "id", "name");
     }
 }

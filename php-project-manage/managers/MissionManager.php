@@ -27,7 +27,6 @@ class MissionManager {
         return self::$shareInstance;
     }
     
-    
     /**
      * 添加一条任务
      * @param string $title 标题id
@@ -38,14 +37,19 @@ class MissionManager {
      */
     public function add($title, $content, $priorityId, $endTime = 0) {
         $currentTime = time();
-        $currentUserId = MP::getUserManager()->getCurrentUserId();
+        $currentUserId = MP::getUserManager()->helper->getSessionUserId();
         
         if (empty($content)) {
             $content = "[无]";
         }
         
         $mission = new Mission();
+        $projectId = MP::getProjectManager()->getSessionProjectId();
+        if ($projectId === 0) {
+            throw new ProcessException(Yii::t("app", "No project is currently selected"));
+        }
         
+        $mission->project_id = $projectId;
         $mission->priority_id = $priorityId;
         $mission->title = $title;
         $mission->content = $content;
@@ -81,7 +85,7 @@ class MissionManager {
         
         $mission->status = $status;
         $mission->update_time = time();
-        $mission->last_user_id = MP::getUserManager()->getCurrentUserId();
+        $mission->last_user_id = MP::getUserManager()->helper->getSessionUserId();
         
         if ($mission->update() === false) {
             throw new ProcessException(Yii::t("app", "Data update failed"));

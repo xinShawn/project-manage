@@ -10,35 +10,23 @@ use Yii;
  */
 class ApiReturn extends BaseModel {
     
-    /**
-     * 处理结果：成功
-     */
+    /** 处理结果：成功 */
     const SUCC_SUCC = 1;
     
-    /**
-     * 处理结果：失败
-     */
+    /** 处理结果：失败 */
     const FAIL_FAIL = -1;
-    /**
-     * 处理结果：失败 空参数
-     */
+    /** 处理结果：失败 空参数 */
     const FAIL_EMPTY_DATA = -2;
-    /**
-     * 处理结果：失败 非法参数
-     */
+    /** 处理结果：失败 非法参数 */
     const FAIL_ILLEGAL_DATA = -3;
-    /**
-     * 处理结果：失败 已经初始化
-     */
+    /** 处理结果：失败 已经初始化 */
     const FAIL_ALREADY_INIT = -4;
+    /** 处理结果：失败 需要重新登录 */
+    const FAIL_RE_LOGIN = -100;
     
-    /**
-     * @var int 返回代码
-     */
+    /** @var int 返回代码 */
     public $code;
-    /**
-     * @var string|array 返回数据
-     */
+    /** @var string|array 返回数据 */
     public $data;
     
     
@@ -97,7 +85,9 @@ class ApiReturn extends BaseModel {
             self::FAIL_FAIL => "failed",
             self::FAIL_EMPTY_DATA => "empty data",
             self::FAIL_ILLEGAL_DATA => "illegal data",
-            self::FAIL_ALREADY_INIT => "already init"
+            self::FAIL_ALREADY_INIT => "already init",
+            
+            self::FAIL_RE_LOGIN => "re login",
         ];
         
         $message = isset($messageArray[$code]) ? $messageArray["$code"] : "unknown message";

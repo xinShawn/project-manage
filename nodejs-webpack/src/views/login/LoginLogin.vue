@@ -1,32 +1,35 @@
 <template>
-  <main>
+  <main class="login-login">
     <el-row>
-      <h3>{{ $t("login page") }}</h3>
-    </el-row>
-    <el-row :gutter='20' class='login-row'>
-      <!--START 两边空白占位区-->
-      <el-col :span='6'>
-        <div>&nbsp;</div>
+      <el-col
+        :sm="{span: 8, offset: 8}"
+        :xs="24">
+        <div class="login-panel">
+          <div class="login-form">
+            <section>
+              <h1 class="login-form-title">{{ $t("sign in project manage") }}</h1>
+            </section>
+            <section>
+              <el-input v-model="form.data.account"
+                autocomplete="off"
+                :placeholder="$t('account')"></el-input>
+            </section>
+            <section>
+              <el-input v-model="form.data.password"
+                @keyup.enter.native="submitLogin"
+                type="password"
+                autocomplete="off"
+                :placeholder="$t('password')"></el-input>
+            </section>
+            <section>
+              <el-button @click='submitLogin'
+                         v-loading="form.loading"
+                style="width: 100%"
+                type='primary'>{{ $t("login") }}</el-button>
+            </section>
+          </div>
+        </div>
       </el-col>
-      <!--END 两边空白占位区-->
-      <el-col :span='12' class='initPanel'>
-        <el-form ref='form' label-width='80px'>
-          <el-form-item :label='$t("account")'>
-            <el-input v-model='from.account' autocomplete='off'></el-input>
-          </el-form-item>
-          <el-form-item :label='$t("password")'>
-            <el-input type='password' v-model='from.password' autocomplete='off' @keyup.enter.native="submitLogin"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type='primary' @click='submitLogin'>{{ $t("login") }}</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
-      <!--START 两边空白占位区-->
-      <el-col :span='6'>
-        <div>&nbsp;</div>
-      </el-col>
-      <!--END 两边空白占位区-->
     </el-row>
   </main>
 </template>
@@ -43,9 +46,12 @@ export default {
       /**
        * 表单数据
        */
-      from: {
-        account: "",
-        password: ""
+      form: {
+        loading: false,
+        data: {
+          account: "",
+          password: ""
+        }
       }
     }
   },
@@ -89,21 +95,23 @@ export default {
      * 提交登录表单
      */
     submitLogin() {
-      let that = this;
+      this.form.loading = true;
       
-      HttpUtil.axiosPost("user/login", {account: this.from.account, password: EncryptUtil.md5(this.from.password)}, (apiReturn) => {
+      HttpUtil.axiosPost("user/login", {account: this.form.data.account, password: EncryptUtil.md5(this.form.data.password)}, (apiReturn) => {
           if (apiReturn.code > 0) {
             let loginToken = apiReturn.data.loginToken;
-            that.$store.dispatch("setLoginToken", loginToken);
+            this.$store.dispatch("setLoginToken", loginToken);
             NotifyUtil.success(apiReturn.message);
-            that.$router.push("../main");
+            this.$router.push("../main");
           } else {
             NotifyUtil.error(apiReturn.message)
           }
+          this.form.loading = false;
         },
         (error) => {
           console.error(error);
-          NotifyUtil.error(that.$t("Request timeout"));
+          NotifyUtil.error(this.$t("Request timeout"));
+          this.form.loading = false;
         }
       )
     }
@@ -123,6 +131,40 @@ export default {
 }
 </script>
 
-<style scoped>
+<!--局部样式（仅本页有效）-->
+<style lang="scss" scoped>
+  .login-login {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background: url("./../../assets/img/login-bg.jpg") center center;
+  }
+  
+  .login-panel {
+    margin: 100px auto 0;
+    padding: 5px;
+    width: 400px;
+  }
 
+  .login-form {
+    padding: 5px 20px;
+    background-color: white;
+    border-radius: 4px;
+  }
+  
+  .login-form-title {
+    text-align: center;
+  }
+  
+  .login-form section {
+    margin: 20px 0;
+  }
+  
+  /*手机端兼容*/
+  @media only screen and (max-width: 768px) {
+    .login-panel {
+      padding: 0;
+      width: 96%;
+    }
+  }
 </style>

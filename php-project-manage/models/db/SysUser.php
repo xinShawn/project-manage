@@ -67,6 +67,15 @@ class SysUser extends BaseDBModel {
     }
     
     /**
+     * 使用账号搜索模型
+     * @param string $account 账号
+     * @return SysUser|null
+     */
+    public static function findByAccount($account) {
+        return self::findOne(["account" => $account]);
+    }
+    
+    /**
      * 获取用户表格数据
      */
     public static function getUserTable() {

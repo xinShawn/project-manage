@@ -1,28 +1,20 @@
 <template>
-  <main id="nav" v-if="$store.getters.isLogin">
-    <el-header>
-      <h1>{{ $t("backend manage system") }}</h1>
-      <!-- 导航菜单 -->
-      <el-menu :default-active="activeName" class="nav" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-        <el-menu-item :index="item.link" :key="index" v-for="(item, index) in links">
-          <router-link :to="item.link">{{ item.name }}</router-link>
-        </el-menu-item>
-      </el-menu>
-      <!-- 搜索框 -->
-      <el-form class="search">
-        <el-select size="mini" popper-class="options" class="search-select" v-model="searchOption" value="">
-          <el-option v-for="(item, index) in searchs" :key="index" :label="item" :value="item">
-          </el-option>
-        </el-select>
-        <el-input class="search-content" size="mini" :placeholder="$t('search content')"></el-input>
-        <el-button size="mini" type="info">{{ $t("search") }}</el-button>
-  
-  
-        <!--登出按钮-->
-        <el-button size="mini" type="danger" @click="logout">{{ $t("logout") }}</el-button>
-      </el-form>
-      <!-- 用户名 -->
-    </el-header>
+  <main class="nav" v-if="$store.getters.isLogin">
+    <el-row>
+      <el-col :sm="5">
+        <div class="title">{{ $t("backend manage system") }}</div>
+      </el-col>
+      <el-col :sm="14">
+        <el-menu :default-active="activeName" class="nav" mode="horizontal" background-color="#409EFF" text-color="white" active-text-color="#ffd04b">
+          <el-menu-item style="padding: 0" v-for="(item, index) in links" :index="item.link" :key="index">
+            <router-link class="router-link" :to="item.link">{{ item.name }}</router-link>
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+      <el-col class="tool-bar" :sm="5">
+        <el-button @click="logout" size="mini" type="danger">{{ $t("logout") }}</el-button>
+      </el-col>
+    </el-row>
   </main>
 </template>
 
@@ -86,70 +78,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #nav {
+  main {
+    height: auto;
+  }
+  
+  .nav {
     padding: 0;
+    color: white;
+    background-color: #409EFF;
   }
-  header {
-    $line-height: 60px;
-    background-color: rgb(84, 92, 100);
-    h1 {
-      float: left;
-      color: #ffffff;
-      margin: 0;
-      line-height: $line-height;
-    }
-    .nav {
-      margin-left: 100px;
-      float: left;
-      li {
-        padding: 0;
-        a {
-          display: inline-block;
-          padding: 0 20px;
-          line-height: $line-height;
-          font-size: 16px;
-        }
-      }
-    }
-    .search {
-      float: right;
-      font-size: 0;
-      margin-top: 16px;
-      .search-select {
-        width: 100px;
-      }
-      .search-content {
-        width: 140px;
-      }
-      &>* {
-        display: inline-block;
-      }
-      * {
-        border-radius: 0;
-      }
-    }
+  
+  .nav > * {
+    line-height: 60px;
   }
-</style>
-<style lang="scss">
-  /*这里的属性修改会导致 App.vue 下所有的 el-input 的变化。应该寻找其他解决方案*/
-  /*.el-input__inner {*/
-    /*border: none;*/
-    /*border: {*/
-      /*radius: 0;*/
-      /*right: 1px #545C64 solid;*/
-    /*}*/
-  /*}*/
-  /*.search-content {*/
-    /*.el-input__inner {*/
-      /*border: none;*/
-      /*&::placeholder {*/
-        /*color: #ffffff;*/
-      /*}*/
-    /*}*/
-  /*}*/
-  /*.options {*/
-    /*.el-select-dropdown__item {*/
-      /*font-size: 12px;*/
-    /*}*/
-  /*}*/
+  
+  .title {
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+  }
+  
+  .tool-bar {
+    padding: 0 20px;
+    text-align: right;
+  }
+  
+  .router-link {
+    display: inline-block;
+    padding: 0 20px;
+    height: 60px;
+  }
 </style>

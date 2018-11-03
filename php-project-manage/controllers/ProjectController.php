@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\managers\MP;
 use app\models\ApiReturn;
 use app\models\db\Project;
+use app\utils\SessionUtil;
 
 /**
  * Class ProjectController 项目控制器
@@ -31,6 +32,37 @@ class ProjectController extends BaseController {
      */
     public function actionGetTable() {
         $tableData = Project::getTable();
+        
         return ApiReturn::retSucc($tableData);
+    }
+    
+    /**
+     * 获取选项数据
+     * @return string
+     */
+    public function actionGetOptions() {
+        $options = Project::getOptions();
+        
+        return ApiReturn::retSucc($options);
+    }
+    
+    /**
+     * 设置 session 当前选中项目的项目id
+     */
+    public function actionSetProjectId() {
+        $projectId = $this->post("projectId");
+        
+        MP::getProjectManager()->setSessionProjectId($projectId);
+        
+        return ApiReturn::retSucc();
+    }
+    
+    /**
+     * 获取项目id
+     */
+    public function actionGetProjectId() {
+        $projectId = MP::getProjectManager()->getSessionProjectId();
+        
+        return ApiReturn::retSucc($projectId);
     }
 }

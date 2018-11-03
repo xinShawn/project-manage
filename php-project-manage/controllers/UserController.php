@@ -58,7 +58,7 @@ class UserController extends BaseController {
      * 检测是否已经登录，并返回 loginToken。如果 loginToken 为 null，则登录无效
      */
     public function actionCheckLogin() {
-        $loginToken = MP::getUserManager()->getLoginToken();
+        $loginToken = MP::getUserManager()->helper->getLoginToken();
         return ApiReturn::retSucc(["loginToken" => $loginToken]);
     }
     
@@ -80,6 +80,10 @@ class UserController extends BaseController {
     
     /**
      * 进行登出
+     * @return string
+     * @throws ProcessException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionLogout() {
         MP::getUserManager()->logout();

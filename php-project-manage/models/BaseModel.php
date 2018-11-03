@@ -8,5 +8,15 @@ use yii\base\Model;
  * @package app\models
  */
 abstract class BaseModel extends Model {
-    
+    /**
+     * 使用数组初始化对象
+     * @deprecated 未经测试
+     * @param array $array 数据
+     * @return BaseModel
+     */
+    public static function initByArray($array) {
+        $model = new static();
+        $model->setAttributes($array);
+        return $model;
+    }
 }

@@ -48,14 +48,15 @@ class MissionController extends BaseController {
      * 获取任务表格的数据
      */
     public function actionGetMissionTable() {
-        $page = $this->post("page");
-        $rows = $this->post("rows");
         $radio = $this->post("radio");
+        $projectId = $this->post("projectId");
+        $page = (int) $this->post("page");
+        $rows = (int) $this->post("rows");
         
         $offset = ($page - 1) * $rows;
         $limit = $rows;
         
-        $tableData = Mission::getTable($radio, $offset, $limit);
+        $tableData = Mission::getTable($projectId, $radio, $offset, $limit);
         
         return ApiReturn::retSucc($tableData);
     }
@@ -82,7 +83,7 @@ class MissionController extends BaseController {
     public function actionGetDetail() {
         $id = (int) $this->post("id");
         
-        $missionDetailForm = Mission::getDetail($id);
+        $missionDetailForm = Mission::getDetailForm($id);
         
         return ApiReturn::retSucc($missionDetailForm->toArray());
     }

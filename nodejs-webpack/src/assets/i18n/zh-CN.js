@@ -76,4 +76,5 @@ module.exports = {
   "project name": "项目名称",
   "remark": "备注",
   "project overview": "项目总览",
+  "sign in project manage": "登录项目管理系统",
 };

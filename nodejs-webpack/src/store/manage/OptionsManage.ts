@@ -10,8 +10,20 @@ export default class OptionsManage {
    */
   private static shareInstance: OptionsManage = null;
 
+  /**
+   * 普通选项。如：{ 值 : 名字, ... }
+   * @param {object}
+   */
   private optionsArray: any = {
-    priority: new OptionsModel("/mission/get-priority-rich-options")
+    project: new OptionsModel("/project/get-options")
+  };
+
+  /**
+   * 富选项。如：[{id : id值, name: 名字, time: 时间}, ...]
+   * @param {object}
+   */
+  private fullOptionsArray: any = {
+    priority: new OptionsModel("/mission/get-priority-rich-options"),
   };
 
   /**
@@ -31,10 +43,19 @@ export default class OptionsManage {
   }
 
   /**
-   * 获取优先级选项
+   * 设置优先级选项
+   * @param setOptionsCallback
    */
-  public setPriorityOptions(setOptionsCallback: SetOptionsCallback) {
-    this.optionsArray.priority.setOptions(setOptionsCallback);
+  public setPriorityFullOptions(setOptionsCallback: SetOptionsCallback) {
+    this.fullOptionsArray.priority.setOptions(setOptionsCallback);
+  }
+
+  /**
+   * 设置项目选项
+   * @param setOptionsCallback
+   */
+  public setProjectOptions(setOptionsCallback: SetOptionsCallback) {
+    this.optionsArray.project.setOptions(setOptionsCallback);
   }
 }
 

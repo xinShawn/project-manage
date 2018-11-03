@@ -9,6 +9,7 @@
 
 <script>
 import Nav from './views/nav/Nav'
+import CheckLoginUtil from "./utils/CheckLoginUtil";
 
 export default {
   name: 'App',
@@ -29,6 +30,7 @@ export default {
         this.isJumpToLoginPage = true;
       }
     });
+    CheckLoginUtil.startLoop();
   },
   mounted() {
   },
@@ -65,18 +67,25 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  margin: 0;
-  background-color: #efefef;
-  min-width: 1024px;
-}
-#app {
-  height: 100%;
-  a {
-    text-decoration: none;
+  body {
+    background-color: #efefef;
   }
-}
-main {
-  padding: 20px 10px;
-}
+  
+  html, body, main {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  div, article, section, footer, nav, header {
+    margin: 0;
+    padding: 0;
+  }
+  
+  #app {
+    height: 100%;
+    a {
+      text-decoration: none;
+    }
+  }
 </style>

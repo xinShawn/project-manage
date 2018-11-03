@@ -91,7 +91,7 @@
         }, (error) => {
           console.error(error);
           this.table.loading = false;
-        }, 5000);
+        });
       },
   
       /**

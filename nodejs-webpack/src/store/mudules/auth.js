@@ -76,8 +76,7 @@ export default {
           (error) => {
             console.error(error);
             needLoginCallback(true);
-          },
-          5000);
+          });
       }
     },
   },

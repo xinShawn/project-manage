@@ -132,7 +132,7 @@
       timeFormat(row, column) {
         let lastLoginTime = row.last_login_time;
         
-        return TimeUtil.timestampToDate(lastLoginTime);
+        return TimeUtil.timestampToDateTime(lastLoginTime);
       },
   
       /**
