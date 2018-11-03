@@ -10,9 +10,7 @@ use Yii;
  */
 class CacheUtil {
     
-    /**
-     * SESSION KEY：用户id
-     */
+    /** SESSION KEY：用户id */
     const PREFIX_USER_ID = "ui";
     
     /**

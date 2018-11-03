@@ -49,7 +49,7 @@ class ProjectManager {
         $project->name = $name;
         $project->remark = $remark;
         $project->status = Project::STATUS_NOT_START;
-        $project->last_user_id = MP::getUserManager()->getCurrentUserId();
+        $project->last_user_id = MP::getUserManager()->helper->getSessionUserId();
         $project->update_time = $time;
         $project->create_time = $time;
         

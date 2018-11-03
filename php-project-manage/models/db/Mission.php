@@ -143,7 +143,11 @@ class Mission extends BaseDBModel {
             case "all":
                 break;
             case "unfinished":
-                $query->andWhere("mission.status < :status", [":status" => Mission::STATUS_FINISHED]);
+                $query->andWhere(["mission.status" => [
+                    self::STATUS_NOT_START,
+                    self::STATUS_START,
+                    self::STATUS_PAUSE,
+                ]]);
                 break;
         }
     }

@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\exceptions\ReLoginException;
+use app\managers\MP;
 use Yii;
 use yii\web\Controller;
 
@@ -14,9 +16,15 @@ abstract class BaseController extends Controller {
     /**
      * @param $action
      * @return bool
+     * @throws \Throwable
+     * @throws \app\exceptions\ProcessException
+     * @throws \yii\db\StaleObjectException
      * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action) {
+        if (!MP::getUserManager()->isLogin()) {
+            throw new ReLoginException(Yii::t("app", "not login"));
+        }
         return parent::beforeAction($action);
     }
     

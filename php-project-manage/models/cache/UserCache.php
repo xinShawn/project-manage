@@ -7,7 +7,9 @@ namespace app\models\cache;
  * @package app\models\cache
  */
 class UserCache extends BaseCacheModel {
+    /** int 用户id */
     public $id;
+    /** string 登录授权码 */
     public $loginToken;
     
     /**

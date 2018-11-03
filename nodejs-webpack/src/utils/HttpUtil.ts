@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import ApiReturnModel from "../models/ApiReturnModel";
+import CONF from "./CONF";
 
 const Qs = require('querystring')
 
@@ -41,6 +42,10 @@ export default class HttpUtil {
       }).then((response: any) => {
         let apiReturn: ApiReturnModel = ApiReturnModel.initByAxiosResponse(response);
         if (succCallback !== undefined) {
+          if (apiReturn.code === CONF.RE_LOGIN_CODE) {
+            // 如果返回码需要重新登录，则刷新页面
+            window.location.reload();
+          }
           succCallback(apiReturn);
         }
       });
