@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\exceptions\ReLoginException;
 use app\managers\MP;
 use Yii;
+use yii\base\Action;
 use yii\web\Controller;
 
 /**
@@ -14,7 +15,7 @@ use yii\web\Controller;
 abstract class BaseController extends Controller {
     
     /**
-     * @param $action
+     * @param Action $action
      * @return bool
      * @throws \Throwable
      * @throws \app\exceptions\ProcessException
@@ -22,7 +23,7 @@ abstract class BaseController extends Controller {
      * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action) {
-        if (!MP::getUserManager()->isLogin()) {
+        if (!MP::getUserManager()->isLogin() && !$this->isSkipLoginCheck($action)) {
             throw new ReLoginException(Yii::t("app", "not login"));
         }
         return parent::beforeAction($action);
@@ -46,5 +47,24 @@ abstract class BaseController extends Controller {
      */
     public function get($name, $defaultValue = null) {
         return Yii::$app->getRequest()->post($name, $defaultValue);
+    }
+    
+    /**
+     * 判断是否是不需要进行登录判断的路由
+     * @param Action $action
+     * @return bool
+     */
+    private function isSkipLoginCheck($action) {
+        $skipRouteKey = [
+            "user/is-init-system" => "",
+            "user/init-admin-user" => "",
+            "user/check-login" => "",
+            "user/login" => "",
+        ];
+        
+        if (isset($skipRouteKey[$action->getUniqueId()])) {
+            return true;
+        }
+        return false;
     }
 }
