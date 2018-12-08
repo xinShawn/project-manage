@@ -30,7 +30,8 @@ abstract class BaseController extends Controller {
         $userManager = MP::getUserManager();
         if (!$userManager->isLogin() && !$this->isSkipLoginCheck($action)) {
             $userManager->logout();
-            throw new ReLoginException();
+            // TODO 这里抛出异常没有被捕捉处理，不知日后会不会出问题
+//            throw new ReLoginException();
         }
         
         return true;
