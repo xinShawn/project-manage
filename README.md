@@ -2,7 +2,7 @@
 
 ## 项目所需环境
     nodejs  8.11 或以上
-    php     7.2 或以上
+    php     7.1.13 或以上(composer安装所需最低版本)
     mysql   5.6 或以上
     nginx|apache    (信息服务器)
     composer        (php包管理工具，类似于 nodejs 的 npm)
@@ -49,6 +49,8 @@
 
 ## 目录结构
 
+> 带 * 的是重要的目录
+
 ```
 /                           项目根路径
     /nodejs-webpack         nodejs vue-template 源码目录
@@ -56,22 +58,32 @@
         /config             配置
         /src                源代码
             /assets         静态资源
-            /components     组件
-            /router         路由配置
-            /views          单个页面
-        /static             原静态资源生成后存放的目录（已改到[php-project-manage] web目录下）
+            /components     组件。一般是可重复使用的控件
+            /models         模型（TypeScript）。对一些数据格式的封装
+            /router         * 路由配置
+            /store          * vuex 代码存放路径
+            /utils          工具类（TypeScript）的封装
+            /views          * 单个页面
+        /static             原静态资源生成后存放的目录（已改到 php-project-manage/web目录下）
         /test               
     /php-project-manage     php yii 框架跟路径
         /assets             资源路径（这个可能用不到）
         /commands           命令行控制器。可以在命令行调用框架内的方法
         /config             配置文件路径
-        /controllers        web 控制器
-        /mail               
+        /controllers        * web 控制器
+        /exceptions         异常类
+        /mail               邮件模板
+        /managers           * 管理器（业务层），主要的逻辑处理代码放在这里
+        /messages           多语言包
         /migrations         数据库版本管理文件
-        /models             数据模型文件
-            /db             每个数据表对应的模型
+        /models             * 数据模型。对数据结构的封装
+            /cache          缓存 数据模型
+            /cmd            命令行 数据模型
+            /db             数据表 数据模型
+            /form           表单 数据模型
         /runtime            项目运行时产生的文件
         /tests              测试文件路径
+        /utils              工具类存放处，如 文件工具，时间工具等
         /vagrant            信息服务器配置参考
         /views              网页模板（html模板）
             /layouts        主模板（为模板提供父级模板） -- 日后将减少这一层的使用
@@ -80,74 +92,6 @@
         /widgets
 ```
 #
-#    
-
-## 更好的开发环境配置： Nginx + Nodejs + php 热更新配置
-
-> 这个方法不能很好地解决，app.js 加载缓慢，且无法实时更新
-
-    修改代码后，可立即呈现在页面中。无需重新 build
-    
-    原理：
-        php原本就支持修改后立即更新。但是 nodejs需要重新编译生成文件，访问首页才会更新。
-        现在，只需要修改nginx文件，使访问非php文件时的请求转发到 nodejs (npm run dev) 服务上即可
-        
-        
-配置文件参考：
-```
-upstream project_manage_server {
-    server localhost:8888;
-    keepalive 64;
-}
-
-server {
-    charset utf-8;
-    client_max_body_size 128M;
-    sendfile off;
-
-    listen 80;
-
-    server_name dev.project-manage.local;
-    root        D:\workspace\project-manage\php-project-manage\web;
-    index       index.php index.html;
-
-    location / {
-        try_files $uri $uri/ /index.php$is_args$args;
-    }
-
-    location ~ \.php$ {
-        fastcgi_pass   127.0.0.1:9000;
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-        include        fastcgi_params;  
-    }
-
-    # 静态资源转发 到 npm run dev 的端口下
-    location ~ \.(html|js|css|jpg|png|json)$ {
-        proxy_pass        http://localhost:8888;
-        proxy_set_header  X-Real-IP $remote_addr;
-        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header  Host localhost;
-    }
-
-    location ^~ /websocket {
-        proxy_pass http://localhost:8888;
-
-        proxy_redirect   off;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host localhost;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-    }
-
-    # 禁止访问以下文件夹 或 后缀名
-    location ~ /\.(ht|svn|git) {
-        deny all;
-    }
-}
 ```
     
 ## 相关文档

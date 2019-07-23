@@ -15,4 +15,11 @@ class DirUtil {
     public static function getAbsWebPackDir() {
         return dirname(dirname(__DIR__)) . "/nodejs-webpack";
     }
+    
+    /**
+     * @return string
+     */
+    public static function getProjectManageDir() {
+        return dirname(dirname(__DIR__)) . "/";
+    }
 }
