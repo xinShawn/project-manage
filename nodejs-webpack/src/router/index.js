@@ -1,38 +1,63 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-// import HelloWorld from '@/components/HelloWorld'
-import main from '../views/main/main'
-import missions from '../views/missions/missions'
-import projects from '../views/projects/projects'
-import backend from '../views/backend/backend'
+import Vue from "vue"
+import Router from "vue-router"
 
-Vue.use(Router)
+import Login from "../views/login/Login"
+import LoginLogin from "../views/login/LoginLogin"
+import LoginInit from "../views/login/LoginInit"
 
-export default new Router({
+import Main from "../views/main/Main"
+
+import Mission from "../views/mission/Mission"
+import MissionsHome from "../views/mission/MissionHome"
+import MissionsDetail from "../views/mission/MissionDetail"
+
+import Project from "../views/project/Project"
+import ProjectHome from "../views/project/ProjectHome"
+
+import Backend from "../views/backend/Backend"
+import BackendAuthUser from "../views/backend/BackendAuthUser"
+
+Vue.use(Router);
+
+let router = new Router({
   routes: [
-    {
-      path: '/',
-      redirect: 'main'
+    // 默认页
+    {path: "/", redirect: "login"},
+    // 系统初始化页面模块
+    {path: "/login", component: Login, children: [
+        {path: "/", redirect: "login"},
+        // 登录页面
+        {path: "login", component: LoginLogin},
+        // 初始化系统页面
+        {path: "init", component: LoginInit},
+      ],
     },
-    {
-      path: '/main',
-      name: 'main',
-      component: main
+    // 主页（我的地盘）
+    {path: "/main", name: "main", component: Main},
+    // 任务
+    {path: "/mission", name: "mission", component: Mission, children: [
+        {path: "/", redirect: "home"},
+        {path: "home", name: "home", component: MissionsHome},
+        {path: "detail", name: "detail", component: MissionsDetail},
+      ],
     },
-    {
-      path: '/missions',
-      name: 'missions',
-      component: missions
+    // 项目
+    {path: "/project", name: "project", component: Project, children: [
+        {path: "/", redirect: "home"},
+        {path: "home", name: "home", component: ProjectHome},
+      ]
     },
-    {
-      path: '/projects',
-      name: 'projects',
-      component: projects
+    // 后台
+    {path: "/backend", name: "backend", component: Backend, children: [
+        {path: "auth_user", name: "auth_user", component: BackendAuthUser},
+      ],
     },
-    {
-      path: '/backend',
-      name: 'backend',
-      component: backend
-    }
-  ]
-})
+  ],
+});
+//
+// /**
+//  * 路由守卫
+//  */
+// router.beforeEach(before);
+
+export default router
